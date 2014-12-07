@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+<tx:annotation-driven transaction-manager="transactionManager"/>
+
+<context:component-scan base-package="org.loader"/>
+
+    <bean id="PropertyConfigure"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:META-INF/db.properties"/>
+    </bean>
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+          p:driverClassName="${database.driver}"
+          p:url="${database.url}"
+          p:password="${database.password}"
+          p:username="${database.username}"/>
+
+    <!--<bean id = "ccbJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
+        <!--<property name="dataSource" ref="CCBdataSource"/>-->
+    <!--</bean>-->
+
+    <bean id = "ccbJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource" />
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="JpaScala"/>
+        <property name="persistenceProviderClass" value="org.hibernate.ejb.HibernatePersistence"/>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="hibernate.connection.charSet" value="UTF-8"/>
+                <entry key="hibernate.hbm2ddl.auto" value="none"/>
+
+                <entry key="org.hibernate.jdbc" value="TRACE"/>
+                <entry key="log4j.logger.org.hibernate.SQL" value="TRACE"/>
+                <entry key="log4j.logger.org.hibernate.type" value = "TRACE"/>
+                <entry key="hibernate.show.sql" value="true"/>
+
+                <entry key="hibernate.archive.autodetection" value="class"/>
+                <entry key="hibernate.format_sql" value="true"/>
+                <entry key="hibernate.dialect" value="org.hibernate.dialect.Oracle9iDialect"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="entityManager"
+          class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name="entityManagerFactory"
+                  ref="entityManagerFactory"/>
+    </bean>
+    <bean id="transactionManager"
+          class="org.springframework.orm.jpa.JpaTransactionManager">
+            <property   name="entityManagerFactory"
+                        ref="entityManagerFactory"/>
+            <property   name="dataSource"
+                        ref="dataSource"/>
+    </bean>
+</beans>
