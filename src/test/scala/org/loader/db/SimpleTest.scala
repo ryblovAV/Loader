@@ -2,25 +2,18 @@
 
 package scalatest
 
-import java.util
-import java.util.{Date, HashSet}
+import java.util.Date
 
 import org.junit.runner.RunWith
-import org.loader.db.dao.general.GeneralDAO
-import org.loader.db.dao.person.PersonDAO
-import org.loader.db.dao.training.MasterDAO
 import org.loader.builders._
+import org.loader.builders.lesk.{AccountPersonBuilderL, AccountBuilderL, PersonBuilderL}
+import org.loader.db.dao.general.GeneralDAO
+import org.loader.db.dao.training.MasterDAO
 import org.loader.db.utl.DBUtl
-import org.loader.out.lesk.objects.{ObjectWithDate, ObjectWithDateZip, ValueObject}
+import org.loader.out.lesk.objects.{ObjectWithDate, ValueObject}
 import org.loader.out.lesk.reader.TestReader
-import org.loader.pojo.per._
-import org.loader.training.{MasterAddress, Master}
-
-import org.loader.reader.OutReader
-import org.loader.reader.JdbcTemplatesUtl._
-
+import org.loader.training.{Master, MasterAddress}
 import org.scalatest.FunSuite
-
 import org.scalatest.junit.JUnitRunner
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
@@ -49,9 +42,9 @@ class SimpleTest extends FunSuite {
 
     val client = TestReader.getClient
 
-    val per = PersonBuilder.buildPerson(client)
+    val per = PersonBuilderL.buildPerson(client)
     
-    val acct = AccountBuilder.buildAccount(client)
+    val acct = AccountBuilderL.buildAccount(client)
 
     //TODO correct check
     if (client.currentAccount != null && client.codeBank != null) {
@@ -59,13 +52,13 @@ class SimpleTest extends FunSuite {
       acct.acctApayEntitySet.add(acctApay)
     }
 
-    val acctPer = AccountPersonBuilder.linkAccoutPerson(per,acct)
+    val acctPer = AccountPersonBuilderL.linkAccoutPerson(per,acct)
 
     generalDAO.save(per,acct, acctPer)
 
     assert(true)
   }
-
+/*
   ignore("jpa person read") {
     val personDAO = ctx.getBean(classOf[PersonDAO])
     val personOpt = personDAO.find("0123456789")
@@ -82,7 +75,7 @@ class SimpleTest extends FunSuite {
     }
     assert(true)
   }
-
+*/
   val id = "9990000009"
 
   ignore("jpa master save") {
@@ -152,7 +145,7 @@ class SimpleTest extends FunSuite {
   test("zip") {
 
 
-    import org.loader.out.lesk.objects.{ObjectWithDateZip, TypeB, TypeA}
+    import org.loader.out.lesk.objects.{ObjectWithDateZip, TypeA, TypeB}
 
     val a: List[TypeA] = List(
       TypeA(DBUtl.getDate(2014, 3, 1)),
