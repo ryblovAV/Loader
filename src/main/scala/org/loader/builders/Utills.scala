@@ -3,12 +3,11 @@ package org.loader.builders
 import java.text.SimpleDateFormat
 
 import org.loader.db.utl.DBUtl
-import org.loader.out.lesk.objects.Client
 
 object Utills {
 
 
-  implicit def dateToStr(dt:java.util.Date) = {
+  implicit def dateToStr(dt: java.util.Date): String = {
     val df = new SimpleDateFormat("dd.MM.yyyy")
     df.format(dt)
   }
@@ -20,6 +19,8 @@ object Utills {
   def getPerId = "9123456789"
   def getAcctId = "1"
   def getAcctApayId = "1"
+
+  def getPremId = "1"
 
 
 

@@ -1,14 +1,13 @@
-package org.loader.builders
+package org.loader.builders.lesk
 
 import java.util.Date
 
-import org.loader.db.utl.DBUtl
-import org.loader.out.lesk.objects.Client
-import org.loader.pojo.acct.{AcctKEntity, AcctCharEntity, AcctEntity}
-
 import org.loader.builders.Utills.dateToStr
+import org.loader.builders.{LeskConstants, Utills}
+import org.loader.out.lesk.objects.Client
+import org.loader.pojo.acct.{AcctCharEntity, AcctEntity}
 
-object AccountBuilder {
+object AccountBuilderL {
 
   val listClientsTypeContract = List(
     "80110002",
@@ -125,7 +124,7 @@ object AccountBuilder {
     "70033035",
     "80160237",
     "90240153")
-  
+
   def defineSetupDt(client: Client) = {
 
     if (client.dateConclusion != null)
@@ -138,11 +137,11 @@ object AccountBuilder {
     }
   }
 
-  def defineTypeContract(client:Client) = {
+  def defineTypeContract(client: Client) = {
     if (client.budget != null) {
       "7"
     } else {
-      if (listClientsTypeContract.exists(_ == client.id)) {
+      if (listClientsTypeContract.contains(client.id)) {
         "2"
       } else {
         if (client.isTSO)
@@ -167,11 +166,6 @@ object AccountBuilder {
 
     acctChar
   }
-
-  def buildAccountChar = {
-
-  }
-
 
   def buildAccount(client: Client) = {
 
