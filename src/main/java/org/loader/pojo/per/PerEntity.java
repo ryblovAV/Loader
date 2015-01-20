@@ -104,7 +104,6 @@ public class PerEntity {
             return false;
         }
 
-
         return true;
     }
 

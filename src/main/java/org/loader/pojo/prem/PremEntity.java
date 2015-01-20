@@ -28,7 +28,6 @@ public class PremEntity {
   @CollectionTable(name = "CI_PREM_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "PREM_ID"))
   public Set<PremCharEntity> premCharEntitySet = new HashSet<>();
 
-
   @Override
   public boolean equals(Object object) {
 
