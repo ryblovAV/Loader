@@ -2,8 +2,8 @@ package org.loader.builders.lesk
 
 import java.util.Date
 
-import org.loader.builders.Utills.dateToStr
-import org.loader.builders.{LeskConstants, Utills}
+import org.loader.builders.Utils.dateToStr
+import org.loader.builders.{LeskConstants, Utils}
 import org.loader.out.lesk.objects.Client
 import org.loader.pojo.acct.{AcctCharEntity, AcctEntity}
 
@@ -133,7 +133,7 @@ object AccountBuilderL {
       if (client.getFirstDt != null)
         client.getFirstDt
       else
-        Utills.getDefaultDt
+        Utils.getDefaultDt
     }
   }
 
@@ -155,7 +155,7 @@ object AccountBuilderL {
   def buildAcctChar(charTypeCd: String,
                     charVal: String = " ",
                     adhocCharVal: String = " ",
-                    effDt: Date = Utills.getDefaultDt) = {
+                    effDt: Date = Utils.getDefaultDt) = {
 
     val acctChar = new AcctCharEntity()
 
@@ -169,8 +169,8 @@ object AccountBuilderL {
 
   def buildAccount(client: Client) = {
 
-    val account = new AcctEntity(Utills.getEnvId)
-    account.acctId = Utills.getAcctId
+    val account = new AcctEntity(Utils.getEnvId)
+    account.acctId = Utils.getAcctId
     account.setupDt = defineSetupDt(client)
     account.cisDivision = LeskConstants.cisDivision
     account.custClCd = LeskConstants.custClCd

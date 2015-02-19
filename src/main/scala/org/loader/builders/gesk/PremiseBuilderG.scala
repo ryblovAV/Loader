@@ -1,15 +1,15 @@
 package org.loader.builders.gesk
 
-import org.loader.builders.Utills
+import org.loader.builders.Utils
 import org.loader.out.gesk.objects.Address
 import org.loader.pojo.prem.PremEntity
 
 object PremiseBuilderG {
   def buildPremise(address: Address) = {
 
-    val prem = new PremEntity(Utills.getEnvId)
+    val prem = new PremEntity(Utils.getEnvId)
 
-    prem.premId = Utills.getPremId
+    prem.premId = Utils.getPremId
     prem.premTypeCd = "PROCHIE"
     prem.cisDivision = GeskConstants.cisDivision
     prem.trendAreaCd = "LIPCOMM"

@@ -1,6 +1,5 @@
 package org.loader.builders
 
-import org.loader.generator.ColumnInfo
 import org.loader.reader.JdbcTemplatesUtl._
 import org.loader.reader.OutReader
 import org.springframework.context.support.ClassPathXmlApplicationContext

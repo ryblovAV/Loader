@@ -17,9 +17,9 @@ object Utils {
   def getEnvId = 1
 
   def getPerId = "9123456789"
-  def getAcctId = "1"
-  def getAcctApayId = "1"
-  def getSaId = "1"
+  def getAcctId = "9123456789"
+  def getAcctApayId = "9123456789"
+  def getSaId = "9123456789"
 
   def getPremId = "1"
 

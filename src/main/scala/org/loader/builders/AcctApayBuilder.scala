@@ -1,23 +1,22 @@
 package org.loader.builders
 
-import org.loader.db.utl.DBUtl
 import org.loader.out.lesk.objects.Client
-import org.loader.pojo.acctapay.{AcctApayKEntity, AcctApayEntity}
+import org.loader.pojo.acctapay.{AcctApayEntity, AcctApayKEntity}
 
 object AcctApayBuilder {
 
   def buildAcctApay(client:Client) = {
 
-    val acctApayEntity = new AcctApayEntity(Utills.getEnvId)
+    val acctApayEntity = new AcctApayEntity(Utils.getEnvId)
 
-    acctApayEntity.acctApayId = Utills.getAcctApayId
-    acctApayEntity.startDt = Utills.getDefaultDt
-    acctApayEntity.endDt = Utills.getDefaultDt
+    acctApayEntity.acctApayId = Utils.getAcctApayId
+    acctApayEntity.startDt = Utils.getDefaultDt
+    acctApayEntity.endDt = Utils.getDefaultDt
     acctApayEntity.extAcctId = client.currentAccount
     acctApayEntity.entityName = client.codeBank
 
     //Key
-    acctApayEntity.acctApayKEntitySet.add(new AcctApayKEntity(Utills.getEnvId))
+    acctApayEntity.acctApayKEntitySet.add(new AcctApayKEntity(Utils.getEnvId))
 
     acctApayEntity
   }

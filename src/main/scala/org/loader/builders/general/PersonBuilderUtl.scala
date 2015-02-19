@@ -1,7 +1,7 @@
 package org.loader.builders.general
 
 
-import org.loader.builders.Utills
+import org.loader.builders.Utils
 import org.loader.models.Characteristic
 import org.loader.pojo.per._
 
@@ -40,7 +40,7 @@ object PersonBuilderUtl {
   }
 
   def addPersonKey(person: PerEntity) = {
-    person.perKEntitySet.add(new PerKEntity(Utills.getEnvId))
+    person.perKEntitySet.add(new PerKEntity(Utils.getEnvId))
   }
 
 

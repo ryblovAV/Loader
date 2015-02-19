@@ -2,7 +2,7 @@ package org.loader.builders.sp
 
 import java.util.Date
 
-import org.loader.builders.Utills
+import org.loader.builders.Utils
 import org.loader.out.lesk.objects.{ServicePointSourceObject, ServicePointType}
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.{SpCharEntity, SpEntity}
@@ -22,7 +22,7 @@ object SpBuilder {
     if (spSource.isClose) "D" else "C"
   }
 
-  def buildSpChar(charTypeCd:String, charVal:String = " ", adhocCharVal:String = " ", effDt:Date = Utills.getDefaultDt) = {
+  def buildSpChar(charTypeCd:String, charVal:String = " ", adhocCharVal:String = " ", effDt:Date = Utils.getDefaultDt) = {
     val spChar = new SpCharEntity()
 
      spChar.charTypeCd = charTypeCd
@@ -35,7 +35,7 @@ object SpBuilder {
 
   def buildSp(spSource: ServicePointSourceObject, premise:PremEntity) = {
 
-    val sp = new SpEntity(Utills.getEnvId)
+    val sp = new SpEntity(Utils.getEnvId)
 
     sp.spTypeCd = defineType(spSource)
     sp.prem = premise

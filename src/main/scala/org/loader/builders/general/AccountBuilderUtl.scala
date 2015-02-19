@@ -1,6 +1,6 @@
 package org.loader.builders.general
 
-import org.loader.builders.Utills
+import org.loader.builders.Utils
 import org.loader.models.Characteristic
 import org.loader.pojo.acct.{AcctCharEntity, AcctEntity, AcctKEntity}
 
@@ -25,7 +25,7 @@ object AccountBuilderUtl {
   }
 
   def addAcctKey(acct: AcctEntity) = {
-    acct.acctKEntitySet.add(new AcctKEntity(Utills.getEnvId))
+    acct.acctKEntitySet.add(new AcctKEntity(Utils.getEnvId))
   }
 
 }

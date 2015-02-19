@@ -2,6 +2,7 @@ package org.loader.builders.gesk
 
 import org.loader.db.dao.general.GeneralDAO
 import org.loader.out.gesk.objects.Plat
+import org.loader.pojo.sa.SaEntity
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
 object LoaderG {
@@ -12,7 +13,19 @@ object LoaderG {
     val generalDAO = ctx.getBean(classOf[GeneralDAO])
 
     val per = PersonBuilderG.buildPerson(plat)
+
     val acct = AccountBuilderG.buildAccount(plat)
+
+    val premise = PremiseBuilderG.buildPremise(plat.addressF)
+
+    val saHistorical = SaBuilderG.buildSaHistorical(plat)
+    saHistorical.premise = premise
+    acct.addSaEntity(saHistorical)
+
+
+
+
+
     val acctPer = AccountPersonBuilderG.linkAccoutPerson(per, acct)
 
     generalDAO.save(per, acct, acctPer)
