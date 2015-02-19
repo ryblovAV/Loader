@@ -1,3 +1,5 @@
+*.sc
+*.log
 *.iml
 *db.properties
 
