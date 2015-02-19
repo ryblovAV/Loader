@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 
 import org.loader.db.utl.DBUtl
 
-object Utills {
+object Utils {
 
 
   implicit def dateToStr(dt: java.util.Date): String = {
@@ -19,6 +19,7 @@ object Utills {
   def getPerId = "9123456789"
   def getAcctId = "1"
   def getAcctApayId = "1"
+  def getSaId = "1"
 
   def getPremId = "1"
 
