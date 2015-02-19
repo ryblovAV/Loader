@@ -1,7 +1,5 @@
 package org.loader.pojo.per;
 
-import org.loader.db.utl.DBUtl;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;

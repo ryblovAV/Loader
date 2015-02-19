@@ -1,6 +1,8 @@
 
 package org.loader.pojo.acctapay;
 
+import org.loader.pojo.acct.AcctEntity;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -13,6 +15,10 @@ public class AcctApayEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CI_ACCT_APAY_K", schema = "STGADM", joinColumns = @JoinColumn(name = "ACCT_APAY_ID"))
     public Set<AcctApayKEntity> acctApayKEntitySet = new HashSet<>();
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ACCT_ID")
+    public AcctEntity account;
 
     @Id
     @Column(name = "ACCT_APAY_ID", columnDefinition = "char", length = 10)

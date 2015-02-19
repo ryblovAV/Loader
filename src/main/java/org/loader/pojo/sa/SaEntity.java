@@ -1,6 +1,9 @@
 
 package org.loader.pojo.sa;
 
+import org.loader.pojo.acct.AcctEntity;
+import org.loader.pojo.prem.PremEntity;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -25,6 +28,9 @@ public class SaEntity {
     @CollectionTable(name = "CI_SA_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "SA_ID"))
     public Set<SaCharEntity> saCharEntitySet = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "CHAR_PREM_ID")
+    public PremEntity premise;
 
     @Override
     public boolean equals(Object object) {
@@ -75,8 +81,9 @@ public class SaEntity {
     @Column(name = "SA_STATUS_FLG", columnDefinition = "char", length = 2)
     public String saStatusFlg = " ";
 
-    @Column(name = "ACCT_ID", columnDefinition = "char", length = 10)
-    public String acctId = " ";
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ACCT_ID")
+    public AcctEntity account;
 
     @Column(name = "END_DT")
     @Temporal(TemporalType.TIMESTAMP)
@@ -93,9 +100,6 @@ public class SaEntity {
 
     @Column(name = "SIC_CD", columnDefinition = "char", length = 8)
     public String sicCd = " ";
-
-    @Column(name = "CHAR_PREM_ID", columnDefinition = "char", length = 10)
-    public String charPremId = " ";
 
     @Column(name = "TOT_TO_BILL_AMT")
     public int totToBillAmt = 0;

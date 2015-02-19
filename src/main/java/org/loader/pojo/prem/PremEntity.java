@@ -4,7 +4,6 @@ package org.loader.pojo.prem;
 import org.loader.pojo.PremKEntity;
 
 import javax.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
         

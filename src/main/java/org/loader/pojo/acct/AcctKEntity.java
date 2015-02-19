@@ -1,7 +1,8 @@
 
 package org.loader.pojo.acct;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 
 @Embeddable

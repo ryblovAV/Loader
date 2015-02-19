@@ -1,8 +1,8 @@
 
 package org.loader.pojo.acct;
 
-import org.loader.db.utl.DBUtl;
 import org.loader.pojo.acctapay.AcctApayEntity;
+import org.loader.pojo.sa.SaEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,9 +29,11 @@ public class AcctEntity {
   @CollectionTable(name = "CI_ACCT_K", schema = "STGADM", joinColumns = @JoinColumn(name = "ACCT_ID"))
   public Set<AcctKEntity> acctKEntitySet = new HashSet<>();
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "ACCT_ID", updatable = false, insertable = false, nullable = false)
+  @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
   public Set<AcctApayEntity> acctApayEntitySet = new HashSet<>();
+
+  @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
+  public Set<SaEntity> saEntitySet = new HashSet<>();
 
   @Override
   public boolean equals(Object object) {
@@ -50,7 +52,6 @@ public class AcctEntity {
 
     return true;
   }
-    
 
   @Override
   public int hashCode() {
@@ -58,8 +59,6 @@ public class AcctEntity {
     hash = 31 * hash + acctId.hashCode();
     return hash;
   }
-       
-
 
   @Id
   @Column(name = "ACCT_ID", columnDefinition = "char", length = 10)
@@ -131,4 +130,10 @@ public class AcctEntity {
 
   @Column(name = "ACCESS_GRP_CD", columnDefinition = "char", length = 12)
   public String accessGrpCd = " ";
+
+  public void addSaEntity(SaEntity saEntity) {
+      saEntitySet.add(saEntity);
+      saEntity.account = this;
+  }
+
 }

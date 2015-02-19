@@ -5,6 +5,7 @@ import org.loader.pojo.acct.AcctEntity;
 import org.loader.pojo.per.PerEntity;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Fetch;
 import java.io.Serializable;
 
 
@@ -49,11 +50,11 @@ public class AcctPerEntity {
     @Column(name = "WEB_ACCESS_FLG", columnDefinition = "char", length = 4)
     public String webAccessFlg = "ALWD";
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PER_ID", insertable = false, updatable = false)
     public PerEntity per;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ACCT_ID", insertable = false, updatable = false)
     public AcctEntity acct;
 
