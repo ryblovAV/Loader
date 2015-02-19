@@ -1,7 +1,6 @@
 package org.loader.out.lesk.objects
 
-import org.loader.builders.Utills
-import org.loader.db.utl.DBUtl
+import org.loader.builders.Utils
 
 /**
  * Created by a123 on 24/11/14.
@@ -31,7 +30,7 @@ case class Client(id: String,
 
   def getFirstDt = {
     //TODO realize method getFirstDt
-    Utills.getDefaultDt
+    Utils.getDefaultDt
   }
 
   def isTSO = {
