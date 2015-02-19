@@ -6,7 +6,7 @@ import java.util.Date
 
 import org.junit.runner.RunWith
 import org.loader.builders._
-import org.loader.builders.lesk.{AccountPersonBuilderL, AccountBuilderL, PersonBuilderL}
+import org.loader.builders.lesk.{AccountBuilderL, AccountPersonBuilderL, PersonBuilderL}
 import org.loader.db.dao.general.GeneralDAO
 import org.loader.db.dao.training.MasterDAO
 import org.loader.db.utl.DBUtl
