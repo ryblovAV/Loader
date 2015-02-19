@@ -2,8 +2,7 @@ package org.loader.out.lesk.objects
 
 import java.util.Date
 
-import org.loader.builders.Utills
-import org.loader.db.utl.DBUtl
+import org.loader.builders.Utils
 
 case class ServicePointType(isLosses: Boolean, isConsumption: Boolean, isWithoutMeterRead: Boolean)
 
@@ -33,7 +32,7 @@ case class ServicePointSourceObject(id: String,
   def isWithoutMeterRead = false
 
   //TODO realize method installDt, abolishDt
-  def installDt = Utills.getDefaultDt
+  def installDt = Utils.getDefaultDt
 
   def abolishDt: Date = null
 
