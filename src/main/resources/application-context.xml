@@ -38,7 +38,7 @@
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="JpaScala"/>
-        <property name="persistenceProviderClass" value="org.hibernate.ejb.HibernatePersistence"/>
+        <property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider"/>
         <property name="jpaDialect">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
         </property>
@@ -46,12 +46,11 @@
         <property name="jpaPropertyMap">
             <map>
                 <entry key="hibernate.connection.charSet" value="UTF-8"/>
-                <entry key="hibernate.hbm2ddl.auto" value="none"/>
+                <!--<entry key="hibernate.hbm2ddl.auto" value="validate"/>-->
 
                 <entry key="org.hibernate.jdbc" value="TRACE"/>
                 <entry key="log4j.logger.org.hibernate.SQL" value="TRACE"/>
                 <entry key="log4j.logger.org.hibernate.type" value = "TRACE"/>
-                <entry key="hibernate.show.sql" value="true"/>
 
                 <entry key="hibernate.archive.autodetection" value="class"/>
                 <entry key="hibernate.format_sql" value="true"/>
