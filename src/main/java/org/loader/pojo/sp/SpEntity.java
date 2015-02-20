@@ -20,7 +20,7 @@ public class SpEntity {
     @CollectionTable(name = "CI_SP_K", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_ID"))
     public Set<SpKEntity> spKEntitySet = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PREM_ID", nullable = false)
     public PremEntity prem;
 

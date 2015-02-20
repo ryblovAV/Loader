@@ -13,4 +13,5 @@ case class Plat(id: String,
                 phoneF: String,
                 dateConclusion: java.util.Date,
                 agreementNumberLGEK: String,
-                agreementNumberGESK: String)
+                agreementNumberGESK: String,
+                potrList:List[Potr])

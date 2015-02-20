@@ -1,6 +1,7 @@
 
 package org.loader.pojo.sa;
 
+import org.hibernate.annotations.Cascade;
 import org.loader.pojo.acct.AcctEntity;
 import org.loader.pojo.prem.PremEntity;
 
@@ -28,7 +29,7 @@ public class SaEntity {
     @CollectionTable(name = "CI_SA_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "SA_ID"))
     public Set<SaCharEntity> saCharEntitySet = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CHAR_PREM_ID")
     public PremEntity premise;
 

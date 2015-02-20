@@ -22,9 +22,15 @@ object LoaderG {
     saHistorical.premise = premise
     acct.addSaEntity(saHistorical)
 
+    val spList = plat.potrList.map(
+      (potr) => {
+        val premise = PremiseBuilderG.buildPremise(potr.address)
+        val sp = SpBuilderG.build(potr,premise)
+        sp.prem = premise
+      }
+    )
 
-
-
+//    val sasp = Sa
 
     val acctPer = AccountPersonBuilderG.linkAccoutPerson(per, acct)
 

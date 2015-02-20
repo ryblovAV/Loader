@@ -1,32 +1,35 @@
 package org.loader.builders.gesk
 
+import java.util.Date
+
 import org.loader.builders.Utils
 import org.loader.out.gesk.objects.Potr
-import org.loader.pojo.sp.SpEntity
-
-/*
-run(p_sp_id             => null,
-                                              p_prem_id           => l_local_prem_id,
-                                              p_install_dt        => l_install_dt,
-                                              p_sp_src_status_flg => 'C',
-                                              p_lvl1              => null,
-                                              p_lvl2              => null,
-                                              p_lvl3              => null,
-                                              p_naim_tu           => q_rtu.naimp,
-                                              p_kod               => q_rtu.kelsch,
-                                              p_voltage_str       => q_rtu.volt,
-                                              p_max_voltage_max   => null,
-                                              p_mtr_loc_details   => q_rtu.naimp,
-                                              p_postr_or          => null);
- */
-
+import org.loader.pojo.prem.PremEntity
+import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
 object SpBuilderG {
-  def build(potr:Potr):SpEntity = {
+
+  private def buildSpChar(charTypeCd:String, charVal:String = " ", adhocCharVal:String = " ", effDt:Date = Utils.getDefaultDt) = {
+    val spChar = new SpCharEntity()
+
+    spChar.charTypeCd = charTypeCd
+    spChar.charVal = charVal
+    spChar.adhocCharVal = adhocCharVal
+    spChar.effdt = effDt
+
+    spChar
+  }
+
+  def build(potr:Potr, premise:PremEntity):SpEntity = {
     val sp = new SpEntity(Utils.getEnvId)
     sp.installDt = Utils.getDefaultDt
     sp.spSrcStatusFlg = "C"
     sp.mtrLocDetails = potr.naimp
+
+    sp.spCharEntitySet.add(buildSpChar(charTypeCd = "NAIM-TP",adhocCharVal = potr.naimp))
+    sp.spCharEntitySet.add(buildSpChar(charTypeCd = "TY_NOM_C",adhocCharVal = potr.kelsch))
+
+    sp.prem = premise
 
     sp
   }

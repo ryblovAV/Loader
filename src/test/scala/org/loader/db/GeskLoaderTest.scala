@@ -7,20 +7,23 @@ import org.junit.runner.RunWith
 import org.loader.builders.Utils
 import org.loader.builders.gesk.LoaderG
 import org.loader.db.utl.DBUtl
-import org.loader.out.gesk.objects.{Address, Plat}
+import org.loader.out.gesk.objects.{Potr, Address, Plat}
 import org.loader.out.gesk.reader.GeskReader
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class GeskLoader extends FunSuite with Logging {
+class GeskLoaderTest extends FunSuite with Logging {
 
   test("load plat") {
-    val platList = GeskReader.readPlat
+    val platList = GeskReader.readPlat("1001")
     assert(!platList.isEmpty)
   }
 
-  test("save acct and per") {
+  ignore("save acct and per") {
+
+    val potrList = List(Potr(naimp = "naim", kelsch = "kelsch", volt = "volt", address = Address("region", "city", "street", "house", "room", "postalCode", "inn")))
+
     LoaderG.load(Plat(
       "1",
       "email",
@@ -33,7 +36,8 @@ class GeskLoader extends FunSuite with Logging {
       "phoneF",
       Utils.getDefaultDt,
       "agnumberL",
-      "agNumber")
+      "agNumber",
+      potrList)
     )
     assert(true)
   }
