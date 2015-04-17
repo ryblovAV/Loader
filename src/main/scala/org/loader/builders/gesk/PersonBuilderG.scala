@@ -1,20 +1,27 @@
 package org.loader.builders.gesk
 
-import org.loader.builders.Utils
+import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.builders.general.PersonBuilderUtl.{addPersonChar, addPersonId, addPersonName}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.Plat
+import org.loader.pojo.acct.AcctEntity
+import org.loader.pojo.acctper.AcctPerEntity
 import org.loader.pojo.per.PerEntity
 
-import org.loader.builders.Utils.dateToStr
+import DateBuilder.dateToStr
 
 object PersonBuilderG {
 
+
+  def addAcctToPer(per: PerEntity, acct: AcctEntity) = {
+    val acctPerEntity = new AcctPerEntity(per,acct)
+  }
+
   def buildPerson(plat: Plat): PerEntity = {
 
-    val person = new PerEntity(Utils.getEnvId)
+    val person = new PerEntity(KeysBuilder.getEnvId)
 
-    person.perId = Utils.getPerId
+    person.perId = KeysBuilder.getPerId
 
     person.emailid = plat.email
     person.address1 = plat.addressJ.region

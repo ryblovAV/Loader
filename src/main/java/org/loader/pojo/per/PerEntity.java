@@ -1,5 +1,7 @@
 package org.loader.pojo.per;
 
+import org.loader.pojo.acctper.AcctPerEntity;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,18 +14,25 @@ public class PerEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CI_PER_ID", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerIdEntity> perIdEntitySet = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CI_PER_PHONE", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerPhoneEntity> perPhoneEntitySet = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CI_PER_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerCharEntity> perCharEntitySet = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CI_PER_K", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerKEntity> perKEntitySet = new HashSet<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CI_PER_NAME", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerNameEntity> perNameEntitySet = new HashSet<>();
+
+
+
     @Id
     @Column(name = "PER_ID", columnDefinition = "char", length = 10)
     public String perId;
@@ -82,11 +91,14 @@ public class PerEntity {
     @Column(name = "WEB_PASSWD_ANS", length = 60)
     public String webPasswdAns = " ";
 
+    @OneToMany(mappedBy="per",cascade = CascadeType.ALL)
+    public Set<AcctPerEntity> acctPerEntities = new HashSet<>();
+
     protected PerEntity() {
     }
 
     public PerEntity(int envId) {
-        perKEntitySet.add(new PerKEntity(envId));
+      perKEntitySet.add(new PerKEntity(envId));
     }
 
     @Override

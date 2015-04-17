@@ -6,7 +6,6 @@ import org.loader.pojo.PremKEntity;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-        
 
 @Entity
 @Table(name = "CI_PREM", schema = "STGADM")
@@ -46,15 +45,12 @@ public class PremEntity {
     return true;
   }
     
-
   @Override
   public int hashCode() {
     int hash = 0;
     hash = 31 * hash + premId.hashCode();
     return hash;
   }
-       
-
 
   @Id
   @Column(name = "PREM_ID", columnDefinition = "char", length = 10)

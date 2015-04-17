@@ -1,15 +1,14 @@
 package org.loader.builders.gesk
 
 import java.util.Date
-
-import org.loader.builders.Utils
+import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.out.gesk.objects.Potr
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
 object SpBuilderG {
 
-  private def buildSpChar(charTypeCd:String, charVal:String = " ", adhocCharVal:String = " ", effDt:Date = Utils.getDefaultDt) = {
+  private def buildSpChar(charTypeCd:String, charVal:String = " ", adhocCharVal:String = " ", effDt:Date = DateBuilder.getDefaultDt) = {
     val spChar = new SpCharEntity()
 
     spChar.charTypeCd = charTypeCd
@@ -21,8 +20,10 @@ object SpBuilderG {
   }
 
   def build(potr:Potr, premise:PremEntity):SpEntity = {
-    val sp = new SpEntity(Utils.getEnvId)
-    sp.installDt = Utils.getDefaultDt
+    val sp = new SpEntity(KeysBuilder.getEnvId)
+
+    sp.spId = KeysBuilder.getSpId
+    sp.installDt = DateBuilder.getDefaultDt
     sp.spSrcStatusFlg = "C"
     sp.mtrLocDetails = potr.naimp
 

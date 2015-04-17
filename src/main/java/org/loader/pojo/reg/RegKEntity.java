@@ -1,0 +1,43 @@
+package org.loader.pojo.reg;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class RegKEntity {
+  protected RegKEntity() {
+  }
+  public RegKEntity(int envId) {
+    this.envId = envId;
+  }
+  @Override
+  public boolean equals(Object object) {
+
+    if (this == object)
+      return true;
+
+    if (!(object instanceof RegKEntity))
+      return false;
+
+    RegKEntity other = (RegKEntity) object;
+
+    if (this.envId != other.envId) {
+      return false;
+    }
+
+    return true;
+  }
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash = 31 * hash + envId;
+
+    return hash;
+  }
+
+  @Column(name = "ENV_ID")
+  public int envId;
+
+
+
+}

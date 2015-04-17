@@ -1,4 +1,4 @@
-package org.loader.builders
+package org.loader.builders.lesk
 
 object LeskConstants {
   //TODA add constants value or move to acctEntity

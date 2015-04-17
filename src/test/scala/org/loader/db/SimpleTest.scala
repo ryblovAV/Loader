@@ -6,7 +6,7 @@ import java.util.Date
 
 import org.junit.runner.RunWith
 import org.loader.builders._
-import org.loader.builders.lesk.{AccountBuilderL, AccountPersonBuilderL, PersonBuilderL}
+import org.loader.builders.lesk.{AccountBuilderL, PersonBuilderL}
 import org.loader.db.dao.general.GeneralDAO
 import org.loader.db.dao.training.MasterDAO
 import org.loader.db.utl.DBUtl
@@ -52,9 +52,9 @@ class SimpleTest extends FunSuite {
       acct.acctApayEntitySet.add(acctApay)
     }
 
-    val acctPer = AccountPersonBuilderL.linkAccoutPerson(per,acct)
+    //per.addAcct(acct)
 
-    generalDAO.save(per,acct, acctPer)
+    //generalDAO.save(per,acct, acctPer)
 
     assert(true)
   }
@@ -142,7 +142,7 @@ class SimpleTest extends FunSuite {
 
   }
 
-  test("zip") {
+  ignore("zip") {
 
 
     import org.loader.out.lesk.objects.{ObjectWithDateZip, TypeA, TypeB}
@@ -185,7 +185,7 @@ class SimpleTest extends FunSuite {
 
   }
 
-  test("Key")  {
+  ignore("Key")  {
     println("id = " + Keys.spId("12"))
     assert(true)
   }

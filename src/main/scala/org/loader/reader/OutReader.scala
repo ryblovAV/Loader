@@ -10,6 +10,4 @@ class OutReader extends JdbcTemplatesUtl {
   @Autowired
   protected var jdbcTemplate:NamedParameterJdbcTemplate = _
 
-  override def toString: String = jdbcTemplate.toString
-
 }

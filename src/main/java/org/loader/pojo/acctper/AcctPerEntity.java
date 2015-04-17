@@ -5,8 +5,6 @@ import org.loader.pojo.acct.AcctEntity;
 import org.loader.pojo.per.PerEntity;
 
 import javax.persistence.*;
-import javax.persistence.criteria.Fetch;
-import java.io.Serializable;
 
 
 @Entity
@@ -14,7 +12,8 @@ import java.io.Serializable;
 public class AcctPerEntity {
 
     @EmbeddedId
-    public Id id = new Id();
+    public AcctPerEntityK id = new AcctPerEntityK();
+
     @Column(name = "ACCT_REL_TYPE_CD", columnDefinition = "char", length = 8)
     public String acctRelTypeCd = "PRIMARY";
     @Column(name = "BILL_ADDR_SRCE_FLG", columnDefinition = "char", length = 4)
@@ -64,8 +63,11 @@ public class AcctPerEntity {
     public AcctPerEntity(PerEntity per, AcctEntity acct) {
         this.per = per;
         this.acct = acct;
+
         this.id.acctId = acct.acctId;
         this.id.perId = per.perId;
+
+        this.per.acctPerEntities.add(this);
     }
 
     @Override
@@ -88,40 +90,7 @@ public class AcctPerEntity {
 
     @Override
     public int hashCode() {
-        return custPoId.hashCode();
-    }
-
-    @Embeddable
-    public static class Id implements Serializable {
-
-        @Column(name = "ACCT_ID", columnDefinition = "char", length = 10)
-        public String acctId;
-
-        @Column(name = "PER_ID", columnDefinition = "char", length = 10)
-        public String perId;
-
-        public Id() {
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Id)) return false;
-
-            Id id = (Id) o;
-
-            if (!acctId.equals(id.acctId)) return false;
-            if (!perId.equals(id.perId)) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = acctId.hashCode();
-            result = 31 * result + perId.hashCode();
-            return result;
-        }
+        return id.hashCode();
     }
 
 }

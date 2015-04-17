@@ -1,9 +1,10 @@
 
 package org.loader.pojo.sa;
 
-import org.hibernate.annotations.Cascade;
 import org.loader.pojo.acct.AcctEntity;
+import org.loader.pojo.acctper.AcctPerEntity;
 import org.loader.pojo.prem.PremEntity;
+import org.loader.pojo.sasp.SaSpEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,8 +31,11 @@ public class SaEntity {
     public Set<SaCharEntity> saCharEntitySet = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "CHAR_PREM_ID")
-    public PremEntity premise;
+    @JoinColumn(name = "CHAR_PREM_ID", nullable = false, updatable = false)
+    public PremEntity charPrem;
+
+    @OneToMany(mappedBy="sa",cascade = CascadeType.ALL)
+    public Set<SaSpEntity> saSpEntitySet = new HashSet<>();
 
     @Override
     public boolean equals(Object object) {
@@ -172,4 +176,5 @@ public class SaEntity {
 
     @Column(name = "NB_APAY_FLG", columnDefinition = "char", length = 4)
     public String nbApayFlg = " ";
+
 }

@@ -1,6 +1,7 @@
 package org.loader.pojo.sp;
 
 import org.loader.pojo.prem.PremEntity;
+import org.loader.pojo.sasp.SaSpEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,8 +22,11 @@ public class SpEntity {
     public Set<SpKEntity> spKEntitySet = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PREM_ID", nullable = false)
+    @JoinColumn(name = "PREM_ID", nullable = false, updatable = false)
     public PremEntity prem;
+
+    @OneToMany(mappedBy="sp",cascade = CascadeType.REMOVE)
+    public Set<SaSpEntity> saSpEntitySet = new HashSet<>();
 
     @Id
     @Column(name = "SP_ID", columnDefinition = "char", length = 10)
@@ -31,8 +35,6 @@ public class SpEntity {
     public String disconLocCd = " ";
     @Column(name = "SP_TYPE_CD", columnDefinition = "char", length = 8)
     public String spTypeCd = " ";
-//    @Column(name = "PREM_ID", columnDefinition = "char", length = 10)
-//    public String premId = " ";
     @Column(name = "SP_STATUS_FLG", columnDefinition = "char", length = 2)
     public String spStatusFlg = "R";
     @Column(name = "INSTALL_DT")

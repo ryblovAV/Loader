@@ -1,6 +1,6 @@
 package org.loader.builders.sp
 
-import org.loader.builders.Utils
+import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.out.lesk.objects.{ServicePointSourceObject, ServicePointType}
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.SpEntity
@@ -25,7 +25,7 @@ object SpBuilderLesk {
 
   def buildSp(spSource: ServicePointSourceObject, premise:PremEntity) = {
 
-    val sp = new SpEntity(Utils.getEnvId)
+    val sp = new SpEntity(KeysBuilder.getEnvId)
 
     sp.spTypeCd = defineType(spSource)
     sp.prem = premise

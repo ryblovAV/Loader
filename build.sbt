@@ -19,5 +19,5 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-simple" % "1.6.4",
   "com.oracle" % "ojdbc14" % "10.2.0.4",
   //"com.oracle" % "ojdbc6" % "11.2.0.3.0",
-  "org.scalatest" % "scalatest_2.10" % "2.0.M7"
+  "org.scalatest" % "scalatest_2.10" % "2.0.M7" % "test"
 )

@@ -1,6 +1,6 @@
 package org.loader.out.lesk.objects
 
-import org.loader.builders.Utils
+import org.loader.builders.general.DateBuilder
 
 /**
  * Created by a123 on 24/11/14.
@@ -30,7 +30,7 @@ case class Client(id: String,
 
   def getFirstDt = {
     //TODO realize method getFirstDt
-    Utils.getDefaultDt
+    DateBuilder.getDefaultDt
   }
 
   def isTSO = {

@@ -1,7 +1,6 @@
 package org.loader.builders.lesk
 
-
-import org.loader.builders.Utils
+import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.builders.general.PersonBuilderUtl.buildPerChar
 import org.loader.models.Characteristic
 import org.loader.out.lesk.objects.Client
@@ -29,9 +28,9 @@ object PersonBuilderL {
 
   def buildPerson(client: Client) = {
 
-    val person = new PerEntity(Utils.getEnvId)
+    val person = new PerEntity(KeysBuilder.getEnvId)
 
-    person.perId = Utils.getPerId
+    person.perId = KeysBuilder.getPerId
     person.emailid = client.email
     person.address1 = client.address
     person.address2 = client.houseU
@@ -63,10 +62,10 @@ object PersonBuilderL {
       person.perCharEntitySet.add(Characteristic(charTypeCd = "IKY", adhocCharVal = "Требуется добавить подтверждающий документ"))
     //Дата расторжения
     if (client.dateCancelling != null)
-      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATARAST", adhocCharVal = Utils.dateToStr(client.dateCancelling)))
+      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATARAST", adhocCharVal = DateBuilder.dateToStr(client.dateCancelling)))
     //Дата заключения
     if (client.dateConclusion != null)
-      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATAZAKL", adhocCharVal = Utils.dateToStr(client.dateConclusion)))
+      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATAZAKL", adhocCharVal = DateBuilder.dateToStr(client.dateConclusion)))
     //Код отрасли
     if (client.codeDepartment != null)
       person.perCharEntitySet.add(Characteristic(charTypeCd = "OKONH", charVal = translateCodeDepartment(client.codeDepartment, client.department)))

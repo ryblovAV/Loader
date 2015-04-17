@@ -1,13 +1,10 @@
 package org.loader.db
 
-import java.util.Calendar
-
 import grizzled.slf4j.Logging
 import org.junit.runner.RunWith
-import org.loader.builders.Utils
+import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.builders.gesk.LoaderG
-import org.loader.db.utl.DBUtl
-import org.loader.out.gesk.objects.{Potr, Address, Plat}
+import org.loader.out.gesk.objects.{Address, Plat, Potr}
 import org.loader.out.gesk.reader.GeskReader
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
@@ -15,14 +12,19 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class GeskLoaderTest extends FunSuite with Logging {
 
-  test("load plat") {
+  ignore("load plat") {
     val platList = GeskReader.readPlat("1001")
     assert(!platList.isEmpty)
   }
 
-  ignore("save acct and per") {
+  test("remove") {
+    LoaderG.removePer(KeysBuilder.getPerId)
+  }
 
-    val potrList = List(Potr(naimp = "naim", kelsch = "kelsch", volt = "volt", address = Address("region", "city", "street", "house", "room", "postalCode", "inn")))
+  test("save acct and per") {
+
+    val potrList = List(
+      Potr(naimp = "naim", kelsch = "kelsch", volt = "volt", address = Address("region", "city", "street", "house", "room", "postalCode", "inn")))
 
     LoaderG.load(Plat(
       "1",
@@ -34,7 +36,7 @@ class GeskLoaderTest extends FunSuite with Logging {
       "kpp",
       "nameF",
       "phoneF",
-      Utils.getDefaultDt,
+      DateBuilder.getDefaultDt,
       "agnumberL",
       "agNumber",
       potrList)
@@ -42,5 +44,10 @@ class GeskLoaderTest extends FunSuite with Logging {
     assert(true)
   }
 
+  test("load person") {
+    val per = LoaderG.findPer(KeysBuilder.getPerId)
+
+    assert((if (per != null) per.perId else null) === KeysBuilder.getPerId)
+  }
 
 }

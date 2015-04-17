@@ -2,12 +2,12 @@ package org.loader.models
 
 import java.util.Date
 
-import org.loader.builders.Utils
+import org.loader.builders.general.DateBuilder
 
 case class Characteristic(charTypeCd: String,
                 charVal: String = " ",
                 adhocCharVal: String = " ",
-                effDt: Date  = Utils.getDefaultDt) {
+                effDt: Date  = DateBuilder.getDefaultDt) {
 
   def isEmpty = ((charVal == null) || (charVal == " ")) && ((adhocCharVal == null) || (adhocCharVal == " "))
 
