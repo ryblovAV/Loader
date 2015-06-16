@@ -59,9 +59,12 @@ object LoaderG {
         val mr = MrBuilderG.build(readDttm = readDttm,
                                   mtrConfig = mtrCfg)
         val regRead = RegReadBuilderG.build(mr,reg,potr.r2)
+        RegReadBuilderG.build(mr,reg,potr.r2)
 
         SpMtrHistBuilderG.build(sp = sp, mtrCfg = mtrCfg)
+        val spMtrHist = SpMtrHistBuilderG.build(sp = sp, mtrCfg = mtrCfg)
         MtrLocHistBuilderG.build(mtr = mtr, readDttm)
+        SpMtrEvtBuilderG.build(spMtrHist = spMtrHist,mr = mr)
 
 
 //        val sa = SaBuilderG.buildSaForSp(plat,potr,premiseSp)
