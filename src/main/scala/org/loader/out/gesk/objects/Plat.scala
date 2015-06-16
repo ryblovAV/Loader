@@ -24,4 +24,5 @@ case class Plat(idPlat: String,
                 ndGesk: Option[String],
                 ko: String,
                 kob: Option[String],
+                kOkwed:Option[String],
                 potrList:List[Potr])

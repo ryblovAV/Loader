@@ -70,6 +70,7 @@ object GeskReader {
           ndLgek = (rs, "nd_lgek"),
           ko = (rs, "ko"),
           kob = (rs, "kob"),
+          kOkwed = (rs, "k_okwed"),
           potrList = potrList
         )
     }
