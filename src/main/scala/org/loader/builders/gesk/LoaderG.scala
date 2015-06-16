@@ -1,21 +1,23 @@
 package org.loader.builders.gesk
 
+
 import org.loader.builders.general.DateBuilder
 import org.loader.db.dao.general.GeneralDAO
-import org.loader.out.gesk.objects.Plat
+import org.loader.out.gesk.objects.{Potr, Plat}
 import org.loader.pojo.acctper.AcctPerEntity
 import org.loader.pojo.mr.MrEntity
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sa.SaEntity
 import org.loader.pojo.sasp.SaSpEntity
+import org.loader.writer.LogWritter
 import org.springframework.context.support.ClassPathXmlApplicationContext
 object LoaderG {
 
   val ctx = new ClassPathXmlApplicationContext("application-context.xml")
   val generalDAO = ctx.getBean(classOf[GeneralDAO])
 
-  val startActiveDt = DateBuilder.getDate(2015,2,1)
-  val stopHistoricalDt = DateBuilder.addMinute(startActiveDt,-1)
+  val activeMonth = DateBuilder.getDate(2015,2,1)
+  val stopHistoricalDt = DateBuilder.addMinute(activeMonth,-1)
 
   def findPer(perId: String) = {
     generalDAO.findPer(perId)
@@ -31,35 +33,66 @@ object LoaderG {
     val per = PersonBuilderG.buildPerson(plat)
 
     val acct = AccountBuilderG.buildAccount(plat)
+//
+//    val premiseForSaHist = PremiseBuilderG.buildPremise("1",plat.addressF)
+//
+//    val saHistorical = SaBuilderG.buildSaHistorical(plat,premiseForSaHist)
+//    acct.addSaEntity(saHistorical)
+//
 
-    val premiseForSaHist = PremiseBuilderG.buildPremise("1",plat.addressF)
-
-    val saHistorical = SaBuilderG.buildSaHistorical(plat,premiseForSaHist)
-    acct.addSaEntity(saHistorical)
+    //создаем premise для каждого id
+    val mPremise:Map[String,PremEntity] =
+      plat.potrList.
+        groupBy((p)=>p.idObj).
+        mapValues((pl) => pl.head).
+        mapValues((p)=>PremiseBuilderG.buildPremise(p))
 
     plat.potrList.map(
       (potr) => {
 
-        //TODO create meter
+        val sp = SpBuilderG.build(potr = potr, premise = mPremise(potr.idObj))
+        val mtr = MtrBuilderG.build(potr)
+        val reg = RegBuilderG.build(mtr = mtr, potr = potr)
+        val mtrCfg = MtrConfigBuilderG.build(mtr = mtr,potr = potr)
 
-        //TODO create fake beginning meter read
+        val mr = MrBuilderG.build(dt = DateBuilder.lastDay(activeMonth),
+                                  mtrConfig = mtrCfg)
+        val regRead = RegReadBuilderG.build(mr,reg,potr.r2)
 
-        val premiseSp = PremiseBuilderG.buildPremise("3",potr.address)
-        val sp = SpBuilderG.build(potr,premiseSp)
+        //link mtr_config to sp
+        SpMtrHistBuilderG.build(sp = sp, mtrCfg = mtrCfg)
 
-//        val premiseSa = PremiseBuilderG.buildPremise("2",potr.address)
-        val sa = SaBuilderG.buildSaForSp(plat,potr,premiseSp)
 
-        SaSpBuilderG.buildSaSp("SA_SP_A",sa,sp)
 
-        SaSpBuilderG.buildSaSp("SA_SP_H",saHistorical,sp)
+        //TODO Если NO_RSCH  = true – то по точке не производим расчет (не привязываем к РДО
 
-        acct.addSaEntity(sa)
+        sp
       }
     )
 
-    PersonBuilderG.addAcctToPer(per,acct)
 
+//        //TODO create fake beginning meter read
+
+//        val mr = MrBuilderG.build(mrId = "MR_ID", dt = potr.data, mtrConfig = mtrCfg)
+//        val regRead = RegReadBuilderG.build(regReadId = "RR_ID", mr = mr, reg = reg, regReading = potr.r2)
+//
+//        val premiseSp = PremiseBuilderG.buildPremise("3",potr.address)
+//
+//        //link mtr_config to sp
+//        SpMtrHistBuilderG.build(spMtrHistId = "SP_MTR_H",sp = sp, mtrCfg = mtrCfg)
+//
+//        val sa = SaBuilderG.buildSaForSp(plat,potr,premiseSp)
+//
+//        SaSpBuilderG.buildSaSp(saSpId = "SA_SP_A",sa = sa,sp = sp)
+//
+//        SaSpBuilderG.buildSaSp(saSpId = "SA_SP_H",sa = saHistorical,sp = sp)
+//
+//        acct.addSaEntity(sa)
+//
+
+    PersonBuilderG.addAcctToPer(per,acct)
     generalDAO.save(per)
+
+    LogWritter.log(idPlat = plat.idPlat,perId = per.perId, acctId = acct.acctId)
   }
 }

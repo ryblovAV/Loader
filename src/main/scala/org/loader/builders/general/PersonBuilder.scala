@@ -4,7 +4,9 @@ package org.loader.builders.general
 import org.loader.models.Characteristic
 import org.loader.pojo.per._
 
-object PersonBuilderUtl {
+
+
+object PersonBuilder {
 
   implicit def buildPerChar(char: Characteristic): PerCharEntity = {
 
@@ -31,6 +33,10 @@ object PersonBuilderUtl {
     if (perIdNbr != null)
       person.perIdEntitySet.add(new PerIdEntity(idTypeCd, perIdNbr, primSw))
   }
+
+//  def addPerPhone(person: PerEntity) = {
+//    person.perPhoneEntitySet.add(new PerPhoneEntity())
+//  }
 
   def addPersonName(person: PerEntity,
                     name: String) = {

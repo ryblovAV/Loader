@@ -4,7 +4,7 @@ package org.loader.builders.general
 import org.loader.models.Characteristic
 import org.loader.pojo.acct.{AcctCharEntity, AcctEntity, AcctKEntity}
 
-object AccountBuilderUtl {
+object AccountBuilder {
 
   implicit def buildChar(char: Characteristic): AcctCharEntity = {
 

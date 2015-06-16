@@ -12,7 +12,7 @@ object SaBuilderG {
 
     sa.saId = KeysBuilder.getSaIdH
     sa.saTypeCd = GeskConstants.saHistoryTypeCd
-    sa.startDt = if (plat.dateConclusion != null) plat.dateConclusion else DateBuilder.getDefaultDt
+    sa.startDt = plat.data.getOrElse(DateBuilder.getDefaultDt)
     sa.endDt = LoaderG.stopHistoricalDt
     sa.cisDivision = GeskConstants.cisDivision
     sa.saStatusFlg = Constants.saCloseStatus
@@ -28,7 +28,10 @@ object SaBuilderG {
 
     sa.saId = KeysBuilder.getSaIdA
     sa.saTypeCd = GeskConstants.saCommercialTypeCd
-    sa.startDt = if (LoaderG.startActiveDt.before(plat.dateConclusion)) plat.dateConclusion else  LoaderG.startActiveDt
+    sa.startDt = plat.data match {
+      case Some(data) if (LoaderG.activeMonth.before(data)) => data
+      case _ => LoaderG.activeMonth
+    }
     sa.cisDivision = GeskConstants.cisDivision
     sa.saStatusFlg = Constants.saOpenStatus
 

@@ -41,9 +41,9 @@ object SpBuilderLesk {
     sp.spSrcStatusFlg = defineStatus(spSource)
 
     //Chars
-    sp.spCharEntitySet.add(SpBuilder.buildSpChar(charTypeCd = "NAIM-TP", adhocCharVal = spSource.name))
-    sp.spCharEntitySet.add(SpBuilder.buildSpChar(charTypeCd = "ID_TY_1C", adhocCharVal = spSource.id))
-    sp.spCharEntitySet.add(SpBuilder.buildSpChar(charTypeCd = "TY_NOM_C", adhocCharVal = spSource.code))
+    sp.spCharEntitySet.add(SpBuilderL.buildSpChar(charTypeCd = "NAIM-TP", adhocCharVal = spSource.name))
+    sp.spCharEntitySet.add(SpBuilderL.buildSpChar(charTypeCd = "ID_TY_1C", adhocCharVal = spSource.id))
+    sp.spCharEntitySet.add(SpBuilderL.buildSpChar(charTypeCd = "TY_NOM_C", adhocCharVal = spSource.code))
 
 
     //    if (spSource.postrOr == "Да") {

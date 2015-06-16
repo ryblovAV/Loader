@@ -1,7 +1,7 @@
 package org.loader.builders.lesk
 
 import org.loader.builders.general.{DateBuilder, KeysBuilder}
-import org.loader.builders.general.PersonBuilderUtl.buildPerChar
+import org.loader.builders.general.PersonBuilder.buildPerChar
 import org.loader.models.Characteristic
 import org.loader.out.lesk.objects.Client
 import org.loader.pojo.per._

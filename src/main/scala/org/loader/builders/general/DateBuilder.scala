@@ -12,6 +12,7 @@ object DateBuilder {
     calendar.set(Calendar.YEAR, year)
     calendar.set(Calendar.MONTH, month - 1)
     calendar.set(Calendar.DAY_OF_MONTH, day)
+    trunc(calendar)
     return calendar.getTime
   }
 
@@ -29,6 +30,21 @@ object DateBuilder {
     calendar.getTime
   }
 
+  def trunc(calendar: Calendar) = {
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+  }
 
+  def lastDay(date: Date) = {
+    val calendar = Calendar.getInstance
+    calendar.setTime(date)
+    calendar.add(Calendar.MONTH,1)
+    calendar.add(Calendar.HOUR,-24)
+    trunc(calendar)
+
+    calendar.getTime
+  }
 
 }

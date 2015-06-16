@@ -6,7 +6,7 @@ import org.loader.out.lesk.objects.{ServicePointSourceObject, ServicePointType}
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
-object SpBuilder {
+object SpBuilderL {
 
   def defineType(spSource: ServicePointSourceObject) = {
     spSource.getType match {

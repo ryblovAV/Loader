@@ -51,9 +51,9 @@ public class SpMtrHistEntity {
   @OneToMany(mappedBy = "spMtrHist", cascade = CascadeType.ALL)
   public Set<MtrLocHisEntity> mtrLocHisSpMtrHistEntitySet = new HashSet<>();
 
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "REMOVAL_MR_ID")
-  public MrEntity removalMr;
+//  @ManyToOne(cascade = CascadeType.ALL)
+//  @JoinColumn(name = "REMOVAL_MR_ID")
+//  public MrEntity removalMr;
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "SP_ID")

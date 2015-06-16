@@ -2,6 +2,7 @@ package org.loader.pojo.sp;
 
 import org.loader.pojo.prem.PremEntity;
 import org.loader.pojo.sasp.SaSpEntity;
+import org.loader.pojo.spmtrhist.SpMtrHistEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,12 +22,19 @@ public class SpEntity {
     @CollectionTable(name = "CI_SP_K", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_ID"))
     public Set<SpKEntity> spKEntitySet = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "CI_SP_OP_AREA", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_ID"))
+    public Set<SpOpAreaEntity> spOpAreaEntitySet = new HashSet<>();
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PREM_ID", nullable = false, updatable = false)
     public PremEntity prem;
 
     @OneToMany(mappedBy="sp",cascade = CascadeType.REMOVE)
     public Set<SaSpEntity> saSpEntitySet = new HashSet<>();
+
+    @OneToMany(mappedBy="sp",cascade = CascadeType.ALL)
+    public Set<SpMtrHistEntity> spMtrHistEntity = new HashSet<>();
 
     @Id
     @Column(name = "SP_ID", columnDefinition = "char", length = 10)

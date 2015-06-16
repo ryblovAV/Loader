@@ -36,7 +36,6 @@ public class SpCharEntity {
     public SpCharEntity() {
     }
 
-
     @Override
     public boolean equals(Object object) {
 

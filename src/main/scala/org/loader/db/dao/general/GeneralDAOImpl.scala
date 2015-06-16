@@ -2,6 +2,8 @@ package org.loader.db.dao.general
 
 import javax.persistence.EntityManager
 
+import org.loader.pojo.mtr.MtrEntity
+import org.loader.pojo.mtrcfg.MtrConfigEntity
 import org.loader.pojo.per.PerEntity
 import org.loader.pojo.prem.PremEntity
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,6 +19,11 @@ class GeneralDAOImpl extends GeneralDAO {
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
   override def save(per: PerEntity): Unit = {
     entityManager.persist(per)
+  }
+
+  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  override def save(mtrCfg: MtrConfigEntity): Unit = {
+    entityManager.persist(mtrCfg)
   }
 
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
