@@ -7,7 +7,15 @@ import org.loader.out.gesk.reader.GeskReader
 import org.scalatest.FunSuite
 
 class DateTest extends FunSuite with Logging {
+
+  val dt = DateBuilder.getDate(2015,2,1)
+  
   test(""){
-    assert(DateBuilder.lastDay(LoaderG.activeMonth) === DateBuilder.getDate(2015,2,28))
+    assert(DateBuilder.lastDay(dt) === DateBuilder.getDate(2015,2,28))
   }
+
+  test(""){
+    assert(DateBuilder.addDay(dt) === DateBuilder.getDate(2015,1,31))
+  }
+
 }

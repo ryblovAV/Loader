@@ -26,7 +26,14 @@ object DateBuilder {
   def addMinute(date: Date, minute: Int) = {
     val calendar = Calendar.getInstance
     calendar.setTime(date)
-    calendar.add(Calendar.MINUTE,-minute)
+    calendar.add(Calendar.MINUTE,minute)
+    calendar.getTime
+  }
+
+  def addDay(date: Date, day: Int = 1) = {
+    val calendar = Calendar.getInstance
+    calendar.setTime(date)
+    calendar.add(Calendar.DAY_OF_MONTH, day)
     calendar.getTime
   }
 

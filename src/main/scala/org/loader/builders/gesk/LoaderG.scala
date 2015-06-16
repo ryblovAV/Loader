@@ -18,6 +18,7 @@ object LoaderG {
 
   val activeMonth = DateBuilder.getDate(2015,2,1)
   val stopHistoricalDt = DateBuilder.addMinute(activeMonth,-1)
+  val readDttm = DateBuilder.lastDay(activeMonth)
 
   def findPer(perId: String) = {
     generalDAO.findPer(perId)
@@ -55,12 +56,15 @@ object LoaderG {
         val reg = RegBuilderG.build(mtr = mtr, potr = potr)
         val mtrCfg = MtrConfigBuilderG.build(mtr = mtr,potr = potr)
 
-        val mr = MrBuilderG.build(dt = DateBuilder.lastDay(activeMonth),
+        val mr = MrBuilderG.build(readDttm = readDttm,
                                   mtrConfig = mtrCfg)
         val regRead = RegReadBuilderG.build(mr,reg,potr.r2)
 
-        //link mtr_config to sp
         SpMtrHistBuilderG.build(sp = sp, mtrCfg = mtrCfg)
+        MtrLocHistBuilderG.build(mtr = mtr, readDttm)
+
+
+//        val sa = SaBuilderG.buildSaForSp(plat,potr,premiseSp)
 
 
 

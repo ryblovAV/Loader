@@ -6,12 +6,12 @@ import org.loader.pojo.mtrcfg.MtrConfigEntity
 
 object MrBuilderG {
 
-  def build(dt: java.util.Date, mtrConfig: MtrConfigEntity):MrEntity = {
+  def build(readDttm: java.util.Date, mtrConfig: MtrConfigEntity):MrEntity = {
     val mr = new MrEntity(KeysBuilder.getEnvId)
 
     mr.mrId = KeysBuilder.getMrId
 
-    mr.readDttm = dt
+    mr.readDttm = readDttm
     mr.useOnBillSw = "Y"
     mr.mtrConfig = mtrConfig
 
