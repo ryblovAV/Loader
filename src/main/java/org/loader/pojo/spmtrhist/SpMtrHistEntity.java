@@ -4,6 +4,7 @@ import org.loader.pojo.mr.MrEntity;
 import org.loader.pojo.mtrcfg.MtrConfigEntity;
 import org.loader.pojo.mtrlochis.MtrLocHisEntity;
 import org.loader.pojo.sp.SpEntity;
+import org.loader.pojo.spmtrevt.SpMtrEvtEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -48,8 +49,13 @@ public class SpMtrHistEntity {
   @CollectionTable(name = "CI_SP_MTR_HIST_K", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_MTR_HIST_ID"))
   public Set<SpMtrHistKEntity> spMtrHistKEntitySet = new HashSet<>();
      
+  @ElementCollection
+  @CollectionTable(name = "CI_SP_MTR_EVT", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_MTR_HIST_ID"))
+  public Set<SpMtrEvtEntity> spMtrEvtSpMtrHistEntitySet = new HashSet<>();
+
   @OneToMany(mappedBy = "spMtrHist", cascade = CascadeType.ALL)
   public Set<MtrLocHisEntity> mtrLocHisSpMtrHistEntitySet = new HashSet<>();
+
 
 //  @ManyToOne(cascade = CascadeType.ALL)
 //  @JoinColumn(name = "REMOVAL_MR_ID")
