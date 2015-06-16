@@ -6,7 +6,7 @@ import org.loader.pojo.mtrlochis.MtrLocHisEntity
 
 object MtrLocHistBuilderG {
 
-  def build(mtr: MtrEntity, locDttm: java.util.Date, stkLocCd: String, locHistTypFlg: String) = {
+  def build(mtr: MtrEntity, locDttm: java.util.Date, stkLocCd: String, locHistTypFlg: String):MtrLocHisEntity = {
     val mtrLocHis = new MtrLocHisEntity(KeysBuilder.getEnvId)
 
     mtrLocHis.mtr = mtr
@@ -19,7 +19,7 @@ object MtrLocHistBuilderG {
     mtrLocHis
   }
 
-  def build(mtr: MtrEntity, readDttm: java.util.Date) = {
+  def build(mtr: MtrEntity, readDttm: java.util.Date):Unit = {
     build(mtr = mtr,locDttm = DateBuilder.addDay(readDttm,-1),stkLocCd = "KLIENT", locHistTypFlg = "STCK")
     build(mtr = mtr,locDttm = readDttm,stkLocCd = " ", locHistTypFlg = "SPIN")
   }
