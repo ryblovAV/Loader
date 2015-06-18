@@ -10,7 +10,7 @@ import java.util.Date;
 @Embeddable
 public class SaCharEntity {
 
-    protected SaCharEntity() {
+    public SaCharEntity() {
     }
 
     @Override
