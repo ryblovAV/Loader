@@ -24,9 +24,9 @@ object JDBCExtractorSafe {
 
   implicit def rsToDouble(p:(ResultSet,String)):Double = extractValue(p,(rs,name) => rs.getDouble(name))
 
-  implicit def rsToOptString(p:(ResultSet,String)):Option[String] = extractOptValue(p,(rs,name) => rs.getString(name).trim)
+  implicit def rsToOptString(p:(ResultSet,String)):Option[String] = extractOptValue(p,(rs,name) => rs.getString(name))
 
-  implicit def rsToString(p:(ResultSet,String)):String = extractValue(p,(rs,name) => rs.getString(name).trim)
+  implicit def rsToString(p:(ResultSet,String)):String = extractValue(p,(rs,name) => rs.getString(name))
 
   implicit def rsToOptDate(p:(ResultSet,String)):Option[Date] = extractOptValue(p,(rs,name) => rs.getDate(name))
 
