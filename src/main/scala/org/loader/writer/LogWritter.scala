@@ -4,8 +4,6 @@ import org.loader.reader.OutReader
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
 import scala.collection.JavaConversions._
-
-
 import scala.collection.immutable.HashMap
 
 object LogWritter {
