@@ -53,7 +53,7 @@ public class MrEntity {
   @CollectionTable(name = "CI_MR_K", schema = "STGADM", joinColumns = @JoinColumn(name = "MR_ID"))
   public Set<MrKEntity> mrKEntitySet = new HashSet<>();
 
-  @OneToMany(mappedBy = "mr", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "mr", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   public Set<RegReadEntity> regReadMrEntitySet = new HashSet<>();
 
   @ManyToOne(cascade = CascadeType.ALL)

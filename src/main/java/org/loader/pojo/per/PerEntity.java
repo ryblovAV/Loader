@@ -91,7 +91,7 @@ public class PerEntity {
     @Column(name = "WEB_PASSWD_ANS", length = 60)
     public String webPasswdAns = " ";
 
-    @OneToMany(mappedBy="per",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="per",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public Set<AcctPerEntity> acctPerEntities = new HashSet<>();
 
     protected PerEntity() {

@@ -17,7 +17,7 @@ public class MtrConfigEntity {
     @CollectionTable(name = "CI_MTR_CONFIG_K", schema = "STGADM", joinColumns = @JoinColumn(name = "MTR_CONFIG_ID"))
     public Set<MtrConfigKEntity> mtrConfigKEntitySet = new HashSet<>();
 
-    @OneToMany(mappedBy = "mtrConfig", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mtrConfig", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public Set<MrEntity> mrMtrConfigEntitySet = new HashSet<>();
 
     @OneToMany(mappedBy = "mtrCfg", cascade = CascadeType.ALL)

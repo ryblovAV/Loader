@@ -33,7 +33,7 @@ public class SpEntity {
     @OneToMany(mappedBy="sp",cascade = CascadeType.REMOVE)
     public Set<SaSpEntity> saSpEntitySet = new HashSet<>();
 
-    @OneToMany(mappedBy="sp",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="sp",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     public Set<SpMtrHistEntity> spMtrHistEntity = new HashSet<>();
 
     @Id

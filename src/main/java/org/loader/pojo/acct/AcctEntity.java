@@ -32,7 +32,7 @@ public class AcctEntity {
   @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
   public Set<AcctApayEntity> acctApayEntitySet = new HashSet<>();
 
-  @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "account",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   public Set<SaEntity> saEntitySet = new HashSet<>();
 
   @Override

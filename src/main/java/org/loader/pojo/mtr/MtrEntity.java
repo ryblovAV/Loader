@@ -56,7 +56,7 @@ public class MtrEntity {
   @OneToMany(mappedBy = "mtr", cascade = CascadeType.ALL)
   public Set<MtrConfigEntity> mtrConfigMtrEntitySet = new HashSet<>();
 
-  @OneToMany(mappedBy = "mtr", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "mtr", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   public Set<RegEntity> regMtrEntitySet = new HashSet<>();
 
   @OneToMany(mappedBy = "mtr", cascade = CascadeType.ALL)
