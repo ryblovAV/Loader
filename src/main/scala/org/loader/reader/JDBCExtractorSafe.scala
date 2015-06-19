@@ -19,6 +19,16 @@ object JDBCExtractorSafe {
   implicit def rsToOptInt(p:(ResultSet,String)):Option[Int] = extractOptValue(p,(rs,name) => rs.getInt(name))
 
   implicit def rsToInt(p:(ResultSet,String)):Int = extractValue(p,(rs,name) => rs.getInt(name))
+  implicit def rsToOptDouble(p: (ResultSet, String)): Option[Double] = {
+    try {
+      extractOptValue(p, (rs, name) => rs.getDouble(name))
+    } catch {
+      case e: Exception => {
+        error(s"name = ${p._2}, message = ${e.getMessage}")
+        throw e
+      }
+    }
+  }
 
   implicit def rsToOptDouble(p:(ResultSet,String)):Option[Double] = extractOptValue(p,(rs,name) => rs.getDouble(name))
 
