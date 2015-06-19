@@ -4,11 +4,12 @@ import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.pojo.mtr.MtrEntity
 import org.loader.pojo.mtrlochis.MtrLocHisEntity
 
-object MtrLocHistBuilderG {
+object MtrLocHisBuilderG {
 
   def build(mtr: MtrEntity, locDttm: java.util.Date, stkLocCd: String, locHistTypFlg: String):MtrLocHisEntity = {
     val mtrLocHis = new MtrLocHisEntity(KeysBuilder.getEnvId)
 
+    mtrLocHis.mtrLocHistId = KeysBuilder.getMtrLocHistId
     mtrLocHis.mtr = mtr
     mtrLocHis.locDttm = locDttm
     mtrLocHis.stkLocCd = "KLIENT"
