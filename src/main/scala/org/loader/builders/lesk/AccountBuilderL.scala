@@ -2,9 +2,8 @@ package org.loader.builders.lesk
 
 import java.util.Date
 
+import org.loader.builders.general.DateBuilder.dateToStr
 import org.loader.builders.general.{DateBuilder, KeysBuilder}
-import DateBuilder.dateToStr
-import org.loader.builders.general.KeysBuilder
 import org.loader.out.lesk.objects.Client
 import org.loader.pojo.acct.{AcctCharEntity, AcctEntity}
 

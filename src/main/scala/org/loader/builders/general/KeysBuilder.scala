@@ -4,8 +4,6 @@ import grizzled.slf4j.Logging
 import org.loader.reader.OutReader
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
-import org.loader.reader.JDBCExtractorSafe._
-import org.loader.reader.JdbcTemplatesUtl._
 
 object KeysBuilder extends Logging {
 

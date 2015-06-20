@@ -1,14 +1,9 @@
 package org.loader.builders.gesk
 
-import java.util.Date
-
 import org.loader.builders.general.DateBuilder._
-import org.loader.builders.general.{MtrBuilder, DateBuilder, KeysBuilder}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.Potr
-import org.loader.pojo.mtr.{MtrCharEntity, MtrEntity}
 
-import org.loader.builders.general.BuilderUtl._
 
 
 object MtrBuilderG {

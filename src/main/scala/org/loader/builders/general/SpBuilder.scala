@@ -1,7 +1,7 @@
 package org.loader.builders.general
 
 import org.loader.models.Characteristic
-import org.loader.pojo.sp.{SpOpAreaEntity, SpEntity, SpCharEntity}
+import org.loader.pojo.sp.{SpCharEntity, SpEntity, SpOpAreaEntity}
 
 object SpBuilder {
 

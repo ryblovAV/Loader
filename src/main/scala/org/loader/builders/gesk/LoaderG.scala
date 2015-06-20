@@ -1,14 +1,8 @@
 package org.loader.builders.gesk
 
 
-import org.loader.builders.general.DateBuilder
 import org.loader.db.dao.general.GeneralDAO
-import org.loader.out.gesk.objects.{Potr, Plat}
-import org.loader.pojo.acctper.AcctPerEntity
-import org.loader.pojo.mr.MrEntity
 import org.loader.pojo.prem.PremEntity
-import org.loader.pojo.sa.SaEntity
-import org.loader.pojo.sasp.SaSpEntity
 import org.loader.writer.LogWritter
 import org.springframework.context.support.ClassPathXmlApplicationContext
 object LoaderG {

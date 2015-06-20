@@ -1,7 +1,7 @@
 package org.loader.builders.general
 
 import org.loader.models.Characteristic
-import org.loader.pojo.mtr.{MtrEntity, MtrCharEntity}
+import org.loader.pojo.mtr.{MtrCharEntity, MtrEntity}
 
 object MtrBuilder {
   

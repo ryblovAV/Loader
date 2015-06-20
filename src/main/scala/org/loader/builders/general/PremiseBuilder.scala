@@ -1,7 +1,6 @@
 package org.loader.builders.general
 
 import org.loader.models.Characteristic
-import org.loader.pojo.per.{PerCharEntity, PerEntity}
 import org.loader.pojo.prem.{PremCharEntity, PremEntity}
 
 object PremiseBuilder {
