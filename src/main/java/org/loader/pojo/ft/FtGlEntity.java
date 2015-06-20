@@ -44,9 +44,6 @@ public class FtGlEntity {
     @Column(name = "DST_ID", columnDefinition = "char", length = 10)
     public String dstId = " ";
 
-    @Column(name = "FT_ID", columnDefinition = "char", length = 12)
-    public String ftId;
-
     @Column(name = "GL_ACCT", length = 254)
     public String glAcct = " ";
 
