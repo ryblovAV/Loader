@@ -18,7 +18,7 @@ public class FtEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CI_FT_GL", schema = "STGADM", joinColumns = @JoinColumn(name = "FT_ID"))
-    public Set<SaKEntity> ftGlEntitySet = new HashSet<>();
+    public Set<FtGlEntity> ftGlEntitySet = new HashSet<>();
 
     @Id
     @Column(name = "FT_ID", columnDefinition = "char", length = 12)
