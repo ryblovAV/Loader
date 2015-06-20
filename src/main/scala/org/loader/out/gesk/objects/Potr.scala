@@ -5,13 +5,19 @@ import org.loader.db.utl.DBUtl
 case class Mt(volt: Option[String],
               amper: Option[String],
               klast: Option[String],
+              ustM: Option[Double],
               gw: Option[Int],
               mIn: Option[String],
               dp: Option[String],
-              tip: String,
+              tip: Option[String],
               pLi: Option[String],
               pTr: Option[String],
               dataSh: Option[java.util.Date])
+
+case class Tar(sn: Option[String],
+               gr: Option[String],
+               prim: Option[String],
+               znJ: Option[String])
 
 case class  Potr(naimp: String,
                  kelsch: String,
@@ -19,15 +25,18 @@ case class  Potr(naimp: String,
                  idObj:String,
                  address: Address,
                  mt: Mt,
+                 tar: Tar,
                  rks: Double,
                  r2: Double,
-                 data: java.util.Date,
                  data2: java.util.Date,
                  kniga: Option[String],
                  gp:Option[String],
                  kp: Option[String],
                  idRec: String,
-                 k1: Option[String]) {
+                 k1: Option[String],
+                 t: Option[String],
+                 grpt46: Option[String],
+                 saldo: Option[Double]) {
 
   def filterGw:Option[Int] = mt.gw match {
     case Some(year) if ((year > 1900) && (year <= 2016)) => Some(year)
