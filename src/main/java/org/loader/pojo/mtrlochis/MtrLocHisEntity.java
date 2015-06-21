@@ -17,11 +17,11 @@ public class MtrLocHisEntity {
     @CollectionTable(name = "CI_MTR_LOC_HIS_K", schema = "STGADM", joinColumns = @JoinColumn(name = "MTR_LOC_HIST_ID"))
     public Set<MtrLocHisKEntity> mtrLocHisKEntitySet = new HashSet<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "SP_MTR_HIST_ID")
     public SpMtrHistEntity spMtrHist;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "MTR_ID")
     public MtrEntity mtr;
 
