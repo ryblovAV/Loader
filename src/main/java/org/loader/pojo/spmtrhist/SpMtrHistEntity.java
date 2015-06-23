@@ -53,8 +53,8 @@ public class SpMtrHistEntity {
   @CollectionTable(name = "CI_SP_MTR_EVT", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_MTR_HIST_ID"))
   public Set<SpMtrEvtEntity> spMtrEvtSpMtrHistEntitySet = new HashSet<>();
 
-  @OneToMany(mappedBy = "spMtrHist", cascade = CascadeType.ALL)
-  public Set<MtrLocHisEntity> mtrLocHisSpMtrHistEntitySet = new HashSet<>();
+//  @OneToMany(mappedBy = "spMtrHist", cascade = CascadeType.ALL)
+//  public Set<MtrLocHisEntity> mtrLocHisSpMtrHistEntitySet = new HashSet<>();
 
 
 //  @ManyToOne(cascade = CascadeType.ALL)
