@@ -26,7 +26,7 @@ class GeneralDAOImpl extends GeneralDAO {
     entityManager.persist(mtrCfg)
   }
 
-  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
   def findPer(perId:String):PerEntity = {
     entityManager.find(classOf[PerEntity],perId)
   }
