@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class TndrCtlStEntity {
 
   @EmbeddedId
-  TndrCtlStPk id;
+  public TndrCtlStPk id;
 
   protected TndrCtlStEntity() {
   }

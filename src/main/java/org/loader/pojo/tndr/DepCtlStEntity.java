@@ -10,12 +10,12 @@ public class DepCtlStEntity {
   protected DepCtlStEntity() {
   }
 
-  public DepCtlStEntity(DepCtlStPk id) {
-    this.id = id;
+  public DepCtlStEntity(DepCtlStPk deptCtlStPk) {
+    this.deptCtlStPk = deptCtlStPk;
   }
 
   @EmbeddedId
-  public DepCtlStPk id;
+  public DepCtlStPk deptCtlStPk;
 
   @Override
   public boolean equals(Object object) {
@@ -28,7 +28,7 @@ public class DepCtlStEntity {
 
     DepCtlStEntity other = (DepCtlStEntity) object;
 
-    if (!this.id.equals(other.id)) {
+    if (!this.deptCtlStPk.equals(other.deptCtlStPk)) {
       return false;
     }
 
@@ -37,7 +37,7 @@ public class DepCtlStEntity {
 
   @Override
   public int hashCode() {
-    return id.hashCode();
+    return deptCtlStPk.hashCode();
   }
 
   @Column(name = "CURRENCY_CD", columnDefinition = "char", length = 3)

@@ -12,12 +12,12 @@ public class TndrCtlStPk implements Serializable {
     @Column(name = "EXT_BATCH_ID", columnDefinition = "char", length = 30)
     public String extBatchId;
 
-    protected TndrCtlStPk {
+    protected TndrCtlStPk() {
     }
 
     public TndrCtlStPk(DepCtlStPk depCtlStId, String extBatchId) {
-        this.depCtlStId = depCtlStId
-        this.extBatchId = extBatchId
+        this.depCtlStId = depCtlStId;
+        this.extBatchId = extBatchId;
     }
 
     @Override
