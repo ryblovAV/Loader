@@ -3,8 +3,8 @@ package org.loader.builders.gesk
 import grizzled.slf4j.Logging
 import org.loader.builders.general.BuilderUtl._
 import org.loader.builders.general.DateBuilder.dateToStr
+import org.loader.builders.general.KeysBuilder
 import org.loader.builders.general.PersonBuilder.{addPersonChar, addPersonId, addPersonName}
-import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.Plat
 import org.loader.pojo.acct.AcctEntity

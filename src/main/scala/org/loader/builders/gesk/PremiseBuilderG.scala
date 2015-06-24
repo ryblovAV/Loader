@@ -1,11 +1,10 @@
 package org.loader.builders.gesk
 
-import org.loader.builders.general.{PremiseBuilder, DateBuilder, KeysBuilder}
-import org.loader.models.Characteristic
-import org.loader.out.gesk.objects.{Potr, Address}
-import org.loader.pojo.prem.PremEntity
-
 import org.loader.builders.general.BuilderUtl._
+import org.loader.builders.general.{KeysBuilder, PremiseBuilder}
+import org.loader.models.Characteristic
+import org.loader.out.gesk.objects.Potr
+import org.loader.pojo.prem.PremEntity
 
 object PremiseBuilderG {
 

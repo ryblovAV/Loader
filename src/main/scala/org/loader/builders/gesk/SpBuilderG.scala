@@ -1,9 +1,10 @@
 package org.loader.builders.gesk
 
 import java.util.Date
-import org.loader.builders.general.{SpBuilder, DateBuilder, KeysBuilder}
+
+import org.loader.builders.general.{DateBuilder, KeysBuilder, SpBuilder}
 import org.loader.models.Characteristic
-import org.loader.out.gesk.objects.{Plat, Potr}
+import org.loader.out.gesk.objects.Potr
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
