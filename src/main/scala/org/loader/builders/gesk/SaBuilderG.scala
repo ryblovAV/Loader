@@ -1,42 +1,71 @@
 package org.loader.builders.gesk
 
-import org.loader.out.gesk.objects.{Potr, Plat}
+import org.loader.builders.general.{Constants, KeysBuilder, SaBuilder}
+import org.loader.models.Characteristic
+import org.loader.out.gesk.objects.{Plat, Potr}
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sa.SaEntity
-
-import org.loader.builders.general.{DateBuilder, KeysBuilder, Constants}
 object SaBuilderG {
 
-  def buildSaHistorical(plat: Plat, charPrem: PremEntity) = {
-    val sa = new SaEntity(KeysBuilder.getEnvId)
+  val mTranslateKategory = Map("1 цен.кат." -> "1")
 
-    sa.saId = KeysBuilder.getSaIdH
-    sa.saTypeCd = GeskConstants.saHistoryTypeCd
-    sa.startDt = plat.data.getOrElse(DateBuilder.getDefaultDt)
-    sa.endDt = LoaderG.stopHistoricalDt
-    sa.cisDivision = GeskConstants.cisDivision
-    sa.saStatusFlg = Constants.saCloseStatus
+  def translateCategory(prim:String):String = mTranslateKategory.get(prim) match {
+    //TODO добавить остальные значения
+    case Some(v) => v
+    case _ => throw new Exception(s"Couldn't decode KATEGORY -> $prim")
+  }
 
-    sa.charPrem = charPrem
-    
-    sa
+  def checkGr(gr:String):Boolean = (gr == "210") || (gr == "2010")
+
+  def translateNaprayg(optSn: Option[String], optGr: Option[String]):Option[String] = {
+    (optSn, optGr) match {
+      case (Some(sn),_) if sn == "нн" => Some("0.4")
+      case (_,Some(gr)) if checkGr(gr) => Some("110")
+      case (Some(sn),Some(gr)) if (sn == "сн") && (!checkGr(gr)) => Some("6")
+      case _ => None
+    }
   }
 
   def buildSaForSp(plat: Plat, potr: Potr, charPrem: PremEntity) = {
 
     val sa = new SaEntity(KeysBuilder.getEnvId)
 
-    sa.saId = KeysBuilder.getSaIdA
+    sa.saId = KeysBuilder.getSaId
     sa.saTypeCd = GeskConstants.saCommercialTypeCd
-    sa.startDt = plat.data match {
-      case Some(data) if (LoaderG.activeMonth.before(data)) => data
-      case _ => LoaderG.activeMonth
-    }
-    sa.cisDivision = GeskConstants.cisDivision
+    sa.startDt = LoaderG.activeMonth
     sa.saStatusFlg = Constants.saOpenStatus
-
+    for (kOkwed <- plat.kOkwed)
+      sa.sicCd = kOkwed
+    sa.cisDivision = GeskConstants.cisDivision
     sa.charPrem = charPrem
-    
+
+    //максимальная мощность
+    for (ustM <- potr.mt.ustM)
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "M-POWER",adhocCharVal = ustM.toString))
+
+    //ценовая категория
+    for (prim <- potr.tar.prim)
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = translateCategory(prim = prim)))
+
+    //Группа населения
+    for (grpt46 <- potr.grpt46)
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "GRPTR-46",charVal = grpt46))
+
+    //диапазон напряжения
+    for (naprayg <- translateNaprayg(optSn = potr.tar.sn,optGr = potr.tar.gr))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "NAPRAYG2",charVal = naprayg))
+
+    //NEPREMEN
+    for (t <- potr.t if (t.take(1) == "8") || (t.take(1) == "9"))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "NEPREMEN",charVal = "NEPREMEN"))
+
+    //PRIMEN
+    SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRIMEN",charVal = "PRIMEN"))
+
+    //PRICE-1
+    for (znj <- potr.tar.znJ)
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRICE-1",charVal = znj))
+
     sa
   }
 
