@@ -1,9 +1,11 @@
 package org.loader.builders.gesk
 
+import org.loader.builders.general.BuilderUtl._
 import org.loader.builders.general.DateBuilder._
+import org.loader.builders.general.{DateBuilder, KeysBuilder, MtrBuilder}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.Potr
-
+import org.loader.pojo.mtr.MtrEntity
 
 
 object MtrBuilderG {
@@ -43,7 +45,9 @@ object MtrBuilderG {
     mtr.modelCd = "CM"
     mtr.serialNbr = potr.nelsch
     mtr.receiveDt = getRecieveDt(potr)
-    mtr.descrlong = potr.mt.tip
+
+    for (tip <- potr.mt.tip)
+      mtr.descrlong = tip
 
 
     //рабочее напряжение
