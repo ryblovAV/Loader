@@ -10,14 +10,35 @@ object KeysBuilder extends Logging {
   val ctx = new ClassPathXmlApplicationContext("application-context.xml")
   val jdbcReader: OutReader = ctx.getBean(classOf[OutReader])
 
+  var mKeys = Map.empty[String,List[String]].withDefaultValue(List.empty[String])
+
   def getEnvId = 201302
 
   def sqlForKey(columnName:String, tableName: String, schemeName: String = "stgadm")
-    = s"select pkg_cm_load_juridical_keys.${columnName}('15') as id from dual"
-//    = s"select max(to_number($columnName))+1 as id from $schemeName.$tableName"
+  = s"""| select pkg_cm_load_juridical_keys.per_id('15') as id
+        |   from dual
+        |connect by level < 100""".stripMargin
 
+  def fillMap(sql:String) = {
+    val keys = jdbcReader.query(sql)((rs, rowNum) => rs.getString("id"))
+    mKeys = mKeys + (sql -> keys)
+  }
 
-  def getId(sql:String) = jdbcReader.query(sql)((rs, rowNum) => rs.getString("id")).head
+  def getNextKey(sql:String):String = mKeys(sql) match {
+    case h::t => {
+      mKeys = mKeys + (sql -> t);
+      h
+    }
+    case Nil  => {
+      fillMap(sql)
+      getNextKey(sql)
+    }
+  }
+
+  def getId(sql:String) = getNextKey(sql)
+
+  def getIdOld(sql:String) = jdbcReader.query(sql)((rs, rowNum) => rs.getString("id")).head
+
 
   val personSql = sqlForKey(columnName = "per_id", tableName = "ci_per_k", schemeName = "stgadm")
   def getPerId:String = getId(personSql)
