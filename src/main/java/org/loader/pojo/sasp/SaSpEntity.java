@@ -34,7 +34,7 @@ public class SaSpEntity {
     @JoinColumn(name = "SA_ID")
     public SaEntity sa;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL,optional = false)
     @JoinColumn(name = "SP_ID")
     public SpEntity sp;
 
