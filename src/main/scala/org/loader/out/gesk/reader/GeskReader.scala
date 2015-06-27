@@ -1,6 +1,6 @@
 package org.loader.out.gesk.reader
 
-import org.loader.out.gesk.objects.{Mt, Address, Plat, Potr}
+import org.loader.out.gesk.objects._
 import org.loader.reader.JDBCExtractorSafe._
 import org.loader.reader.JdbcTemplatesUtl._
 import org.loader.reader.OutReader
@@ -16,8 +16,11 @@ object GeskReader {
 
   final val city = "Липецк"
 
-  //final val sqlPlat = "select * from v_gesk_plat where id_plat = :id_plat"
-  final val sqlPlat =
+  final val sqlPlat = "select * from v_gesk_plat where id_plat = '15065'"
+
+  final val sqlPlatAll = "select * from v_gesk_plat where rownum < 100"
+
+  final val sqlPlat0 =
     s"""
        |select *
        | from v_gesk_plat t
@@ -25,17 +28,17 @@ object GeskReader {
        |  and not exists (select *
        |                    from cm_log_per_gesk_juridical j
        |                   where j.id_plat = t.id_plat)
-       |  and :id_plat is not null
+       |  /*and :id_plat is not null*/
      """.stripMargin
 
 
   final val sqlPotr = "select * from v_gesk_potr where id_plat = :id_plat"
 
-  def readPlat(idPlat: String): List[Plat] = {
 
-    val potrList: List[Potr] = readPotrForPlat(idPlat)
+  def readPlat: List[Plat] = {
 
-    jdbcReader.queryWithParameters(sqlPlat, HashMap("id_plat" -> idPlat)) {
+    //jdbcReader.queryWithParameters(sqlPlat, HashMap("id_plat" -> idPlat)) {
+    val platList = jdbcReader.query(sqlPlatAll) {
       (rs, rowNum) =>
         Plat(
           idPlat = (rs, "id_plat"),
@@ -71,9 +74,15 @@ object GeskReader {
           ko = (rs, "ko"),
           kob = (rs, "kob"),
           kOkwed = (rs, "k_okwed"),
-          potrList = potrList
+          oplataSum = (rs,"sum"),
+          oplataDat = (rs,"dat"),
+          potrList = Nil
         )
     }
+
+    //load potr for plat
+    platList.map((plat) => plat.copy(potrList = readPotrForPlat(plat.idPlat)))
+
   }
 
   def readPotrForPlat(idPlat: String): List[Potr] = {
@@ -93,6 +102,7 @@ object GeskReader {
           mt = Mt(volt = (rs, "volt"),
             amper = (rs, "amper"),
             klast = (rs, "klast"),
+            ustM = (rs, "ust_m"),
             gw = (rs, "gw"),
             mIn = (rs, "m_in"),
             dp = (rs, "d_p"),
@@ -101,19 +111,29 @@ object GeskReader {
             pTr = (rs,"p_tr"),
             dataSh = (rs,"data_sh")
           ),
+          tar = Tar(
+            sn = (rs,"tar_sn"),
+            gr = (rs,"tar_gr"),
+            prim = (rs,"tar_prim"),
+            znJ = (rs,"tar_zn_j")
+          ),
           naimp = (rs, "naimp"),
           kelsch = (rs, "kelsch"),
           idObj = (rs,"id_ob"),
           nelsch = (rs, "nelsch"),
           rks = (rs, "rks"),
           r2 = (rs, "r2"),
-          data = (rs, "data"),
           data2 = (rs, "data2"),
           kniga = (rs,"kniga"),
           gp = (rs,"gp"),
           kp = (rs,"kp"),
           idRec = (rs,"id_rec"),
-          k1 = (rs,"k1")
+          idRecI = (rs,"id_rec_i"),
+          k1 = (rs,"k1"),
+          t = (rs,"t"),
+          grpt46 = (rs,"grptr46"),
+          saldo = (rs,"OB_SALDO"),
+          parentIdRec = (rs,"parent_id_rec")
         )
     }
   }
