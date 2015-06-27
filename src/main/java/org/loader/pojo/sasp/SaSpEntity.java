@@ -26,10 +26,9 @@ public class SaSpEntity {
 //    @JoinColumn(name = "STOP_MR_ID")
 //    public MrEntity stopMr;
 
-    //TODO add startMr
-//    @ManyToOne
-//    @JoinColumn(name = "START_MR_ID")
-//    public MrEntity startMr;
+    @ManyToOne(cascade = CascadeType.PERSIST,optional = false)
+    @JoinColumn(name = "START_MR_ID")
+    public MrEntity startMr;
 
     @ManyToOne
     @JoinColumn(name = "SA_ID")
