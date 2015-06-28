@@ -133,7 +133,9 @@ object GeskReader {
           t = (rs,"t"),
           grpt46 = (rs,"grptr46"),
           saldo = (rs,"OB_SALDO"),
-          parentIdRec = (rs,"parent_id_rec")
+          parentIdRec = (rs,"parent_id_rec"),
+          iZn = (rs,"i_zn"),
+          idGrup = (rs,"id_grup")
         )
     }
   }

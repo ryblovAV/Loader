@@ -38,7 +38,9 @@ case class  Potr(naimp: String,
                  t: Option[String],
                  grpt46: Option[String],
                  saldo: Option[Double],
-                 parentIdRec: Option[String] ) {
+                 parentIdRec: Option[String],
+                 iZn: Option[String],
+                 idGrup: Option[Int]) {
 
   def filterGw:Option[Int] = mt.gw match {
     case Some(year) if ((year > 1900) && (year <= 2016)) => Some(year)
