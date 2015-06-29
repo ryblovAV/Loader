@@ -1,11 +1,12 @@
 package org.loader.builders.gesk
 
+import grizzled.slf4j.Logging
 import org.loader.builders.general.{Constants, KeysBuilder, SaBuilder}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.{Plat, Potr}
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sa.SaEntity
-object SaBuilderG {
+object SaBuilderG extends Logging{
 
   val mTranslateKategory = Map("1 цен.кат." -> "1")
 
@@ -34,8 +35,11 @@ object SaBuilderG {
     sa.saTypeCd = GeskConstants.saCommercialTypeCd
     sa.startDt = LoaderG.activeMonth
     sa.saStatusFlg = Constants.saOpenStatus
-    for (kOkwed <- plat.kOkwed)
-      sa.sicCd = kOkwed
+    for (kOkwed <- plat.kOkwed) {
+      sa.sicCd = kOkwed.split(",|;").head
+      if (sa.sicCd.length > 8)
+        info(s"kOkwed = $kOkwed, sicCd = ${sa.sicCd}}")
+    }
     sa.cisDivision = GeskConstants.cisDivision
     sa.charPrem = charPrem
 
