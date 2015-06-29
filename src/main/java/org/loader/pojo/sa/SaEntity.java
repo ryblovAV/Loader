@@ -3,6 +3,8 @@ package org.loader.pojo.sa;
 
 import org.loader.pojo.acct.AcctEntity;
 import org.loader.pojo.acctper.AcctPerEntity;
+import org.loader.pojo.adj.AdjEntity;
+import org.loader.pojo.ft.FtEntity;
 import org.loader.pojo.prem.PremEntity;
 import org.loader.pojo.sasp.SaSpEntity;
 
@@ -34,8 +36,14 @@ public class SaEntity {
     @JoinColumn(name = "CHAR_PREM_ID", nullable = false, updatable = false)
     public PremEntity charPrem;
 
-    @OneToMany(mappedBy="sa",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="sa",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     public Set<SaSpEntity> saSpEntitySet = new HashSet<>();
+
+    @OneToMany(mappedBy="sa",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    public Set<AdjEntity> adjEntitySet = new HashSet<>();
+
+    @OneToMany(mappedBy="sa",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    public Set<FtEntity> ftEntitySet = new HashSet<>();
 
     @Override
     public boolean equals(Object object) {
