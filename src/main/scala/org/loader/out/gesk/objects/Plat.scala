@@ -25,6 +25,6 @@ case class Plat(idPlat: String,
                 ko: String,
                 kob: Option[String],
                 kOkwed:Option[String],
-                oplataSum:Option[Double],
-                oplataDat:Option[java.util.Date],
+                oplataSum:List[Double] = List.empty[Double],
+                oplataDat:List[java.util.Date] = List.empty[java.util.Date],
                 potrList:List[Potr])
