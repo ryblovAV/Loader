@@ -19,7 +19,8 @@ case class Tar(sn: Option[String],
                prim: Option[String],
                znJ: Option[String])
 
-case class  Potr(naimp: String,
+case class  Potr(id: Int,
+                 naimp: String,
                  kelsch: String,
                  nelsch: Option[String],
                  idObj:String,

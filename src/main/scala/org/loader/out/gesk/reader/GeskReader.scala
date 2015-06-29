@@ -117,6 +117,7 @@ object GeskReader {
             prim = (rs,"tar_prim"),
             znJ = (rs,"tar_zn_j")
           ),
+          id = (rs,"id"),
           naimp = (rs, "naimp"),
           kelsch = (rs, "kelsch"),
           idObj = (rs,"id_ob"),
