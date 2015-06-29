@@ -15,8 +15,11 @@ object MtrConfigBuilderG {
 
     mtrConfig.mtr = mtr
     mtrConfig.effDttm = mtr.receiveDt
-    //TODO check multizone
-    mtrConfig.mtrConfigTyCd = "EE-1"
+
+    if (potr.isMultiZone)
+      mtrConfig.mtrConfigTyCd = "EE-1"
+    else
+      mtrConfig.mtrConfigTyCd = "EE-ZS"
 
     mtrConfig
   }

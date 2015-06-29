@@ -37,8 +37,12 @@ object MtrBuilderG {
     val mtr = new MtrEntity(KeysBuilder.getEnvId)
 
     mtr.mtrId = KeysBuilder.getMtrId
-    //TODO учесть разные типы счетчиков
-    mtr.mtrTypeCd = "E-1F"
+
+    if (potr.isMultiZone)
+      mtr.mtrTypeCd = "E-3F"
+    else
+      mtr.mtrTypeCd = "E-1F"
+
     mtr.badgeNbr = potr.nelsch
     mtr.mtrStatusFlg = "A"
     mtr.mfgCd = "CM"

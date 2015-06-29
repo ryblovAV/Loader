@@ -7,17 +7,21 @@ import org.loader.pojo.reg.RegEntity
 
 object RegBuilderG {
 
-  //TODO add multi zone
-  def build(mtr: MtrEntity, potr: Potr):RegEntity = {
+  def build(mtr: MtrEntity, potr: Potr, isMultiZone: Boolean, seq: Int):RegEntity = {
     val reg = new RegEntity(KeysBuilder.getEnvId)
 
     reg.regId = KeysBuilder.getRegId
 
     reg.mtr = mtr
     reg.effDttm = mtr.receiveDt
-    reg.readSeq = 1
+
+    if (isMultiZone) {
+      reg.touCd = potr.zone.iZn.get
+    }
+    reg.readSeq = seq
+
     reg.consumSubFlg = "C"
-    reg.regConst = potr.rks
+    reg.regConst = potr.mt.rks
     reg.readOutTypeCd = "ELT"
 
     reg.nbrOfDgtsLft = 7
@@ -27,7 +31,6 @@ object RegBuilderG {
     mtr.regMtrEntitySet.add(reg)
 
     reg
-
   }
 
 }
