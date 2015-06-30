@@ -12,6 +12,9 @@ case class Mt(volt: Option[String],
               tip: Option[String],
               pLi: Option[String],
               pTr: Option[String],
+              rks: Double,
+              r1: Double,
+              r2: Double,
               dataSh: Option[java.util.Date])
 
 case class Tar(sn: Option[String],
@@ -19,7 +22,12 @@ case class Tar(sn: Option[String],
                prim: Option[String],
                znJ: Option[String])
 
+case class Zone(iZn: Option[String],
+                idGrup: Option[Int],
+                listZonePotr: List[Potr] = List.empty[Potr])
+
 case class  Potr(id: Int,
+                 idPlat: String,
                  naimp: String,
                  kelsch: String,
                  nelsch: Option[String],
@@ -27,8 +35,6 @@ case class  Potr(id: Int,
                  address: Address,
                  mt: Mt,
                  tar: Tar,
-                 rks: Double,
-                 r2: Double,
                  data2: java.util.Date,
                  kniga: Option[String],
                  gp:Option[String],
@@ -40,8 +46,7 @@ case class  Potr(id: Int,
                  grpt46: Option[String],
                  saldo: Option[Double],
                  parentIdRec: Option[String],
-                 iZn: Option[String],
-                 idGrup: Option[Int]) {
+                 zone: Zone) {
 
   def filterGw:Option[Int] = mt.gw match {
     case Some(year) if ((year > 1900) && (year <= 2016)) => Some(year)
@@ -52,5 +57,7 @@ case class  Potr(id: Int,
     case Some(year) => Some(DBUtl.getDate(year,1,1))
     case _ => None
   }
+
+  def isMultiZone = zone.listZonePotr.isEmpty == false
 
 }

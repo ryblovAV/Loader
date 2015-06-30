@@ -8,8 +8,11 @@ import org.loader.models.{SubjectModel, ObjectModel}
 import org.loader.out.gesk.objects.{Potr, Plat}
 import org.loader.out.gesk.reader.GeskReader
 import org.loader.pojo.acct.AcctEntity
+import org.loader.pojo.mr.MrEntity
+import org.loader.pojo.mtr.MtrEntity
 import org.loader.pojo.per.PerEntity
 import org.loader.pojo.prem.PremEntity
+import org.loader.pojo.reg.RegEntity
 import org.loader.pojo.sa.SaEntity
 import org.loader.writer.LogWritter
 import org.springframework.context.support.ClassPathXmlApplicationContext
@@ -30,25 +33,47 @@ object LoaderG extends Logging{
     generalDAO.removePer(perId)
   }
 
+  def buildReg(potr:Potr, mtr:MtrEntity, seq:Int):(RegEntity,Potr) = {
+    (RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = true, seq = seq),potr)
+  }
+  
   def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
 
     val sp = SpBuilderG.build(potr = potr, premise = mPremise(potr.idObj))
     val mtr = MtrBuilderG.build(potr)
     val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
-    val mr = MrBuilderG.build(readDttm = readDttm,
-      mtrConfig = mtrCfg)
+    val mrFirst = MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
+
+    val mrLast = MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
+
+    val regList = potr.zone.listZonePotr.view.zipWithIndex.map(
+        (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2)
+    ).toList
 
     if (potr.isMultiZone) {
-      for ((p,i) <- potr.zone.listZonePotr.view.zipWithIndex) {
+
+      for ((reg,potr) <- regList) {
+
         RegReadBuilderG.build(
-          mr = mr,
-          reg = RegBuilderG.build(mtr = mtr, potr = p, isMultiZone = true, seq = i),
-          regReading = p.mt.r2)
+          mr = mrFirst,
+          reg = reg,
+          regReading = potr.mt.r1)
+
+          RegReadBuilderG.build(
+            mr = mrLast,
+            reg = reg,
+            regReading = potr.mt.r2)
       }
+
     } else {
       RegReadBuilderG.build(
-        mr = mr,
+        mr = mrFirst,
+        reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, seq = 1),
+        regReading = potr.mt.r1)
+
+      RegReadBuilderG.build(
+        mr = mrLast,
         reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, seq = 1),
         regReading = potr.mt.r2)
     }
@@ -57,17 +82,17 @@ object LoaderG extends Logging{
 
     MtrLocHisBuilderG.build(mtr = mtr, spMtrHist = spMtrHist, readDttm = readDttm)
 
-    SpMtrEvtBuilderG.build(spMtrHist = spMtrHist, mr = mr)
+    SpMtrEvtBuilderG.build(spMtrHist = spMtrHist, mr = mrFirst)
 
     //TODO Если NO_RSCH  = true – то по точке не производим расчет (не привязываем к РДО
     val sa = SaBuilderG.buildSaForSp(plat, potr, mPremise(potr.idObj))
 
-    SaSpBuilderG.buildSaSp(sa = sa, sp = sp, mr = mr)
+    SaSpBuilderG.buildSaSp(sa = sa, sp = sp, mr = mrFirst, isMinus = false)
 
     //load finance
     loadFinance(potr,sa)
 
-    ObjectModel(potr, sp,sa, mr)
+    ObjectModel(potr, sp,sa, mrLast, regList)
   }
 
   def loadFinance(potr:Potr, sa:SaEntity) = {
@@ -81,6 +106,9 @@ object LoaderG extends Logging{
 
     val per = PersonBuilderG.buildPerson(plat)
     val acct = AccountBuilderG.buildAccount(plat)
+
+    //acct apay (БИК)
+    AcctApayBuilderG.buildAcctApay(plat = plat, acct = acct)
 
     //создаем premise для каждого id
     val mPremise: Map[String, PremEntity] =
@@ -102,7 +130,7 @@ object LoaderG extends Logging{
 
   def addToParent(parIdRec: String, obj: ObjectModel, m:Map[String,ObjectModel]) = {
     for (parentSubj <- m.get(obj.potr.idRecI)) {
-      SaSpBuilderG.buildSaSp(sa = parentSubj.sa, sp = obj.sp, mr = obj.mr)
+      SaSpBuilderG.buildSaSp(sa = parentSubj.sa, sp = obj.sp, mr = obj.mr, isMinus = true)
     }
   }
 
@@ -158,10 +186,13 @@ object LoaderG extends Logging{
 
   def loadPlat = {
     info("------------ start read from db")
-    val platList = fillZonePotr(GeskReader.readPlat.filter(_.idPlat == "7071"))
+    val platList = fillZonePotr(GeskReader.readPlat)
 
     info("------------ start build subjectList")
-    val subjects = platList.map((plat) => platToSubject(plat))
+    val subjects = platList.map((plat) => {
+      info(s"platId = ${plat.idPlat}")
+      platToSubject(plat)
+    })
 
     info("------------ start transformation")
     transforEntity(subjects)
