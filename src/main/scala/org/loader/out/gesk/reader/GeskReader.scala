@@ -1,5 +1,7 @@
 package org.loader.out.gesk.reader
 
+import java.sql.ResultSet
+
 import org.loader.out.gesk.objects._
 import org.loader.reader.JDBCExtractorSafe._
 import org.loader.reader.JdbcTemplatesUtl._
@@ -18,7 +20,7 @@ object GeskReader {
 
   final val sqlPlat = "select * from v_gesk_plat where id_plat = '15065'"
 
-  final val sqlPlatAll = "select * from v_gesk_plat where rownum < 100"
+  final val sqlPlatAll = "select * from v_gesk_plat /*where rownum < 100*/"
 
   final val sqlPlat0 =
     s"""
@@ -34,6 +36,7 @@ object GeskReader {
 
   final val sqlPotr = "select * from v_gesk_potr where id_plat = :id_plat"
 
+  final val sqlPotrAll = "select * from v_gesk_potr"
 
   def readPlat: List[Plat] = {
 
@@ -74,71 +77,85 @@ object GeskReader {
           ko = (rs, "ko"),
           kob = (rs, "kob"),
           kOkwed = (rs, "k_okwed"),
-          oplataSum = (rs,"sum"),
-          oplataDat = (rs,"dat"),
+          bankNb = (rs,"bank_nb"),
+          rspl = (rs,"rspl"),
           potrList = Nil
         )
     }
 
+    val potrList = readAllPotr.groupBy((p) => p.idPlat)
+
     //load potr for plat
-    platList.map((plat) => plat.copy(potrList = readPotrForPlat(plat.idPlat)))
+//    platList.map((plat) => plat.copy(potrList = readPotrForPlat(plat.idPlat)))
+    platList.map((plat) => plat.copy(potrList = potrList.getOrElse(plat.idPlat,List.empty[Potr])))
+
+
+
 
   }
 
+  def rsToPotr(rs:ResultSet, rowNum: Int):Potr = {
+    Potr(
+      address = Address(
+        reg = None,
+        ul = (rs, "ul_a"),
+        dom = (rs, "dom_a"),
+        kv = (rs, "kv_a"),
+        ind = None,
+        inn = None,
+        abv1 = (rs,"abv_d"),
+        abv2 = (rs,"abv_u")
+      ),
+      mt = Mt(volt = (rs, "volt"),
+        amper = (rs, "amper"),
+        klast = (rs, "klast"),
+        ustM = (rs, "ust_m"),
+        gw = (rs, "gw"),
+        mIn = (rs, "m_in"),
+        dp = (rs, "d_p"),
+        tip = (rs, "tip"),
+        pLi = (rs,"p_li"),
+        pTr = (rs,"p_tr"),
+        dataSh = (rs,"data_sh"),
+        rks = (rs, "rks"),
+        r1 = (rs, "r1"),
+        r2 = (rs, "r2")
+      ),
+      tar = Tar(
+        sn = (rs,"tar_sn"),
+        gr = (rs,"tar_gr"),
+        prim = (rs,"tar_prim"),
+        znJ = (rs,"tar_zn_j")
+      ),
+      id = (rs,"id"),
+      idPlat = (rs,"id_plat"),
+      naimp = (rs, "naimp"),
+      kelsch = (rs, "kelsch"),
+      idObj = (rs,"id_ob"),
+      nelsch = (rs, "nelsch"),
+      data2 = (rs, "data2"),
+      kniga = (rs,"kniga"),
+      gp = (rs,"gp"),
+      kp = (rs,"kp"),
+      idRec = (rs,"id_rec"),
+      idRecI = (rs,"id_rec_i"),
+      k1 = (rs,"k1"),
+      t = (rs,"t"),
+      grpt46 = (rs,"grptr46"),
+      saldo = (rs,"OB_SALDO"),
+      parentIdRec = (rs,"parent_id_rec"),
+      zone = Zone(
+        iZn = (rs,"i_zn"),
+        idGrup = (rs,"id_grup"))
+    )
+  }
+
   def readPotrForPlat(idPlat: String): List[Potr] = {
-    jdbcReader.queryWithParameters(sqlPotr, HashMap("id_plat" -> idPlat)) {
-      (rs, rowNum) =>
-        Potr(
-          address = Address(
-            reg = None,
-            ul = (rs, "ul_a"),
-            dom = (rs, "dom_a"),
-            kv = (rs, "kv_a"),
-            ind = None,
-            inn = None,
-            abv1 = (rs,"abv_d"),
-            abv2 = (rs,"abv_u")
-          ),
-          mt = Mt(volt = (rs, "volt"),
-            amper = (rs, "amper"),
-            klast = (rs, "klast"),
-            ustM = (rs, "ust_m"),
-            gw = (rs, "gw"),
-            mIn = (rs, "m_in"),
-            dp = (rs, "d_p"),
-            tip = (rs, "tip"),
-            pLi = (rs,"p_li"),
-            pTr = (rs,"p_tr"),
-            dataSh = (rs,"data_sh")
-          ),
-          tar = Tar(
-            sn = (rs,"tar_sn"),
-            gr = (rs,"tar_gr"),
-            prim = (rs,"tar_prim"),
-            znJ = (rs,"tar_zn_j")
-          ),
-          id = (rs,"id"),
-          naimp = (rs, "naimp"),
-          kelsch = (rs, "kelsch"),
-          idObj = (rs,"id_ob"),
-          nelsch = (rs, "nelsch"),
-          rks = (rs, "rks"),
-          r2 = (rs, "r2"),
-          data2 = (rs, "data2"),
-          kniga = (rs,"kniga"),
-          gp = (rs,"gp"),
-          kp = (rs,"kp"),
-          idRec = (rs,"id_rec"),
-          idRecI = (rs,"id_rec_i"),
-          k1 = (rs,"k1"),
-          t = (rs,"t"),
-          grpt46 = (rs,"grptr46"),
-          saldo = (rs,"OB_SALDO"),
-          parentIdRec = (rs,"parent_id_rec"),
-          iZn = (rs,"i_zn"),
-          idGrup = (rs,"id_grup")
-        )
-    }
+    jdbcReader.queryWithParameters(sqlPotr, HashMap("id_plat" -> idPlat))(rsToPotr)
+  }
+
+  def readAllPotr: List[Potr] = {
+    jdbcReader.query(sqlPotrAll)(rsToPotr)
   }
 
 }
