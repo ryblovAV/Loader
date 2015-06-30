@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "CI_PAY_TNDR_ST", schema = "STGADM")
+@Table(name = "CI_PAY_TNDR_ST", schema = "RUSADM")
 public class PayTndrStEntity {
 
   @EmbeddedId

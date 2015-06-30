@@ -10,11 +10,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_MTR_LOC_HIS", schema = "STGADM")
+@Table(name = "CI_MTR_LOC_HIS", schema = "RUSADM")
 public class MtrLocHisEntity {
 
     @ElementCollection
-    @CollectionTable(name = "CI_MTR_LOC_HIS_K", schema = "STGADM", joinColumns = @JoinColumn(name = "MTR_LOC_HIST_ID"))
+    @CollectionTable(name = "CI_MTR_LOC_HIS_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "MTR_LOC_HIST_ID"))
     public Set<MtrLocHisKEntity> mtrLocHisKEntitySet = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.PERSIST, optional = false)

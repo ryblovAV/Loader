@@ -3,7 +3,7 @@ package org.loader.pojo.tndr;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CI_TNDR_CTL_ST", schema = "STGADM")
+@Table(name = "CI_TNDR_CTL_ST", schema = "RUSADM")
 public class TndrCtlStEntity {
 
   @EmbeddedId

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_PREM", schema = "STGADM")
+@Table(name = "CI_PREM", schema = "RUSADM")
 public class PremEntity {
 
   protected PremEntity() {
@@ -19,11 +19,11 @@ public class PremEntity {
   }
 
   @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "CI_PREM_K", schema = "STGADM", joinColumns = @JoinColumn(name = "PREM_ID"))
+  @CollectionTable(name = "CI_PREM_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "PREM_ID"))
   public Set<PremKEntity> premKEntitySet = new HashSet<>();
 
   @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "CI_PREM_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "PREM_ID"))
+  @CollectionTable(name = "CI_PREM_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "PREM_ID"))
   public Set<PremCharEntity> premCharEntitySet = new HashSet<>();
 
   @Override

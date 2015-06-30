@@ -6,7 +6,7 @@ import org.loader.pojo.mr.MrEntity;
 import javax.persistence.*;
 
 @Embeddable
-@Table(name = "CI_SP_MTR_EVT", schema = "STGADM")
+@Table(name = "CI_SP_MTR_EVT", schema = "RUSADM")
 public class SpMtrEvtEntity {
 
   public SpMtrEvtEntity() {

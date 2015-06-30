@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_ADJ", schema = "STGADM")
+@Table(name = "CI_ADJ", schema = "RUSADM")
 public class AdjEntity {
   protected AdjEntity() {
   }
@@ -41,7 +41,7 @@ public class AdjEntity {
   }
 
   @ElementCollection
-  @CollectionTable(name = "CI_ADJ_K", schema = "STGADM", joinColumns = @JoinColumn(name = "ADJ_ID"))
+  @CollectionTable(name = "CI_ADJ_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "ADJ_ID"))
   public Set<AdjKEntity> adjKEntitySet = new HashSet<>();
 
 //  @OneToMany(mappedBy = "adj", cascade = CascadeType.ALL)

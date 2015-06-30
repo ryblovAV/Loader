@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_SA", schema = "STGADM")
+@Table(name = "CI_SA", schema = "RUSADM")
 public class SaEntity {
 
     protected SaEntity() {
@@ -25,11 +25,11 @@ public class SaEntity {
     }
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_SA_K", schema = "STGADM", joinColumns = @JoinColumn(name = "SA_ID"))
+    @CollectionTable(name = "CI_SA_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "SA_ID"))
     public Set<SaKEntity> saKEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_SA_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "SA_ID"))
+    @CollectionTable(name = "CI_SA_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "SA_ID"))
     public Set<SaCharEntity> saCharEntitySet = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)

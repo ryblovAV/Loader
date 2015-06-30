@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_MTR", schema = "STGADM")
+@Table(name = "CI_MTR", schema = "RUSADM")
 public class MtrEntity {
 
   protected MtrEntity() {
@@ -45,11 +45,11 @@ public class MtrEntity {
   }
 
   @ElementCollection
-  @CollectionTable(name = "CI_MTR_K", schema = "STGADM", joinColumns = @JoinColumn(name = "MTR_ID"))
+  @CollectionTable(name = "CI_MTR_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "MTR_ID"))
   public Set<MtrKEntity> mtrKEntitySet = new HashSet<>();
      
   @ElementCollection
-  @CollectionTable(name = "CI_MTR_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "MTR_ID"))
+  @CollectionTable(name = "CI_MTR_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "MTR_ID"))
   public Set<MtrCharEntity> mtrCharEntitySet = new HashSet<>();
      
 

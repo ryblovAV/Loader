@@ -9,11 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_ACCT_APAY", schema = "STGADM")
+@Table(name = "CI_ACCT_APAY", schema = "RUSADM")
 public class AcctApayEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_ACCT_APAY_K", schema = "STGADM", joinColumns = @JoinColumn(name = "ACCT_APAY_ID"))
+    @CollectionTable(name = "CI_ACCT_APAY_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "ACCT_APAY_ID"))
     public Set<AcctApayKEntity> acctApayKEntitySet = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.PERSIST)

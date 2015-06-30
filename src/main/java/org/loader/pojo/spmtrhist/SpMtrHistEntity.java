@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_SP_MTR_HIST", schema = "STGADM")
+@Table(name = "CI_SP_MTR_HIST", schema = "RUSADM")
 
 public class SpMtrHistEntity {
   protected SpMtrHistEntity() {
@@ -46,11 +46,11 @@ public class SpMtrHistEntity {
   }
 
   @ElementCollection
-  @CollectionTable(name = "CI_SP_MTR_HIST_K", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_MTR_HIST_ID"))
+  @CollectionTable(name = "CI_SP_MTR_HIST_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "SP_MTR_HIST_ID"))
   public Set<SpMtrHistKEntity> spMtrHistKEntitySet = new HashSet<>();
      
   @ElementCollection
-  @CollectionTable(name = "CI_SP_MTR_EVT", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_MTR_HIST_ID"))
+  @CollectionTable(name = "CI_SP_MTR_EVT", schema = "RUSADM", joinColumns = @JoinColumn(name = "SP_MTR_HIST_ID"))
   public Set<SpMtrEvtEntity> spMtrEvtSpMtrHistEntitySet = new HashSet<>();
 
 //  @OneToMany(mappedBy = "spMtrHist", cascade = CascadeType.ALL)

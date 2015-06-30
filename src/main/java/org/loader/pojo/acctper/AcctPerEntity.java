@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "CI_ACCT_PER", schema = "STGADM")
+@Table(name = "CI_ACCT_PER", schema = "RUSADM")
 public class AcctPerEntity {
 
     @EmbeddedId

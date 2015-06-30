@@ -10,15 +10,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_SA_SP", schema = "STGADM")
+@Table(name = "CI_SA_SP", schema = "RUSADM")
 public class SaSpEntity {
 
     @ElementCollection
-    @CollectionTable(name = "CI_SA_SP_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "SA_SP_ID"))
+    @CollectionTable(name = "CI_SA_SP_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "SA_SP_ID"))
     public Set<SaSpCharEntity> saSpCharEntitySet = new HashSet<>();
 
     @ElementCollection
-    @CollectionTable(name = "CI_SA_SP_K", schema = "STGADM", joinColumns = @JoinColumn(name = "SA_SP_ID"))
+    @CollectionTable(name = "CI_SA_SP_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "SA_SP_ID"))
     public Set<SaSpKEntity> saSpKEntitySet = new HashSet<>();
 
     //TODO add stopMr

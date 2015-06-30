@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_PER", schema = "STGADM")
+@Table(name = "CI_PER", schema = "RUSADM")
 public class Master {
 
     @Id
@@ -14,7 +14,7 @@ public class Master {
     public String id;
     @Access(AccessType.FIELD)
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_PER_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
+    @CollectionTable(name = "CI_PER_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<MasterAddress> addresses = new HashSet<>();
 
     public Master() {

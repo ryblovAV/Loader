@@ -11,19 +11,19 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "CI_SP", schema = "STGADM")
+@Table(name = "CI_SP", schema = "RUSADM")
 public class SpEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_SP_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_ID"))
+    @CollectionTable(name = "CI_SP_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "SP_ID"))
     public Set<SpCharEntity> spCharEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_SP_K", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_ID"))
+    @CollectionTable(name = "CI_SP_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "SP_ID"))
     public Set<SpKEntity> spKEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_SP_OP_AREA", schema = "STGADM", joinColumns = @JoinColumn(name = "SP_ID"))
+    @CollectionTable(name = "CI_SP_OP_AREA", schema = "RUSADM", joinColumns = @JoinColumn(name = "SP_ID"))
     public Set<SpOpAreaEntity> spOpAreaEntitySet = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)

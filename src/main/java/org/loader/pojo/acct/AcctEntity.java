@@ -11,7 +11,7 @@ import java.util.Set;
         
 
 @Entity
-@Table(name = "CI_ACCT", schema = "STGADM")
+@Table(name = "CI_ACCT", schema = "RUSADM")
 public class AcctEntity {
 
   protected AcctEntity() {
@@ -22,11 +22,11 @@ public class AcctEntity {
   }
 
   @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "CI_ACCT_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "ACCT_ID"))
+  @CollectionTable(name = "CI_ACCT_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "ACCT_ID"))
   public Set<AcctCharEntity> acctCharEntitySet = new HashSet<>();
 
   @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(name = "CI_ACCT_K", schema = "STGADM", joinColumns = @JoinColumn(name = "ACCT_ID"))
+  @CollectionTable(name = "CI_ACCT_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "ACCT_ID"))
   public Set<AcctKEntity> acctKEntitySet = new HashSet<>();
 
   @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)

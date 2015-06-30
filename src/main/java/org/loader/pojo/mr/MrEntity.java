@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_MR", schema = "STGADM")
+@Table(name = "CI_MR", schema = "RUSADM")
 public class MrEntity {
 
   protected MrEntity() {
@@ -46,11 +46,11 @@ public class MrEntity {
   }
 
   @ElementCollection
-  @CollectionTable(name = "CI_MR_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "MR_ID"))
+  @CollectionTable(name = "CI_MR_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "MR_ID"))
   public Set<MrCharEntity> mrCharEntitySet = new HashSet<>();
      
   @ElementCollection
-  @CollectionTable(name = "CI_MR_K", schema = "STGADM", joinColumns = @JoinColumn(name = "MR_ID"))
+  @CollectionTable(name = "CI_MR_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "MR_ID"))
   public Set<MrKEntity> mrKEntitySet = new HashSet<>();
 
   @OneToMany(mappedBy = "mr", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

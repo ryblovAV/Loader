@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_REG", schema = "STGADM")
+@Table(name = "CI_REG", schema = "RUSADM")
 public class RegEntity {
   protected RegEntity() {
   }
@@ -43,11 +43,11 @@ public class RegEntity {
   }
 
   @ElementCollection
-  @CollectionTable(name = "CI_REG_K", schema = "STGADM", joinColumns = @JoinColumn(name = "REG_ID"))
+  @CollectionTable(name = "CI_REG_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "REG_ID"))
   public Set<RegKEntity> regKEntitySet = new HashSet<>();
      
   @ElementCollection
-  @CollectionTable(name = "CI_REG_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "REG_ID"))
+  @CollectionTable(name = "CI_REG_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "REG_ID"))
   public Set<RegCharEntity> regCharEntitySet = new HashSet<>();
      
   @OneToMany(mappedBy = "reg", cascade = CascadeType.ALL)

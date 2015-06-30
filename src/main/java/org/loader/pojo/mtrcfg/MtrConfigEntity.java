@@ -10,11 +10,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_MTR_CONFIG", schema = "STGADM")
+@Table(name = "CI_MTR_CONFIG", schema = "RUSADM")
 public class MtrConfigEntity {
 
     @ElementCollection
-    @CollectionTable(name = "CI_MTR_CONFIG_K", schema = "STGADM", joinColumns = @JoinColumn(name = "MTR_CONFIG_ID"))
+    @CollectionTable(name = "CI_MTR_CONFIG_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "MTR_CONFIG_ID"))
     public Set<MtrConfigKEntity> mtrConfigKEntitySet = new HashSet<>();
 
     @OneToMany(mappedBy = "mtrConfig", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

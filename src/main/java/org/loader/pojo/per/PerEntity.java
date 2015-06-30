@@ -8,27 +8,27 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "CI_PER", schema = "STGADM")
+@Table(name = "CI_PER", schema = "RUSADM")
 public class PerEntity {
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_PER_ID", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
+    @CollectionTable(name = "CI_PER_ID", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerIdEntity> perIdEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_PER_PHONE", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
+    @CollectionTable(name = "CI_PER_PHONE", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerPhoneEntity> perPhoneEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_PER_CHAR", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
+    @CollectionTable(name = "CI_PER_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerCharEntity> perCharEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_PER_K", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
+    @CollectionTable(name = "CI_PER_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerKEntity> perKEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_PER_NAME", schema = "STGADM", joinColumns = @JoinColumn(name = "PER_ID"))
+    @CollectionTable(name = "CI_PER_NAME", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerNameEntity> perNameEntitySet = new HashSet<>();
 
 

@@ -9,15 +9,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "CI_FT", schema = "STGADM")
+@Table(name = "CI_FT", schema = "RUSADM")
 public class FtEntity {
 
     @ElementCollection
-    @CollectionTable(name = "CI_FT_K", schema = "STGADM", joinColumns = @JoinColumn(name = "FT_ID"))
+    @CollectionTable(name = "CI_FT_K", schema = "RUSADM", joinColumns = @JoinColumn(name = "FT_ID"))
     public Set<FtKEntity> ftKEntitySet = new HashSet<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "CI_FT_GL", schema = "STGADM", joinColumns = @JoinColumn(name = "FT_ID"))
+    @CollectionTable(name = "CI_FT_GL", schema = "RUSADM", joinColumns = @JoinColumn(name = "FT_ID"))
     public Set<FtGlEntity> ftGlEntitySet = new HashSet<>();
 
     @Id
