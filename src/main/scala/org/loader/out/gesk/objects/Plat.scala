@@ -6,8 +6,13 @@ case class Address(reg: Option[String],
                    kv: Option[String],
                    ind: Option[String],
                    inn: Option[String],
+                   phone: Option[String],
                    abv1: Option[String] = None,
                    abv2: Option[String] = None)
+
+case class Phone(tel1:Option[String],
+                 tel2:Option[String],
+                 tel3:Option[String])
 
 case class Plat(idPlat: String,
                 seq: Int,
@@ -29,4 +34,5 @@ case class Plat(idPlat: String,
                 rspl:Option[String],
                 oplataSum:List[Double] = List.empty[Double],
                 oplataDat:List[java.util.Date] = List.empty[java.util.Date],
+                phone: Phone,
                 potrList:List[Potr])

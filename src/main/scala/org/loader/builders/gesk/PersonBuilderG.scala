@@ -99,7 +99,26 @@ object PersonBuilderG extends Logging{
       case None =>
     }
 
+    def getPhoneStr(name:String,phone:Option[String]) = phone match {
+      case Some(phone) => s"$name=phone"
+      case _ => ""
+    }
+
     //TODO Add phone
+    val phones = List(
+      ("t_f",plat.addressF.phone),
+      ("t_u",plat.addressU.phone),
+      ("tel1",plat.phone.tel1),
+      ("tel2",plat.phone.tel2),
+      ("tel3",plat.phone.tel3))
+
+    val phoneStr = phones.foldLeft("")(
+        (b,a)=> s"${if (!b.isEmpty) "/" else ""} ${a._1}=${getPhoneStr(a._1,a._2)}"
+      )
+
+    if (!phoneStr.isEmpty) {
+      addPersonChar(person = person, Characteristic(charTypeCd = "KOMMENT", adhocCharVal = phoneStr))
+    }
 
     person
   }

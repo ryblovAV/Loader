@@ -54,6 +54,7 @@ object GeskReader {
             kv = (rs, "kv_u"),
             ind = (rs, "ind_u"),
             inn = (rs, "inn_u"),
+            phone = (rs, "t_u"),
             abv1 = (rs, "abv1_u"),
             abv2 = (rs, "abv2_u")
           ),
@@ -64,6 +65,7 @@ object GeskReader {
             kv = (rs, "kv_f"),
             ind = (rs, "ind_f"),
             inn = (rs, "inn_f"),
+            phone = (rs, "t_f"),
             abv1 = (rs, "abv1_f"),
             abv2 = (rs, "abv2_f")),
           kontr = (rs, "kontr"),
@@ -79,6 +81,11 @@ object GeskReader {
           kOkwed = (rs, "k_okwed"),
           bankNb = (rs,"bank_nb"),
           rspl = (rs,"rspl"),
+          phone = Phone(
+            tel1 = (rs,"tel1"),
+            tel2 = (rs,"tel2"),
+            tel3 = (rs,"tel3")
+          ),
           potrList = Nil
         )
     }
@@ -104,7 +111,8 @@ object GeskReader {
         ind = None,
         inn = None,
         abv1 = (rs,"abv_d"),
-        abv2 = (rs,"abv_u")
+        abv2 = (rs,"abv_u"),
+        phone = None
       ),
       mt = Mt(volt = (rs, "volt"),
         amper = (rs, "amper"),
