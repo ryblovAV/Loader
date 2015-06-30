@@ -12,8 +12,8 @@ object DateBuilder {
     calendar.set(Calendar.YEAR, year)
     calendar.set(Calendar.MONTH, month - 1)
     calendar.set(Calendar.DAY_OF_MONTH, day)
-    trunc(calendar)
-    return calendar.getTime
+
+    return trunc(calendar).getTime
   }
 
   implicit def dateToStr(dt: java.util.Date): String = {
@@ -37,11 +37,19 @@ object DateBuilder {
     calendar.getTime
   }
 
+  def addMonth(date: Date, month: Int) = {
+    val calendar = Calendar.getInstance
+    calendar.setTime(date)
+    calendar.add(Calendar.MONTH, month)
+    calendar.getTime
+  }
+
   def trunc(calendar: Calendar) = {
     calendar.set(Calendar.HOUR_OF_DAY, 0);
     calendar.set(Calendar.MINUTE, 0);
     calendar.set(Calendar.SECOND, 0);
     calendar.set(Calendar.MILLISECOND, 0);
+    calendar
   }
 
   def lastDay(date: Date) = {
@@ -49,9 +57,7 @@ object DateBuilder {
     calendar.setTime(date)
     calendar.add(Calendar.MONTH,1)
     calendar.add(Calendar.HOUR,-24)
-    trunc(calendar)
-
-    calendar.getTime
+    trunc(calendar).getTime
   }
 
 }

@@ -13,7 +13,7 @@ import org.scalatest.junit.JUnitRunner
 class GeskLoaderTest extends FunSuite with Logging {
 
   ignore("load plat") {
-    val platList = GeskReader.readPlat("1001")
+    val platList = GeskReader.readPlat
     assert(!platList.isEmpty)
   }
 

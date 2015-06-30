@@ -43,11 +43,14 @@ object MtrBuilderG {
     else
       mtr.mtrTypeCd = "E-1F"
 
-    mtr.badgeNbr = potr.nelsch
+    for (nelsch <- potr.nelsch) {
+      mtr.badgeNbr = nelsch
+      mtr.serialNbr = nelsch.take(16)
+    }
+
     mtr.mtrStatusFlg = "A"
     mtr.mfgCd = "CM"
     mtr.modelCd = "CM"
-    mtr.serialNbr = potr.nelsch
     mtr.receiveDt = getRecieveDt(potr)
 
     for (tip <- potr.mt.tip)

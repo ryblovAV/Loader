@@ -2,6 +2,7 @@ package org.loader.db
 
 import grizzled.slf4j.Logging
 import org.loader.builders.gesk.LoaderG
+import org.loader.pojo.per.PerEntity
 import org.scalatest.FunSuite
 
 import scala.collection.JavaConversions._
@@ -9,7 +10,25 @@ import scala.collection.JavaConversions._
 class FindPerTest extends FunSuite with Logging{
 
   test("find per") {
-    val per = LoaderG.findPer("5150003653")
+    val perId = "5150003666"
+
+    val per = LoaderG.findPer(perId)
+    assert(per.perId === perId)
+
+    val apList = per.acctPerEntities
+    assert(apList.size === 1)
+
+    val acct = apList.head.acct
+
+    val saList = acct.saEntitySet
+    assert(saList.size === 1)
+
+  }
+
+
+
+
+  def print(per: PerEntity) {
     info("----------- perChar")
     for (p <- per.perCharEntitySet) {
       info(s"${p.charTypeCd} = ${p.charVal} ${p.adhocCharVal}")

@@ -17,7 +17,7 @@ object KeysBuilder extends Logging {
   def sqlForKey(columnName:String, tableName: String, schemeName: String = "stgadm")
   = s"""| select pkg_cm_load_juridical_keys.per_id('15') as id
         |   from dual
-        |connect by level < 100""".stripMargin
+        |connect by level < 1000""".stripMargin
 
   def fillMap(sql:String) = {
     val keys = jdbcReader.query(sql)((rs, rowNum) => rs.getString("id"))

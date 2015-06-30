@@ -48,9 +48,9 @@
                 <entry key="hibernate.connection.charSet" value="UTF-8"/>
                 <!--<entry key="hibernate.hbm2ddl.auto" value="validate"/>-->
 
-                <entry key="org.hibernate.jdbc" value="TRACE"/>
-                <entry key="log4j.logger.org.hibernate.SQL" value="TRACE"/>
-                <entry key="log4j.logger.org.hibernate.type" value = "TRACE"/>
+                <!--<entry key="org.hibernate.jdbc" value="TRACE"/>-->
+                <!--<entry key="log4j.logger.org.hibernate.SQL" value="TRACE"/>-->
+                <!--<entry key="log4j.logger.org.hibernate.type" value = "TRACE"/>-->
 
                 <entry key="hibernate.archive.autodetection" value="class"/>
                 <entry key="hibernate.format_sql" value="true"/>

@@ -47,14 +47,16 @@ object PersonBuilderG extends Logging{
     val person = new PerEntity(KeysBuilder.getEnvId)
 
     person.perId = KeysBuilder.getPerId
-    info(s"person.id = ${person.perId}")
 
     person.emailid = plat.el_adr
     person.address1 = AddressBuilderG.buildAddress1(plat.addressU)
     person.address2 = plat.addressU.dom
     person.address3 = plat.addressU.ul
     person.address4 = plat.addressU.kv
-    person.city = plat.addressU.reg
+
+    for (reg <- plat.addressU.reg)
+      person.city = reg.take(90)
+
     person.postal = plat.addressU.ind
 
     //Идентификаторы

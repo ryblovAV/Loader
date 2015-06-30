@@ -2,16 +2,17 @@ package org.loader.db.dao.general
 
 import javax.persistence.EntityManager
 
-import org.loader.pojo.mtr.MtrEntity
+import grizzled.slf4j.Logging
+import org.loader.models.SubjectModel
 import org.loader.pojo.mtrcfg.MtrConfigEntity
 import org.loader.pojo.per.PerEntity
-import org.loader.pojo.prem.PremEntity
+import org.loader.pojo.tndr.DepCtlStEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.{Propagation, Transactional}
 
 @Repository("generalDAO")
-class GeneralDAOImpl extends GeneralDAO {
+class GeneralDAOImpl extends GeneralDAO with Logging{
 
   @Autowired
   var entityManager: EntityManager = _
@@ -19,6 +20,16 @@ class GeneralDAOImpl extends GeneralDAO {
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
   override def save(per: PerEntity): Unit = {
     entityManager.persist(per)
+  }
+
+  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  override def saveList(perList: List[SubjectModel]): Unit = {
+    info("--------- start persist")
+    perList.foreach((subj) => {
+      info(s"perId = ${subj.per.perId}")
+      entityManager.persist(subj.per)
+    })
+    info("--------- end persist")
   }
 
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -38,6 +49,12 @@ class GeneralDAOImpl extends GeneralDAO {
       entityManager.remove(per)
     }
   }
+
+  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  def saveDepCtlSt(depCtlSt: DepCtlStEntity) = {
+    entityManager.persist(depCtlSt)
+  }
+
 
 
 }

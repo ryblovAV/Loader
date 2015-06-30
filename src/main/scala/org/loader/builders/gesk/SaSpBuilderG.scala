@@ -8,7 +8,7 @@ import org.loader.pojo.sp.SpEntity
 
 object SaSpBuilderG {
 
-  def buildSaSp(sa: SaEntity, sp: SpEntity, mr: MrEntity) = {
+  def buildSaSp(sa: SaEntity, sp: SpEntity, mr: MrEntity, isMinus: Boolean) = {
 
     val sasp = new SaSpEntity(
       KeysBuilder.getEnvId,
@@ -21,7 +21,7 @@ object SaSpBuilderG {
 
     sasp.startMr = mr
 
-    sasp.usageFlg = "Y"
+    sasp.usageFlg = if (isMinus) "-" else "+"
     sasp.usePct = 100
 
     sasp

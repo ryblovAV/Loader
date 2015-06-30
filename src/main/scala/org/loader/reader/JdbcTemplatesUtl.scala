@@ -26,7 +26,6 @@ trait JdbcTemplatesUtl extends Logging {
   }
 
   def insert(sql:String,paramMap:java.util.Map[String,_]) = {
-    info(s"sql = $sql")
     jdbcTemplate.update(sql,paramMap)
   }
 
