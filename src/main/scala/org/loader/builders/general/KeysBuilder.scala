@@ -14,8 +14,8 @@ object KeysBuilder extends Logging {
 
   def getEnvId = 201302
 
-  def sqlForKey(columnName:String, tableName: String, schemeName: String = "stgadm")
-  = s"""| select pkg_cm_load_juridical_keys.per_id('15') as id
+  def sqlForKey(columnName:String)
+  = s"""| select pkg_cm_load_juridical_keys.${columnName}('15') as id
         |   from dual
         |connect by level < 1000""".stripMargin
 
@@ -40,61 +40,61 @@ object KeysBuilder extends Logging {
   def getIdOld(sql:String) = jdbcReader.query(sql)((rs, rowNum) => rs.getString("id")).head
 
 
-  val personSql = sqlForKey(columnName = "per_id", tableName = "ci_per_k", schemeName = "stgadm")
+  val personSql = sqlForKey(columnName = "per_id")
   def getPerId:String = getId(personSql)
 
-  val acctSql = sqlForKey(columnName = "acct_id", tableName = "ci_acct_k", schemeName = "stgadm")
+  val acctSql = sqlForKey(columnName = "acct_id")
   def getAcctId = getId(acctSql)
 
-  val premiseSql = sqlForKey(columnName = "prem_id", tableName = "ci_prem_k", schemeName = "stgadm")
+  val premiseSql = sqlForKey(columnName = "prem_id")
   def getPremiseId = getId(spSql)
 
-  val spSql = sqlForKey(columnName = "sp_id", tableName = "ci_sp_k", schemeName = "stgadm")
+  val spSql = sqlForKey(columnName = "sp_id")
   def getSpId = getId(spSql)
 
-  val mtrSql = sqlForKey(columnName = "mtr_id", tableName = "ci_mtr_k", schemeName = "stgadm")
+  val mtrSql = sqlForKey(columnName = "mtr_id")
   def getMtrId = getId(mtrSql)
 
-  val regSql = sqlForKey(columnName = "reg_id", tableName = "ci_reg_k", schemeName = "stgadm")
+  val regSql = sqlForKey(columnName = "reg_id")
   def getRegId = getId(regSql)
 
-  val mtrConfigSql = sqlForKey(columnName = "mtr_config_id", tableName = "ci_mtr_config_k", schemeName = "stgadm")
+  val mtrConfigSql = sqlForKey(columnName = "mtr_config_id")
   def getMtrConfigId = getId(mtrConfigSql)
 
-  val mrSql = sqlForKey(columnName = "mr_id", tableName = "ci_mr_k", schemeName = "stgadm")
+  val mrSql = sqlForKey(columnName = "mr_id")
   def getMrId = getId(mrSql)
 
-  val regReadSql = sqlForKey(columnName = "reg_read_id", tableName = "ci_reg_read_k", schemeName = "stgadm")
+  val regReadSql = sqlForKey(columnName = "reg_read_id")
   def getRegReadId = getId(regReadSql)
 
-  val spMtrHistSql = sqlForKey(columnName = "sp_mtr_hist_id", tableName = "ci_sp_mtr_hist_k", schemeName = "stgadm")
+  val spMtrHistSql = sqlForKey(columnName = "sp_mtr_hist_id")
   def getSpMtrHistId = getId(spMtrHistSql)
 
-  val saSql = sqlForKey(columnName = "sa_id", tableName = "ci_sa_k", schemeName = "stgadm")
+  val saSql = sqlForKey(columnName = "sa_id")
   def getSaId = getId(saSql)
 
-  val saSpSql = sqlForKey(columnName = "sa_sp_id", tableName = "ci_sa_sp_k", schemeName = "stgadm")
+  val saSpSql = sqlForKey(columnName = "sa_sp_id")
   def getSaSpId = getId(saSpSql)
 
-  val acctApaySql = sqlForKey(columnName = "acct_apay_id", tableName = "ci_acct_apay_k", schemeName = "stgadm")
+  val acctApaySql = sqlForKey(columnName = "acct_apay_id")
   def getAcctApayId = getId(acctApaySql)
 
-  val mtrLocHistSql = sqlForKey(columnName = "mtr_loc_hist_id", tableName = "mtr_loc_hist_k", schemeName = "stgadm")
+  val mtrLocHistSql = sqlForKey(columnName = "mtr_loc_hist_id")
   def getMtrLocHistId = getId(mtrLocHistSql)
 
-  val adjSql = sqlForKey(columnName = "adj_id", tableName = "adj_k", schemeName = "stgadm")
+  val adjSql = sqlForKey(columnName = "adj_id")
   def getAdjId = getId(adjSql)
 
-  val ftSql = sqlForKey(columnName = "ft_id", tableName = "ft_k", schemeName = "stgadm")
+  val ftSql = sqlForKey(columnName = "ft_id")
   def getFtId = getId(ftSql)
 
-  val depCtlStSql = sqlForKey(columnName = "dep_ctl_st_id", tableName = "ci_dep_ctl_st", schemeName = "stgadm")
+  val depCtlStSql = sqlForKey(columnName = "dep_ctl_st_id")
   def getExtTransmitId = getId(depCtlStSql)
 
-  val tndrCtlStId = sqlForKey(columnName = "tndr_ctl_st_id", tableName = "ci_tndr_ctl_st", schemeName = "stgadm")
+  val tndrCtlStId = sqlForKey(columnName = "tndr_ctl_st_id")
   def getExtBatchId = getId(tndrCtlStId)
 
-  val payTndrStId = sqlForKey(columnName = "pay_tndr_st_id", tableName = "ci_pay_tndr_st", schemeName = "stgadm")
+  val payTndrStId = sqlForKey(columnName = "pay_tndr_st_id")
   def getExtReferenceId = getId(payTndrStId)
 
   
