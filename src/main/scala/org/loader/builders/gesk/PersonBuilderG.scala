@@ -130,7 +130,7 @@ object PersonBuilderG extends Logging{
       } yield phone
     }).flatten.zipWithIndex.foreach(
         (p:(PhoneWithType,Int)) =>
-          PersonBuilder.addPersonPhone(person = person,seqNum = p._2,phone=p._1.phone,phoneType = p._1.phoneType))
+          PersonBuilder.addPersonPhone(person = person,seqNum = p._2 + 1,phone=p._1.phone,phoneType = p._1.phoneType))
 
     person
   }
