@@ -100,7 +100,7 @@ object PersonBuilderG extends Logging{
     }
 
     def getPhoneStr(name:String,phone:Option[String]) = phone match {
-      case Some(phone) => s"$name=phone"
+      case Some(phone) => s"$name=$phone"
       case _ => ""
     }
 
@@ -113,7 +113,7 @@ object PersonBuilderG extends Logging{
       ("tel3",plat.phone.tel3))
 
     val phoneStr = phones.foldLeft("")(
-        (b,a)=> s"${if (!b.isEmpty) "/" else ""} ${a._1}=${getPhoneStr(a._1,a._2)}"
+        (b,a)=> s"$b${if (!b.isEmpty) ";" else ""}${getPhoneStr(a._1,a._2)}"
       )
 
     if (!phoneStr.isEmpty) {
