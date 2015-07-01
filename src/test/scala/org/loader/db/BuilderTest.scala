@@ -16,7 +16,8 @@ class BuilderTest extends FunSuite with Logging {
         ind = Some("ind"),
         inn = Some("inn"),
         abv1 = Some("abv1"),
-        abv2 = Some("abv2"))
+        abv2 = Some("abv2"),
+        phone = None)
     assert(AddressBuilderG.buildAddress1(address) === "reg, abv2 ul, д. dom, кв. kv")
     assert(AddressBuilderG.buildAddress1(address.copy(abv2 = None)) === "reg, ul, д. dom, кв. kv")
     assert(AddressBuilderG.buildAddress1(address.copy(ul = None)) === "reg, д. dom, кв. kv")
