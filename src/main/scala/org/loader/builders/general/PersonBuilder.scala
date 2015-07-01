@@ -48,5 +48,14 @@ object PersonBuilder {
     person.perKEntitySet.add(new PerKEntity(KeysBuilder.getEnvId))
   }
 
+  def addPersonPhone(person:PerEntity, seqNum: Int, phone:String, phoneType: String) = {
+    val perPhone = new PerPhoneEntity()
+    perPhone.seqNum = seqNum
+    perPhone.phone = phone
+    perPhone.phoneTypeCd = phoneType
+
+    person.perPhoneEntitySet.add(perPhone)
+  }
+
 
 }

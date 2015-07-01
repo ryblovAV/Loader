@@ -20,23 +20,7 @@ public class PerPhoneEntity {
     @Column(name = "VERSION")
     public int version = 1;
 
-    protected PerPhoneEntity() {
-    }
-
-    public PerPhoneEntity(
-            int seqNum,
-            String phoneTypeCd,
-            String countryCode,
-            String phone,
-            String extension,
-            int version) {
-
-        this.seqNum = seqNum;
-        this.phoneTypeCd = phoneTypeCd;
-        this.countryCode = countryCode;
-        this.phone = phone;
-        this.extension = extension;
-        this.version = version;
+    public PerPhoneEntity() {
     }
 
     @Override

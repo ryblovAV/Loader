@@ -3,7 +3,7 @@ package org.loader.builders.gesk
 import grizzled.slf4j.Logging
 import org.loader.builders.general.BuilderUtl._
 import org.loader.builders.general.DateBuilder.dateToStr
-import org.loader.builders.general.KeysBuilder
+import org.loader.builders.general.{PhoneWithType, PhoneParser, PersonBuilder, KeysBuilder}
 import org.loader.builders.general.PersonBuilder.{addPersonChar, addPersonId, addPersonName}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.Plat
@@ -38,6 +38,8 @@ object PersonBuilderG extends Logging{
     case "8"  => Some("B_FED")
     case _ => None
   }
+
+
 
   def buildName(abv1:Option[String], naimU:String):String =
     s"${abv1.getOrElse("")} ${naimU}".trim
@@ -119,6 +121,16 @@ object PersonBuilderG extends Logging{
     if (!phoneStr.isEmpty) {
       addPersonChar(person = person, Characteristic(charTypeCd = "KOMMENT", adhocCharVal = phoneStr))
     }
+
+    //add Person phone
+    phones.map(_._2).map((str) => {
+      for {
+        phoneOpt <- PhoneParser.parse(str)
+        phone <- phoneOpt
+      } yield phone
+    }).flatten.zipWithIndex.foreach(
+        (p:(PhoneWithType,Int)) =>
+          PersonBuilder.addPersonPhone(person = person,seqNum = p._2,phone=p._1.phone,phoneType = p._1.phoneType))
 
     person
   }
