@@ -190,7 +190,6 @@ object LoaderG extends Logging{
 
     info("------------ start build subjectList")
     val subjects = platList.map((plat) => {
-      info(s"platId = ${plat.idPlat}")
       platToSubject(plat)
     })
 
@@ -202,12 +201,16 @@ object LoaderG extends Logging{
 
     info("------------ start saveToDb")
     generalDAO.saveList(subjects)
+
+
+//    generalDAO.saveList(subjects)
 //    generalDAO.saveDepCtlSt(depCtlSt = depCtlSt)
 
     info("------------ start logging")
-    for (subj <- subjects) {
-      LogWritter.log(subj = subj)
-    }
+//    for (subj <- subjects) {
+//      LogWritter.log(subj = subj)
+//    }
+    LogWritter.log(subjects = subjects)
     info("------------ end")
   }
 

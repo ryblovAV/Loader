@@ -55,6 +55,7 @@
                 <entry key="hibernate.archive.autodetection" value="class"/>
                 <entry key="hibernate.format_sql" value="true"/>
                 <entry key="hibernate.dialect" value="org.hibernate.dialect.Oracle9iDialect"/>
+                <entry key="hibernate.jdbc.batch_size" value="300"/>
             </map>
         </property>
     </bean>
