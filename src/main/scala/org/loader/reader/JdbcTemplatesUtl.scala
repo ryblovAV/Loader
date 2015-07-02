@@ -29,6 +29,10 @@ trait JdbcTemplatesUtl extends Logging {
     jdbcTemplate.update(sql,paramMap)
   }
 
+  def insertBatch(sql:String,paramMapArray:List[java.util.Map[String,_]]) = {
+    jdbcTemplate.batchUpdate(sql,paramMapArray.toArray)
+  }
+
 }
 
 object JdbcTemplatesUtl {
