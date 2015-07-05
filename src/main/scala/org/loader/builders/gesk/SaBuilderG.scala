@@ -36,9 +36,10 @@ object SaBuilderG extends Logging{
     sa.startDt = LoaderG.activeMonth
     sa.saStatusFlg = Constants.saOpenStatus
     for (kOkwed <- plat.kOkwed) {
-      sa.sicCd = kOkwed.split(",|;").head
+      sa.sicCd = kOkwed.split(",|;| ").head.split(" ").head
       if (sa.sicCd.length > 8)
         info(s"kOkwed = $kOkwed, sicCd = ${sa.sicCd}}")
+        sa.sicCd = " "
     }
     sa.cisDivision = GeskConstants.cisDivision
     sa.charPrem = charPrem
