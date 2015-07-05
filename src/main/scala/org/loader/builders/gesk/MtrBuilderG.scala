@@ -38,10 +38,10 @@ object MtrBuilderG {
 
     mtr.mtrId = KeysBuilder.getMtrId
 
-    if (potr.isMultiZone)
-      mtr.mtrTypeCd = "E-3F"
-    else
-      mtr.mtrTypeCd = "E-1F"
+    mtr.mtrTypeCd =
+      if (potr.isHistVol) "HIST_VOL"
+      else
+        if (potr.isMultiZone) "E-3F" else "E-1F"
 
     for (nelsch <- potr.nelsch) {
       mtr.badgeNbr = nelsch

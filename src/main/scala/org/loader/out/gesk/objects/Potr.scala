@@ -15,6 +15,7 @@ case class Mt(volt: Option[String],
               rks: Double,
               r1: Double,
               r2: Double,
+              rUz: Option[Double],
               dataSh: Option[java.util.Date])
 
 case class Tar(sn: Option[String],
@@ -59,5 +60,7 @@ case class  Potr(id: Int,
   }
 
   def isMultiZone = zone.listZonePotr.isEmpty == false
+
+  def isHistVol = mt.rUz.isEmpty == false
 
 }

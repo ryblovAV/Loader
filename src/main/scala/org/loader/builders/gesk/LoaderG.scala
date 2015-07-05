@@ -36,16 +36,44 @@ object LoaderG extends Logging{
   def buildReg(potr:Potr, mtr:MtrEntity, seq:Int):(RegEntity,Potr) = {
     (RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = true, seq = seq),potr)
   }
-  
+
+  def buildRegRead(potr: Potr, reg: RegEntity, mrFirst: MrEntity, mrLast: Option[MrEntity]):Unit = {
+    if (potr.isHistVol) {
+      RegReadBuilderG.build(
+        mr = mrFirst,
+        reg = reg,
+        regReading = potr.mt.rUz.get)
+    } else {
+      RegReadBuilderG.build(
+        mr = mrFirst,
+        reg = reg,
+        regReading = potr.mt.r1)
+
+      for (mr <- mrLast) {
+        RegReadBuilderG.build(
+          mr = mr,
+          reg = reg,
+          regReading = potr.mt.r2)
+      }
+    }
+  }
+
   def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
 
     val sp = SpBuilderG.build(potr = potr, premise = mPremise(potr.idObj))
     val mtr = MtrBuilderG.build(potr)
     val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
-    val mrFirst = MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
+    val mrFirst =
+      if (potr.isHistVol)
+        MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
+      else
+        MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
 
-    val mrLast = MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
+    val mrLast:Option[MrEntity] =
+      if (potr.isHistVol) None
+      else Some(MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg))
+
 
     val regList = potr.zone.listZonePotr.view.zipWithIndex.map(
         (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2)
@@ -55,27 +83,19 @@ object LoaderG extends Logging{
 
       for ((reg,potr) <- regList) {
 
-        RegReadBuilderG.build(
-          mr = mrFirst,
+        buildRegRead(potr = potr,
           reg = reg,
-          regReading = potr.mt.r1)
+          mrFirst = mrFirst,
+          mrLast = mrLast)
 
-          RegReadBuilderG.build(
-            mr = mrLast,
-            reg = reg,
-            regReading = potr.mt.r2)
       }
-
     } else {
-      RegReadBuilderG.build(
-        mr = mrFirst,
-        reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, seq = 1),
-        regReading = potr.mt.r1)
 
-      RegReadBuilderG.build(
-        mr = mrLast,
+      buildRegRead(potr = potr,
         reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, seq = 1),
-        regReading = potr.mt.r2)
+        mrFirst = mrFirst,
+        mrLast = mrLast)
+
     }
 
     val spMtrHist = SpMtrHistBuilderG.build(sp = sp, mtrCfg = mtrCfg)
@@ -92,7 +112,7 @@ object LoaderG extends Logging{
     //load finance
     loadFinance(potr,sa)
 
-    ObjectModel(potr, sp,sa, mrLast, regList)
+    ObjectModel(potr, sp,sa, mrLast.getOrElse(mrFirst), regList)
   }
 
   def loadFinance(potr:Potr, sa:SaEntity) = {

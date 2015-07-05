@@ -127,7 +127,8 @@ object GeskReader {
         dataSh = (rs,"data_sh"),
         rks = (rs, "rks"),
         r1 = (rs, "r1"),
-        r2 = (rs, "r2")
+        r2 = (rs, "r2"),
+        rUz = (rs,"r_uz")
       ),
       tar = Tar(
         sn = (rs,"tar_sn"),
