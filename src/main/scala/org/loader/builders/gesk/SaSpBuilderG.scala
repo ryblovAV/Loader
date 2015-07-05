@@ -14,7 +14,8 @@ object SaSpBuilderG {
       KeysBuilder.getEnvId,
       KeysBuilder.getSaSpId,
       sa,
-      sp)
+      sp
+    )
 
     sasp.startDttm = DateBuilder.addMinute(sa.startDt,1)
     sasp.stopDttm  = if (sa.endDt != null) DateBuilder.addMinute(sa.endDt,-1) else sa.endDt
@@ -25,6 +26,6 @@ object SaSpBuilderG {
     sasp.usePct = 100
 
     sasp
-
   }
+
 }

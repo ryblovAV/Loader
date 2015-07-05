@@ -14,7 +14,7 @@ import org.loader.pojo.per.PerEntity
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.reg.RegEntity
 import org.loader.pojo.sa.SaEntity
-import org.loader.writer.LogWritter
+import org.loader.writer.{SaSpWriter, SaSpObject, LogWritter}
 import org.springframework.context.support.ClassPathXmlApplicationContext
 object LoaderG extends Logging{
 
@@ -147,29 +147,6 @@ object LoaderG extends Logging{
     SubjectModel(plat = plat, per = per, acct = acct, objects = objects)
   }
 
-
-  def addToParent(parIdRec: String, obj: ObjectModel, m:Map[String,ObjectModel]) = {
-    for (parentSubj <- m.get(obj.potr.idRecI)) {
-      SaSpBuilderG.buildSaSp(sa = parentSubj.sa, sp = obj.sp, mr = obj.mr, isMinus = true)
-    }
-  }
-
-  def linkToParent(obj: ObjectModel, m:Map[String,ObjectModel]) = {
-    if (obj.potr.idRecI != "0") {
-      addToParent(parIdRec = obj.potr.idRecI,obj = obj, m = m)
-    }
-
-    for (parentIdRec <- obj.potr.parentIdRec) {
-      addToParent(parIdRec = parentIdRec,obj = obj, m = m)
-    }
-  }
-
-  def transforEntity(subjects: List[SubjectModel]) = {
-    val m = Map.empty[String,ObjectModel] ++
-      (subjects.map((s)=>s.objects).flatten.map((o) => (o.potr.idRec,o)))
-    m.values.foreach((o) => linkToParent(o,m))
-  }
-
   def checkZonePort(potr: Potr, mPotrForIdGrup:Map[Int,List[Potr]]):Option[Potr] =
     potr.zone.idGrup match {
       case Some(idGrup) => mPotrForIdGrup.get(idGrup) match {
@@ -208,28 +185,28 @@ object LoaderG extends Logging{
     info("------------ start read from db")
     val platList = fillZonePotr(GeskReader.readPlat)
 
-    info("------------ start build subjectList")
-    val subjects = platList.map((plat) => {
+    info("------------ start build subjectList (par)")
+    val subjects = platList.par.map((plat) => {
       platToSubject(plat)
-    })
+    }).toList
 
-    info("------------ start transformation")
-    transforEntity(subjects)
+    info("------------ start set ref sa sp")
+//    TransformationBuilder.transforEntity(subjects)
+    val saSpObjects = SharedBuilderG.buildListSaSpObject(subjects)
 
-    info("------------ start load tndr")
+//    info("------------ start load tndr")
 //    val depCtlSt = loadTndr(subjects = subjects)
 
     info("------------ start saveToDb")
-    generalDAO.saveList(subjects)
-
-
 //    generalDAO.saveList(subjects)
+    subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
+
+    info("start save to DB shared objects")
+    SaSpWriter.save(saSpObjects)
+
 //    generalDAO.saveDepCtlSt(depCtlSt = depCtlSt)
 
     info("------------ start logging")
-//    for (subj <- subjects) {
-//      LogWritter.log(subj = subj)
-//    }
     LogWritter.log(subjects = subjects)
     info("------------ end")
   }
