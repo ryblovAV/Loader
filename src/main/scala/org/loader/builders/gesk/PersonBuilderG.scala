@@ -56,6 +56,7 @@ object PersonBuilderG extends Logging{
     person.address3 = plat.addressU.ul
     person.address4 = plat.addressU.kv
     person.country = "RUS"
+    person.languageCd = "RUS"
 
     for (reg <- plat.addressU.reg)
       person.city = reg.take(90)
