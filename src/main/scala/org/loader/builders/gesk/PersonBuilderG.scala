@@ -59,7 +59,9 @@ object PersonBuilderG extends Logging{
     for (reg <- plat.addressU.reg)
       person.city = reg.take(90)
 
-    person.postal = plat.addressU.ind
+//    person.postal = plat.addressU.ind
+
+    person.perOrBusFlg = "B"
 
     //Идентификаторы
     addPersonIdWithCheck(person = person, idTypeCd = "SHTRIH", perIdNbrOpt = Some(plat.idPlat), primSw = "N")
