@@ -44,12 +44,14 @@ object SaSpWriter {
   def saSpObjectToMap(saObject: SaSpObject):JMap[String,_] = {
 
     val m = new JMap[String,Any]
+
     m.put("sa_sp_id",saObject.saSpId)
     m.put("sp_id",saObject.spId)
     m.put("sa_id",saObject.saId)
     m.put("start_dttm",saObject.startDttm)
     m.put("start_mr_id",saObject.startMrId)
     m.put("usage_flg",saObject.usageFlg)
+    m.put("use_pct",saObject.usePct)
 
     m
   }
