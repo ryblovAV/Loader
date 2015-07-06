@@ -31,7 +31,9 @@ public class PerEntity {
     @CollectionTable(name = "CI_PER_NAME", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
     public Set<PerNameEntity> perNameEntitySet = new HashSet<>();
 
-
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "CI_PER_ADDR_OVRD", schema = "RUSADM", joinColumns = @JoinColumn(name = "PER_ID"))
+    public Set<PerAddrOvrdEntity> perAddrOvrdEntitySet = new HashSet<>();
 
     @Id
     @Column(name = "PER_ID", columnDefinition = "char", length = 10)

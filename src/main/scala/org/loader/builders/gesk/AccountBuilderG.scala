@@ -5,8 +5,35 @@ import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.Plat
 import org.loader.pojo.acct.AcctEntity
+import org.loader.pojo.acctper.AcctPerEntity
+import org.loader.pojo.per.{PerEntity, PerAddrOvrdEntity}
+
+import org.loader.builders.general.BuilderUtl._
+
 
 object AccountBuilderG {
+
+  def addMailingAddress(plat: Plat,
+                        per:PerEntity,
+                        acct: AcctEntity,
+                        acctPer: AcctPerEntity) = {
+    if (plat.addressF == plat.addressU) {
+      acct.mailingPrem = PremiseBuilderG.buildPremise(address = plat.addressF)
+      acctPer.billAddrSrceFlg = "PER"
+    } else {
+      val perAddrOvrd = new PerAddrOvrdEntity
+      perAddrOvrd.acct = acct
+      perAddrOvrd.address1 = AddressBuilderG.buildAddress1(plat.addressF)
+      perAddrOvrd.address2 = plat.addressF.dom
+      perAddrOvrd.address3 = plat.addressF.ul
+      perAddrOvrd.address4 = plat.addressF.kv
+      perAddrOvrd.country = "RUS"
+      per.perAddrOvrdEntitySet.add(perAddrOvrd)
+
+      acctPer.billAddrSrceFlg = "ACOV"
+    }
+
+  }
 
   def buildAccount(plat: Plat) = {
 
@@ -37,6 +64,8 @@ object AccountBuilderG {
         case None =>
       }
     }
+
+
 
     //TODO Расчетный счет (ГЭСК) (4 характеристики)
     //TODO Загрузка БИК

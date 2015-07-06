@@ -135,14 +135,16 @@ object LoaderG extends Logging{
       plat.potrList.
         groupBy((p) => p.idObj).
         mapValues((pl) => pl.head).
-        mapValues((p) => PremiseBuilderG.buildPremise(p))
+        mapValues((p) => PremiseBuilderG.buildPremise(address = p.address,optKniga = p.kniga))
 
     val objects:List[ObjectModel] = plat.potrList.map((potr) => potrToObject(plat,potr,mPremise))
 
     //add service agreement to account
     objects.foreach((o) => acct.addSaEntity(o.sa))
 
-    PersonBuilderG.addAcctToPer(per, acct)
+    val acctPer = PersonBuilderG.addAcctToPer(per, acct)
+
+    AccountBuilderG.addMailingAddress(plat = plat,per = per, acct = acct, acctPer = acctPer)
 
     SubjectModel(plat = plat, per = per, acct = acct, objects = objects)
   }
@@ -186,9 +188,9 @@ object LoaderG extends Logging{
     val platList = fillZonePotr(GeskReader.readPlat)
 
     info("------------ start build subjectList (par)")
-    val subjects = platList.par.map((plat) => {
+    val subjects = platList.map((plat) => {
       platToSubject(plat)
-    }).toList
+    })
 
     info("------------ start set ref sa sp")
 //    TransformationBuilder.transforEntity(subjects)

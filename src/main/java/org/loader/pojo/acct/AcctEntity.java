@@ -2,6 +2,7 @@
 package org.loader.pojo.acct;
 
 import org.loader.pojo.acctapay.AcctApayEntity;
+import org.loader.pojo.prem.PremEntity;
 import org.loader.pojo.sa.SaEntity;
 
 import javax.persistence.*;
@@ -90,8 +91,9 @@ public class AcctEntity {
   @Column(name = "CIS_DIVISION", columnDefinition = "char", length = 5)
   public String cisDivision = " ";
 
-  @Column(name = "MAILING_PREM_ID", columnDefinition = "char", length = 10)
-  public String mailingPremId = " ";
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "MAILING_PREM_ID", nullable = true, updatable = false)
+  public PremEntity mailingPrem;
 
   @Column(name = "PROTECT_PREM_SW", columnDefinition = "char", length = 1)
   public String protectPremSw = "N";
