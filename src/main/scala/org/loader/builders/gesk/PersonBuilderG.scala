@@ -14,8 +14,8 @@ import org.loader.pojo.per.PerEntity
 object PersonBuilderG extends Logging{
 
 
-  def addAcctToPer(per: PerEntity, acct: AcctEntity) = {
-    val acctPerEntity = new AcctPerEntity(per,acct)
+  def addAcctToPer(per: PerEntity, acct: AcctEntity):AcctPerEntity = {
+    new AcctPerEntity(per,acct)
   }
 
   def addPersonIdWithCheck(person: PerEntity, perIdNbrOpt:Option[String], idTypeCd:String, primSw: String) = {
