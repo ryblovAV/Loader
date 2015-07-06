@@ -62,6 +62,7 @@ object PersonBuilderG extends Logging{
 //    person.postal = plat.addressU.ind
 
     person.perOrBusFlg = "B"
+    person.lsSlFlg = "N"
 
     //Идентификаторы
     addPersonIdWithCheck(person = person, idTypeCd = "SHTRIH", perIdNbrOpt = Some(plat.idPlat), primSw = "N")
