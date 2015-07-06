@@ -23,6 +23,20 @@ class BuilderTest extends FunSuite with Logging {
     assert(AddressBuilderG.buildAddress1(address.copy(ul = None)) === "reg, д. dom, кв. kv")
   }
 
+  test("build address2") {
+    val address =
+    Address(reg = None,
+      ul = Some("Октябрьская"),
+      dom = Some("1"),
+      kv = Some("148"),
+      ind = None,
+      inn = None,
+      abv1 = Some("д."),
+      abv2 = Some("ул."),
+      phone = None)
+    assert(AddressBuilderG.buildAddress1(address) === "ул. Октябрьская, д. 1, кв. 148")
+  }
+
   test("readOkonh") {
     assert(OkonhDictionary.getOkonh(Some("86")) === Some("999108"))
     assert(OkonhDictionary.getOkonh(None) === None)

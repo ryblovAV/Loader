@@ -12,8 +12,13 @@ object AddressBuilderG {
     case None => ""
   }
 
+  def getRegStr(regOpt: Option[String]) = regOpt match {
+    case Some(reg) => s"$reg, "
+    case _ => ""
+  }
+
   def buildAddress1(a: Address) = {
-    s"${a.reg.getOrElse("")}, ${addPair(a.abv2,a.ul,",")}${addPair(Some("д."),a.dom,",")}${addPair(Some("кв."),a.kv,"")}".trim
+    s"${getRegStr(a.reg)}${addPair(a.abv2,a.ul,",")}${addPair(Some("д."),a.dom,",")}${addPair(Some("кв."),a.kv,"")}".trim
   }
 
 
