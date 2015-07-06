@@ -66,6 +66,7 @@ object PersonBuilderG extends Logging{
     person.perOrBusFlg = "B"
     person.lsSlFlg = "N"
 
+    person.state = "20"
     //Идентификаторы
     addPersonIdWithCheck(person = person, idTypeCd = "SHTRIH", perIdNbrOpt = Some(plat.idPlat), primSw = "N")
     addPersonIdWithCheck(person = person, idTypeCd = "NOM_DOG", perIdNbrOpt = plat.kontr, perIdNbrAltOpt = plat.ndGesk, primSw = "Y")
