@@ -53,12 +53,12 @@ object AccountBuilderG {
     //char
     plat.kontr match {
       case Some(kontr) => {
-        addAcctChar(account, Characteristic(charTypeCd = "NOM_DOG", adhocCharVal = kontr))
+//        addAcctChar(account, Characteristic(charTypeCd = "NOM_DOG", adhocCharVal = kontr))
         addAcctChar(account, Characteristic(charTypeCd = "VID_DOG", charVal = "7"))
       }
       case None => plat.ndGesk match {
         case Some(ndGesk) => {
-          addAcctChar(account, Characteristic(charTypeCd = "NOM_DOG", adhocCharVal = ndGesk))
+//          addAcctChar(account, Characteristic(charTypeCd = "NOM_DOG", adhocCharVal = ndGesk))
           addAcctChar(account, Characteristic(charTypeCd = "VID_DOG", charVal = "6"))
         }
         case None =>
