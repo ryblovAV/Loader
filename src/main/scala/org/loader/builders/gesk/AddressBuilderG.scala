@@ -18,7 +18,8 @@ object AddressBuilderG {
   }
 
   def buildAddress1(a: Address) = {
-    s"${getRegStr(a.reg)}${addPair(a.abv2,a.ul,",")}${addPair(Some("д."),a.dom,",")}${addPair(Some("кв."),a.kv,"")}".trim
+    val str = s"${getRegStr(a.reg)}${addPair(a.abv2,a.ul,",")}${addPair(Some("д."),a.dom,",")}${addPair(Some("кв."),a.kv,"")}".trim
+    if (str.length == 0) " " else str
   }
 
 
