@@ -18,7 +18,7 @@ object GeskReader {
 
   final val city = "Липецк"
 
-  final val sqlPlat = "select * from v_gesk_plat where id_plat = '15065'"
+  final val sqlPlat = "select * from v_gesk_plat where id_plat = '1002'"
 
   final val sqlPlatAll = "select * from v_gesk_plat /*where rownum < 100*/"
 

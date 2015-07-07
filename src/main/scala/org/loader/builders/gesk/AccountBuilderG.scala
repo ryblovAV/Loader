@@ -13,31 +13,39 @@ import org.loader.builders.general.BuilderUtl._
 
 object AccountBuilderG {
 
+
+  def addPerAddrOvrd(plat: Plat,
+                     per:PerEntity,
+                     acct: AcctEntity,
+                     acctPer: AcctPerEntity) = {
+    val perAddrOvrd = new PerAddrOvrdEntity
+    perAddrOvrd.acct = acct
+    perAddrOvrd.address1 = AddressBuilderG.buildAddress1(plat.addressF)
+    perAddrOvrd.address2 = plat.addressF.dom
+    perAddrOvrd.address3 = plat.addressF.ul
+    perAddrOvrd.address4 = plat.addressF.kv
+    perAddrOvrd.country = "RUS"
+    per.perAddrOvrdEntitySet.add(perAddrOvrd)
+
+    acctPer.billAddrSrceFlg = "ACOV"
+  }
+
   def addMailingAddress(plat: Plat,
                         per:PerEntity,
                         acct: AcctEntity,
                         acctPer: AcctPerEntity) = {
-    if (plat.addressF == plat.addressU) {
+    if (plat.addMailingAddrtoAcct) {
       acct.mailingPrem = PremiseBuilderG.buildPremise(address = plat.addressF)
       acctPer.billAddrSrceFlg = "PER"
     } else {
-      val perAddrOvrd = new PerAddrOvrdEntity
-      perAddrOvrd.acct = acct
-      perAddrOvrd.address1 = AddressBuilderG.buildAddress1(plat.addressF)
-      perAddrOvrd.address2 = plat.addressF.dom
-      perAddrOvrd.address3 = plat.addressF.ul
-      perAddrOvrd.address4 = plat.addressF.kv
-      perAddrOvrd.country = "RUS"
-      per.perAddrOvrdEntitySet.add(perAddrOvrd)
-
-      acctPer.billAddrSrceFlg = "ACOV"
+    addPerAddrOvrd(plat, per, acct, acctPer)
     }
-
   }
 
-  def buildAccount(plat: Plat) = {
+  def buildAcct(plat: Plat) = {
 
     val account = new AcctEntity(KeysBuilder.getEnvId)
+
     account.acctId = KeysBuilder.getAcctId
     account.billCycCd = "M-D1"
     account.custClCd = "COMM"
@@ -64,8 +72,6 @@ object AccountBuilderG {
         case None =>
       }
     }
-
-
 
     //TODO Расчетный счет (ГЭСК) (4 характеристики)
     //TODO Загрузка БИК

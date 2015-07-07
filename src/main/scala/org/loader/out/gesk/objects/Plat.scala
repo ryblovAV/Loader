@@ -35,4 +35,7 @@ case class Plat(idPlat: String,
                 oplataSum:List[Double] = List.empty[Double],
                 oplataDat:List[java.util.Date] = List.empty[java.util.Date],
                 phone: Phone,
-                potrList:List[Potr])
+                potrList:List[Potr]) {
+
+  def addMailingAddrtoAcct = addressU == addressF
+}

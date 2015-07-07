@@ -125,7 +125,8 @@ object LoaderG extends Logging{
   def platToSubject(plat: Plat):SubjectModel = {
 
     val per = PersonBuilderG.buildPerson(plat)
-    val acct = AccountBuilderG.buildAccount(plat)
+
+    val acct = AccountBuilderG.buildAcct(plat = plat)
 
     //acct apay (БИК)
     AcctApayBuilderG.buildAcctApay(plat = plat, acct = acct)
@@ -144,6 +145,7 @@ object LoaderG extends Logging{
 
     val acctPer = PersonBuilderG.addAcctToPer(per, acct)
 
+    //add mailing address
     AccountBuilderG.addMailingAddress(plat = plat,per = per, acct = acct, acctPer = acctPer)
 
     SubjectModel(plat = plat, per = per, acct = acct, objects = objects)
