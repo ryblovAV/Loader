@@ -57,6 +57,7 @@ object PersonBuilderG extends Logging{
     person.address4 = plat.addressU.kv
     person.houseType = plat.addressU.houseType
     person.country = "RUS"
+    person.postal = plat.addressU.ind
     person.languageCd = "RUS"
 
 
