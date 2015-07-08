@@ -70,8 +70,10 @@ object GeskReader {
             abv2 = (rs, "abv2_f")),
           kontr = (rs, "kontr"),
           kpp = (rs, "kpp"),
-          naimF = (rs, "naim_f"),
-          naimU = (rs, "naim_u"),
+          name = Name(
+            naimF = (rs, "naim_f"),
+            naimU = (rs, "naim_u")
+          ),
           tF = (rs, "t_f"),
           data = (rs, "data"),
           ndGesk = (rs, "nd_gesk"),
@@ -79,7 +81,17 @@ object GeskReader {
           ko = (rs, "ko"),
           kob = (rs, "kob"),
           kOkwed = (rs, "k_okwed"),
-          bankNb = (rs,"bank_nb"),
+          bank = Bank(
+            nb = (rs,"bank_nb"),
+            naimb = (rs,"bank_naimb"),
+            rs = (rs, "bank_rs")
+          ),
+          rs = Rs(
+            bank = (rs,"x_bank"),
+            rasSch = (rs,"x_ras_sch"),
+            bik = (rs,"x_bik"),
+            korSch = (rs,"x_kor_sch")
+          ),
           rspl = (rs,"rspl"),
           phone = Phone(
             tel1 = (rs,"tel1"),

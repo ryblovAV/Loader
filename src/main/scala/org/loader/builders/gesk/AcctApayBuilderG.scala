@@ -11,7 +11,7 @@ object AcctApayBuilderG {
 
     for {
       rspl <- plat.rspl
-      bankNb <- plat.bankNb
+      bankNb <- plat.bank.nb
     } {
 
       val acctApayEntity = new AcctApayEntity(KeysBuilder.getEnvId)

@@ -74,7 +74,39 @@ object AccountBuilderG {
     }
 
     //TODO Расчетный счет (ГЭСК) (4 характеристики)
+    //банк
+    for (bank <- plat.rs.bank) {
+      addAcctChar(account, Characteristic(charTypeCd = "BANK_G", adhocCharVal = bank))
+    }
+    //расчетный счет
+    for (rasSch <- plat.rs.rasSch) {
+      addAcctChar(account, Characteristic(charTypeCd = "R/CH_G", adhocCharVal = rasSch))
+    }
+    //бик
+    for (bik <- plat.rs.bik) {
+      addAcctChar(account, Characteristic(charTypeCd = "BIK_G", adhocCharVal = bik))
+    }
+    //корреспондентский счет банка
+    for (korSch <- plat.rs.korSch) {
+      addAcctChar(account, Characteristic(charTypeCd = "KORSCH_G", adhocCharVal = korSch))
+    }
+
     //TODO Загрузка БИК
+    //банк
+    for (naimb <- plat.bank.naimb) {
+      addAcctChar(account, Characteristic(charTypeCd = "BANK_K_L", adhocCharVal = naimb))
+    }
+    //БИК
+    for (nb <- plat.bank.nb) {
+      addAcctChar(account, Characteristic(charTypeCd = "BIK_K_L", adhocCharVal = nb))
+    }
+    //расчетный счет
+    for (rs <- plat.bank.rs) {
+      addAcctChar(account, Characteristic(charTypeCd = "RSCH_K_L", adhocCharVal = rs))
+    }
+
+
+
 
     account
   }
