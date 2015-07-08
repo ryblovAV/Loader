@@ -8,7 +8,14 @@ case class Address(reg: Option[String],
                    inn: Option[String],
                    phone: Option[String],
                    abv1: Option[String] = None,
-                   abv2: Option[String] = None)
+                   abv2: Option[String] = None) {
+
+  def houseType = kv match {
+    case Some(_) => "2"
+    case _ => "10"
+  }
+
+}
 
 case class Phone(tel1:Option[String],
                  tel2:Option[String],
