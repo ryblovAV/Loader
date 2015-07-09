@@ -132,12 +132,12 @@ object PersonBuilderG extends Logging{
     }
 
     //add Person phone
-    phones.map(_._2).map((str) => {
+    phones.map(_._2).flatMap((str) => {
       for {
         phoneOpt <- PhoneParser.parse(str)
         phone <- phoneOpt
       } yield phone
-    }).flatten.zipWithIndex.foreach(
+    }).zipWithIndex.foreach(
         (p:(PhoneWithType,Int)) =>
           PersonBuilder.addPersonPhone(person = person,seqNum = p._2 + 1,phone=p._1.phone,phoneType = p._1.phoneType))
 

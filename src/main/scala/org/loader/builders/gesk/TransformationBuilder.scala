@@ -22,7 +22,7 @@ object TransformationBuilder {
 
   def transforEntity(subjects: List[SubjectModel]) = {
     val m = Map.empty[String,ObjectModel] ++
-      (subjects.map((s)=>s.objects).flatten.map((o) => (o.potr.idRec,o)))
+      (subjects.flatMap((s)=>s.objects).map((o) => (o.potr.idRec,o)))
     m.values.foreach((o) => linkToParent(o,m))
   }
 

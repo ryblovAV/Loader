@@ -62,13 +62,13 @@ object LogWritter extends Logging {
   }
 
   def subjToRegListMap(subj:SubjectModel):List[JMap[String,_]] = {
-    subj.objects.map((obj) => objToRegListMap(obj = obj)).flatten
+    subj.objects.flatMap((obj) => objToRegListMap(obj = obj))
   }
 
   def log(subjects: List[SubjectModel]) = {
-    jdbc.insertBatch(sql,subjects.map(subjToListMap(_)).flatten)
+    jdbc.insertBatch(sql,subjects.flatMap(subjToListMap(_)))
     info(s"end $sql")
-    jdbc.insertBatch(sqlRegMultiZone,subjects.map(subjToRegListMap(_)).flatten)
+    jdbc.insertBatch(sqlRegMultiZone,subjects.flatMap(subjToRegListMap(_)))
     info(s"end $sqlRegMultiZone")
   }
 
