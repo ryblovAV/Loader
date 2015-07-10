@@ -8,7 +8,12 @@ import org.loader.pojo.prem.PremEntity
 
 object PremiseBuilderG {
 
-  def buildPremise(address:Address, optKniga: Option[String] = None):PremEntity = {
+  def defineHouseType(optKv:Option[String]) = optKv match {
+    case Some(_) => "2" //квартира
+    case _ => "10"      //другое
+  }
+
+  def buildPremise(address:Address, optKniga: Option[String] = None, houseType:String):PremEntity = {
     val prem = new PremEntity(KeysBuilder.getEnvId)
     prem.premId = KeysBuilder.getPremiseId
     prem.premTypeCd = "PROCHIE"
@@ -20,15 +25,9 @@ object PremiseBuilderG {
     prem.address4 = address.kv
     prem.country = "RUS"
     prem.timeZoneCd = "MSK"
-
     prem.lsSlFlg = "N"
-
     prem.state = "20"
-
-    prem.houseType = address.kv match {
-      case Some(_) => "2"
-      case _ => "10"
-    }
+    prem.houseType = houseType
 
     //книга
     for (kniga <- optKniga)

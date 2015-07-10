@@ -136,7 +136,11 @@ object LoaderG extends Logging{
       plat.potrList.
         groupBy((p) => p.idObj).
         mapValues((pl) => pl.head).
-        mapValues((p) => PremiseBuilderG.buildPremise(address = p.address.copy(kv = Option(p.naimp)),optKniga = p.kniga))
+        mapValues((p) => PremiseBuilderG.buildPremise(
+          address = p.address.copy(kv = Option(p.naimp)),
+          optKniga = p.kniga,
+          houseType = "10")
+        )
 
     val objects:List[ObjectModel] = plat.potrList.map((potr) => potrToObject(plat,potr,mPremise))
 

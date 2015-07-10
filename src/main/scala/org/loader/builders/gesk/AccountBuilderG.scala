@@ -35,7 +35,10 @@ object AccountBuilderG {
                         acct: AcctEntity,
                         acctPer: AcctPerEntity) = {
     if (plat.addMailingAddrtoAcct) {
-      acct.mailingPrem = PremiseBuilderG.buildPremise(address = plat.addressF)
+      acct.mailingPrem = PremiseBuilderG.buildPremise(
+        address = plat.addressF,
+        houseType = PremiseBuilderG.defineHouseType(plat.addressF.kv)
+      )
       acctPer.billAddrSrceFlg = "PER"
     } else {
     addPerAddrOvrd(plat, per, acct, acctPer)
@@ -91,7 +94,6 @@ object AccountBuilderG {
       addAcctChar(account, Characteristic(charTypeCd = "KORSCH_G", adhocCharVal = korSch))
     }
 
-    //TODO Загрузка БИК
     //банк
     for (naimb <- plat.bank.naimb) {
       addAcctChar(account, Characteristic(charTypeCd = "BANK_K_L", adhocCharVal = naimb))
