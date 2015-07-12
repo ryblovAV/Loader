@@ -21,7 +21,7 @@ object LoaderG extends Logging{
   val ctx = new ClassPathXmlApplicationContext("application-context.xml")
   val generalDAO = ctx.getBean(classOf[GeneralDAO])
 
-  val activeMonth = DateBuilder.getDate(2015,2,1)
+  val activeMonth = DateBuilder.getDate(2015,5,1)
   val stopHistoricalDt = DateBuilder.addMinute(activeMonth,-1)
   val readDttm = DateBuilder.lastDay(activeMonth)
 
