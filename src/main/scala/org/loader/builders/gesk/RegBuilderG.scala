@@ -28,6 +28,9 @@ object RegBuilderG {
     reg.nbrOfDgtsRgt = 3
     reg.fullScale = 9999999.999
 
+    reg.howToUseFlg = "+"
+    reg.uomCd = "KWH"
+
     mtr.regMtrEntitySet.add(reg)
 
     reg
