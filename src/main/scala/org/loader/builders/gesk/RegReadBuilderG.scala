@@ -14,6 +14,8 @@ object RegReadBuilderG {
     rr.mr = mr
     rr.reg = reg
     rr.regReading = regReading
+    rr.readTypeFlg = "50"
+    rr.readSeq = 1
 
     rr.mr.regReadMrEntitySet.add(rr)
 
