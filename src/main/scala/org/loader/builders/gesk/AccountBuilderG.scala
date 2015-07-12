@@ -36,9 +36,8 @@ object AccountBuilderG {
                         acctPer: AcctPerEntity) = {
     if (plat.addMailingAddrtoAcct) {
       acct.mailingPrem = PremiseBuilderG.buildPremise(
-        address = plat.addressF,
-        houseType = PremiseBuilderG.defineHouseType(plat.addressF.kv)
-      )
+        address = plat.addressF)
+      
       acctPer.billAddrSrceFlg = "PER"
     } else {
     addPerAddrOvrd(plat, per, acct, acctPer)

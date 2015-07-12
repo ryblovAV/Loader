@@ -13,7 +13,7 @@ object PremiseBuilderG {
     case _ => "10"      //другое
   }
 
-  def buildPremise(address:Address, optKniga: Option[String] = None, houseType:String):PremEntity = {
+  def buildPremise(address:Address, optKniga: Option[String] = None):PremEntity = {
     val prem = new PremEntity(KeysBuilder.getEnvId)
     prem.premId = KeysBuilder.getPremiseId
     prem.premTypeCd = "PROCHIE"
@@ -27,7 +27,6 @@ object PremiseBuilderG {
     prem.timeZoneCd = "MSK"
     prem.lsSlFlg = "N"
     prem.state = "20"
-    prem.houseType = houseType
 
     //книга
     for (kniga <- optKniga)

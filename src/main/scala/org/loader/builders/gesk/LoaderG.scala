@@ -138,8 +138,7 @@ object LoaderG extends Logging{
         mapValues((pl) => pl.head).
         mapValues((p) => PremiseBuilderG.buildPremise(
           address = p.address.copy(kv = Option(p.naimp)),
-          optKniga = p.kniga,
-          houseType = "10")
+          optKniga = p.kniga)
         )
 
     val objects:List[ObjectModel] = plat.potrList.map((potr) => potrToObject(plat,potr,mPremise))
