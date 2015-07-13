@@ -28,8 +28,9 @@ object SharedBuilderG {
   }
 
   def buildWithParentIdRec(obj: ObjectModel,
-                           m:Map[String,ObjectModel]):Option[SaSpObject] = obj.potr.parentIdRec match {
-    case Some(parentIdRec) => buildSaSpObject(parIdRec = parentIdRec, obj = obj, m = m)
+                           m:Map[String,ObjectModel]):Option[SaSpObject] = (obj.potr.parentIdRec, obj.potr.idRecI) match {
+    case (Some(parentIdRec),idRecI) if parentIdRec == idRecI => None
+    case (Some(parentIdRec),_) => buildSaSpObject(parIdRec = parentIdRec, obj = obj, m = m)
     case _ => None
   }
 
