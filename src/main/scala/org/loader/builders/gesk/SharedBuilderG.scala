@@ -34,7 +34,7 @@ object SharedBuilderG {
   }
 
   def buildSaSpObjectList(o:ObjectModel,m:Map[String,ObjectModel]):List[SaSpObject] = {
-    for {a <- List(buildWithIdRecI(o,m),buildWithParentIdRec(o,m))
+    for {a <- List(buildWithIdRecI(o,m),buildWithParentIdRec(o,m)).distinct
          b <- a } yield b
   }
 
