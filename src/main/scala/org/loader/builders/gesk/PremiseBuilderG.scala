@@ -28,6 +28,9 @@ object PremiseBuilderG {
     prem.lsSlFlg = "N"
     prem.state = "20"
 
+    prem.postal = address.ind
+    prem.city = address.reg
+
     //книга
     for (kniga <- optKniga)
       PremiseBuilder.addChar(prem,Characteristic(charTypeCd = "BOOK",adhocCharVal = kniga))
