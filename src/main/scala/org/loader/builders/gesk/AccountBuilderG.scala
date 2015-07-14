@@ -102,12 +102,13 @@ object AccountBuilderG {
       addAcctChar(account, Characteristic(charTypeCd = "BIK_K_L", adhocCharVal = nb))
     }
     //расчетный счет
-    for (rs <- plat.bank.rs) {
-      addAcctChar(account, Characteristic(charTypeCd = "RSCH_K_L", adhocCharVal = rs))
+    for (rspl <- plat.rspl) {
+      addAcctChar(account, Characteristic(charTypeCd = "RSCH_K_L", adhocCharVal = rspl))
     }
-
-
-
+    //Корр.счет банка клиента
+    for (rs <- plat.bank.rs) {
+      addAcctChar(account, Characteristic(charTypeCd = "KOR_KL_L", adhocCharVal = rs))
+    }
 
     account
   }
