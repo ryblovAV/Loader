@@ -142,12 +142,15 @@ object GeskReader {
       gp = (rs,"gp"),
       kp = (rs,"kp"),
       idRec = (rs,"id_rec"),
-      idRecI = (rs,"id_rec_i"),
+      parent = Parent(
+        idRecI = (rs, "id_rec_i"),
+        parentIdRec = (rs,"parent_id_rec"),
+        parentIdRec2 = (rs,"parent_id_rec2")
+      ),
       k1 = (rs,"k1"),
       t = (rs,"t"),
       grpt46 = (rs,"grptr46"),
       saldo = (rs,"OB_SALDO"),
-      parentIdRec = (rs,"parent_id_rec"),
       zone = Zone(
         iZn = (rs,"i_zn"),
         idGrup = (rs,"id_grup"))

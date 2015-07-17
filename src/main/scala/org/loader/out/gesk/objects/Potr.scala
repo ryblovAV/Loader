@@ -27,6 +27,14 @@ case class Zone(iZn: Option[String],
                 idGrup: Option[Int],
                 listZonePotr: List[Potr] = List.empty[Potr])
 
+case class Parent(idRecI: Option[String],
+                  parentIdRec: Option[String],
+                  parentIdRec2: Option[String]) {
+
+  def getParentIdRec:List[String] = List(idRecI,parentIdRec,parentIdRec2).flatten.distinct
+
+}
+
 case class  Potr(id: Int,
                  idPlat: String,
                  naimp: String,
@@ -41,13 +49,12 @@ case class  Potr(id: Int,
                  gp:Option[String],
                  kp: Option[String],
                  idRec: String,
-                 idRecI : String,
+                 parent: Parent,
                  k1: Option[String],
                  t: Option[String],
                  grpt46: Option[String],
                  saldo: Option[Double],
-                 parentIdRec: Option[String],
-                 zone: Zone) {
+                 zone: Zone,
 
   def filterGw:Option[Int] = mt.gw match {
     case Some(year) if ((year > 1900) && (year <= 2016)) => Some(year)
