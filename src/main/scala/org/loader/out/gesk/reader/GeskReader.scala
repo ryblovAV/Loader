@@ -53,6 +53,10 @@ object GeskReader {
             abv2 = (rs, "abv2_f")),
           kontr = (rs, "kontr"),
           kpp = (rs, "kpp"),
+          id = Id(
+            rspl = (rs,"rspl"),
+            nLsh = (rs, "n_lsh")
+          ),
           name = Name(
             naimF = (rs, "naim_f"),
             naimU = (rs, "naim_u")
@@ -75,7 +79,6 @@ object GeskReader {
             bik = (rs,"x_bik"),
             korSch = (rs,"x_kor_sch")
           ),
-          rspl = (rs,"rspl"),
           phone = Phone(
             tel1 = (rs,"tel1"),
             tel2 = (rs,"tel2"),
@@ -153,7 +156,7 @@ object GeskReader {
       saldo = (rs,"OB_SALDO"),
       zone = Zone(
         iZn = (rs,"i_zn"),
-        idGrup = (rs,"id_grup"))
+        idGrup = (rs,"id_grup")),
     )
   }
   
