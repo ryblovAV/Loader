@@ -157,9 +157,10 @@ object GeskReader {
       zone = Zone(
         iZn = (rs,"i_zn"),
         idGrup = (rs,"id_grup")),
+      iPch = (rs,"i_pch")
     )
   }
-  
+
   def readAllPotr: List[Potr] = {
     jdbcReader.query(sqlPotrAll)(rsToPotr)
   }

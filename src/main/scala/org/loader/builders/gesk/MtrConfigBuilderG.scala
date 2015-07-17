@@ -16,10 +16,12 @@ object MtrConfigBuilderG {
     mtrConfig.mtr = mtr
     mtrConfig.effDttm = mtr.receiveDt
 
-    if (potr.isMultiZone)
-      mtrConfig.mtrConfigTyCd = "EE-1"
-    else
-      mtrConfig.mtrConfigTyCd = "EE-ZS"
+    mtrConfig.mtrConfigTyCd =
+      if (potr.isInterval) "PO_POTREBLEN"
+      else {
+        if (potr.isMultiZone) "EE-1"
+        else "EE-ZS"
+      }
 
     mtrConfig
   }

@@ -20,8 +20,8 @@ object RegBuilderG {
     }
     reg.readSeq = seq
 
-    reg.consumSubFlg = if (potr.isHistVol) "C" else "S"
-    reg.regConst = potr.mt.rks
+    reg.consumSubFlg = if ((potr.isHistVol) || (potr.isInterval)) "C" else "S"
+    reg.regConst = if (potr.isInterval) 1 else potr.mt.rks
     reg.readOutTypeCd = "ELT"
 
     reg.nbrOfDgtsLft = 7

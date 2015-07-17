@@ -55,6 +55,7 @@ case class  Potr(id: Int,
                  grpt46: Option[String],
                  saldo: Option[Double],
                  zone: Zone,
+                 iPch: String) {
 
   def filterGw:Option[Int] = mt.gw match {
     case Some(year) if ((year > 1900) && (year <= 2016)) => Some(year)
@@ -69,5 +70,7 @@ case class  Potr(id: Int,
   def isMultiZone = zone.listZonePotr.isEmpty == false
 
   def isHistVol = mt.rUz.isEmpty == false
+
+  def isInterval = iPch == "true"
 
 }

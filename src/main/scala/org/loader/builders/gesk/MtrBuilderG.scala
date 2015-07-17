@@ -39,7 +39,7 @@ object MtrBuilderG {
     mtr.mtrId = KeysBuilder.getMtrId
 
     mtr.mtrTypeCd =
-      if (potr.isHistVol) "HIST_VOL"
+      if ((potr.isHistVol) || (potr.isInterval)) "HIST_VOL"
       else
         if (potr.isMultiZone) "E-3F" else "E-1F"
 
