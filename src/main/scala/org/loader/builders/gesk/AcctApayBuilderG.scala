@@ -10,7 +10,7 @@ object AcctApayBuilderG {
   def buildAcctApay(plat: Plat, acct: AcctEntity):Unit = {
 
     for {
-      rspl <- plat.rspl
+      rspl <- plat.id.rspl
       bankNb <- plat.bank.nb
     } {
 

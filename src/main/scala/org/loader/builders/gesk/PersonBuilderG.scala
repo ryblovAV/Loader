@@ -71,10 +71,11 @@ object PersonBuilderG extends Logging{
 
     person.state = "20"
     //Идентификаторы
-    addPersonIdWithCheck(person = person, idTypeCd = "NOM_DOG", perIdNbrOpt = Some(plat.idPlat), primSw = "N")
-    addPersonIdWithCheck(person = person, idTypeCd = "SHTRIH", perIdNbrOpt = plat.kontr, perIdNbrAltOpt = plat.ndGesk, primSw = "Y")
+    addPersonIdWithCheck(person = person, idTypeCd = "SHTRIH", perIdNbrOpt = Some(plat.idPlat), primSw = "N")
+    addPersonIdWithCheck(person = person, idTypeCd = "NOM_DOG", perIdNbrOpt = plat.kontr, perIdNbrAltOpt = plat.ndGesk, primSw = "Y")
     addPersonIdWithCheck(person = person, idTypeCd = "INN", perIdNbrOpt = plat.addressF.inn, primSw = "N")
     addPersonIdWithCheck(person = person, idTypeCd = "KPP", perIdNbrOpt = plat.kpp, primSw = "N")
+    addPersonIdWithCheck(person = person, idTypeCd = "OLDLS", perIdNbrOpt = plat.id.nLsh, primSw = "N")
 
     //Наименование
     addPersonName(person = person, name = buildName(plat.addressU.abv1,plat.name.naimU))
