@@ -60,7 +60,9 @@ object LoaderG extends Logging{
 
   def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
 
-    val sp = SpBuilderG.build(potr = potr, premise = mPremise(potr.idObj))
+    val premise = mPremise(potr.idObj)
+
+    val sp = SpBuilderG.build(potr = potr, premise = premise)
     val mtr = MtrBuilderG.build(potr)
     val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
@@ -131,15 +133,13 @@ object LoaderG extends Logging{
     //acct apay (БИК)
     AcctApayBuilderG.buildAcctApay(plat = plat, acct = acct)
 
-    //создаем premise для каждого id
     val mPremise: Map[String, PremEntity] =
-      plat.potrList.
-        groupBy((p) => p.idObj).
-        mapValues((pl) => pl.head).
-        mapValues((p) => PremiseBuilderG.buildPremise(
-          address = p.address.copy(kv = Option(p.naimp)),
-          optKniga = p.kniga)
-        )
+      plat.potrList.groupBy((p) => p.idObj).
+        mapValues((l) => l.head).
+        values.map((potr) => (potr.idObj -> PremiseBuilderG.buildPremise(
+          address = potr.address.copy(reg = Some("г.Липецк"), ind = Some("398000"), kv = Option(potr.naimp)),
+          optKniga = potr.kniga))).
+        toMap
 
     val objects:List[ObjectModel] = plat.potrList.map((potr) => potrToObject(plat,potr,mPremise))
 
@@ -198,14 +198,12 @@ object LoaderG extends Logging{
     })
 
     info("------------ start set ref sa sp")
-//    TransformationBuilder.transforEntity(subjects)
     val saSpObjects = SharedBuilderG.buildListSaSpObject(subjects)
 
 //    info("------------ start load tndr")
 //    val depCtlSt = loadTndr(subjects = subjects)
 
     info("------------ start saveToDb")
-//    generalDAO.saveList(subjects)
     subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
 
     info("start save to DB shared objects")
