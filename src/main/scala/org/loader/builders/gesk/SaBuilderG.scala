@@ -1,7 +1,7 @@
 package org.loader.builders.gesk
 
 import grizzled.slf4j.Logging
-import org.loader.builders.general.{Constants, KeysBuilder, SaBuilder}
+import org.loader.builders.general.{DateBuilder, Constants, KeysBuilder, SaBuilder}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.{Plat, Potr}
 import org.loader.pojo.prem.PremEntity
@@ -32,7 +32,7 @@ object SaBuilderG extends Logging{
     val sa = new SaEntity(KeysBuilder.getEnvId)
 
     sa.saId = KeysBuilder.getSaId
-    sa.saTypeCd = GeskConstants.saCommercialTypeCd
+    sa.saTypeCd = if (potr.isInterval) "L_EL_INT" else GeskConstants.saCommercialTypeCd
     sa.startDt = LoaderG.activeMonth
     sa.saStatusFlg = Constants.saOpenStatus
     for (kOkwed <- plat.kOkwed) {
@@ -43,6 +43,11 @@ object SaBuilderG extends Logging{
     }
     sa.cisDivision = GeskConstants.cisDivision
     sa.charPrem = charPrem
+
+    if (potr.isInterval) {
+      sa.ibSaCutoffTm = DateBuilder.getDate(year = 1900,month = 1,day = 1,hour = 23,minute = 0)
+      sa.ibBaseTmDayFlg = "P"
+    }
 
     //максимальная мощность
     for (ustM <- potr.mt.ustM)

@@ -103,7 +103,7 @@ object AccountBuilderG extends Logging {
       addAcctChar(account, Characteristic(charTypeCd = "BIK_K_L", adhocCharVal = nb))
     }
     //расчетный счет
-    for (rspl <- plat.rspl) {
+    for (rspl <- plat.id.rspl) {
       addAcctChar(account, Characteristic(charTypeCd = "RSCH_K_L", adhocCharVal = rspl))
     }
     //Корр.счет банка клиента
