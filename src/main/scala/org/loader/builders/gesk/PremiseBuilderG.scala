@@ -1,12 +1,13 @@
 package org.loader.builders.gesk
 
+import grizzled.slf4j.Logging
 import org.loader.builders.general.BuilderUtl._
 import org.loader.builders.general.{KeysBuilder, PremiseBuilder}
 import org.loader.models.Characteristic
 import org.loader.out.gesk.objects.{Address, Potr}
 import org.loader.pojo.prem.PremEntity
 
-object PremiseBuilderG {
+object PremiseBuilderG extends Logging {
 
   def defineHouseType(optKv:Option[String]) = optKv match {
     case Some(_) => "2" //квартира

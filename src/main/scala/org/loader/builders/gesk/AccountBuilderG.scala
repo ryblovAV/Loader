@@ -1,5 +1,6 @@
 package org.loader.builders.gesk
 
+import grizzled.slf4j.Logging
 import org.loader.builders.general.AccountBuilder.addAcctChar
 import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.models.Characteristic
@@ -11,7 +12,7 @@ import org.loader.pojo.per.{PerEntity, PerAddrOvrdEntity}
 import org.loader.builders.general.BuilderUtl._
 
 
-object AccountBuilderG {
+object AccountBuilderG extends Logging {
 
 
   def addPerAddrOvrd(plat: Plat,
