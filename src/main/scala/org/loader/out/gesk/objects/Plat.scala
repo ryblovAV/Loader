@@ -33,6 +33,9 @@ case class Rs(bank:Option[String],
 case class Name(naimF: String,
                 naimU: String)
 
+case class Id(rspl:Option[String],
+              nLsh: Option[String])
+
 case class Plat(idPlat: String,
                 seq: Int,
                 el_adr: Option[String],
@@ -40,6 +43,7 @@ case class Plat(idPlat: String,
                 addressF: Address,
                 kontr: Option[String],
                 kpp: Option[String],
+                id: Id,
                 name: Name,
                 tF: String,
                 data: Option[java.util.Date],
@@ -50,11 +54,11 @@ case class Plat(idPlat: String,
                 kOkwed:Option[String],
                 bank:Bank,
                 rs:Rs,
-                rspl:Option[String],
                 oplataSum:List[Double] = List.empty[Double],
                 oplataDat:List[java.util.Date] = List.empty[java.util.Date],
                 phone: Phone,
                 potrList:List[Potr]) {
 
   def addMailingAddrtoAcct = addressU == addressF
+
 }
