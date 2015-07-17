@@ -16,6 +16,21 @@ object DateBuilder {
     return trunc(calendar).getTime
   }
 
+  def getDate(year: Int, month: Int, day: Int, hour: Int, minute: Int): Date = {
+    val calendar: Calendar = new GregorianCalendar
+
+    calendar.set(Calendar.YEAR, year)
+    calendar.set(Calendar.MONTH, month - 1)
+    calendar.set(Calendar.DAY_OF_MONTH, day)
+    calendar.set(Calendar.HOUR_OF_DAY,hour)
+    calendar.set(Calendar.MINUTE,minute)
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+
+    return calendar.getTime
+  }
+
+
   implicit def dateToStr(dt: java.util.Date): String = {
     val df = new SimpleDateFormat("dd.MM.yyyy")
     df.format(dt)
