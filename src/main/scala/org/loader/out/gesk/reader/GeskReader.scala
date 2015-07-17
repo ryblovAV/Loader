@@ -18,24 +18,7 @@ object GeskReader {
 
   final val city = "Липецк"
 
-  final val sqlPlat = "select * from v_gesk_plat where id_plat = '1002'"
-
-  final val sqlPlatAll = "select * from v_gesk_plat /*where rownum < 100*/"
-
-  final val sqlPlat0 =
-    s"""
-       |select *
-       | from v_gesk_plat t
-       |where rownum < 100
-       |  and not exists (select *
-       |                    from cm_log_per_gesk_juridical j
-       |                   where j.id_plat = t.id_plat)
-       |  /*and :id_plat is not null*/
-     """.stripMargin
-
-
-  final val sqlPotr = "select * from v_gesk_potr where id_plat = :id_plat"
-
+  final val sqlPlatAll = "select * from v_gesk_plat"
   final val sqlPotrAll = "select * from v_gesk_potr"
 
   def readPlat: List[Plat] = {
@@ -170,11 +153,7 @@ object GeskReader {
         idGrup = (rs,"id_grup"))
     )
   }
-
-  def readPotrForPlat(idPlat: String): List[Potr] = {
-    jdbcReader.queryWithParameters(sqlPotr, HashMap("id_plat" -> idPlat))(rsToPotr)
-  }
-
+  
   def readAllPotr: List[Potr] = {
     jdbcReader.query(sqlPotrAll)(rsToPotr)
   }
