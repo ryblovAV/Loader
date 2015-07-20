@@ -8,7 +8,7 @@ import org.loader.pojo.tndr.DepCtlStEntity
 
 trait GeneralDAO {
 
-  def save(per:PerEntity):Unit
+  def save(subject:SubjectModel):Unit
   def save(mtrCfg: MtrConfigEntity): Unit
   def saveList(perList: List[SubjectModel]): Unit
 

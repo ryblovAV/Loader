@@ -148,7 +148,8 @@ object GeskReader {
       parent = Parent(
         idRecI = (rs, "id_rec_i"),
         parentIdRec = (rs,"parent_id_rec"),
-        parentIdRec2 = (rs,"parent_id_rec2")
+        parentIdRec2 = (rs,"parent_id_rec2"),
+        iChS = (rs,"i_ch_s")
       ),
       k1 = (rs,"k1"),
       t = (rs,"t"),

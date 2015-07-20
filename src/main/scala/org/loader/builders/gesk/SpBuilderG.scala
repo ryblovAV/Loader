@@ -28,7 +28,11 @@ object SpBuilderG {
     sp.spTypeCd = "E-URTU"
     sp.installDt = potr.mt.dataSh.getOrElse(DateBuilder.getDefaultDt)
     sp.spSrcStatusFlg = "C"
-    sp.mtrLocDetails = potr.naimp
+
+    sp.mtrLocDetails = potr.parent.iChS match {
+      case Some(_) => s"${potr.naimp} ${potr.address.abv2} ${potr.address.ul} ${potr.address.abv1} ${potr.address.dom}"
+      case None    => potr.naimp
+    }
 
     //Наименование ТУ
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "NAIM-TP", adhocCharVal = potr.naimp))
@@ -52,6 +56,12 @@ object SpBuilderG {
     for (fsClCd <- Array("KON_P","MONTA","OGRAN","OPLOM","POKAZ","PRIBO", "KONTR")) {
       SpBuilder.addSpOpArea(sp,fsClCd,"GESK_YO")
     }
+
+    //ИД ТУ из БД граждан ГЭСК
+    for (iChS <- potr.parent.iChS) {
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_GE", adhocCharVal = iChS))
+    }
+
 
     sp.prem = premise
 

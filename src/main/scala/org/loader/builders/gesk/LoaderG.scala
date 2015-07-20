@@ -4,7 +4,7 @@ package org.loader.builders.gesk
 import grizzled.slf4j.Logging
 import org.loader.builders.general.{KeysBuilder, DateBuilder}
 import org.loader.db.dao.general.GeneralDAO
-import org.loader.models.{SubjectModel, ObjectModel}
+import org.loader.models.{SpObject, SubjectModel, ObjectModel}
 import org.loader.out.gesk.objects.{Potr, Plat}
 import org.loader.out.gesk.reader.GeskReader
 import org.loader.pojo.acct.AcctEntity
@@ -14,6 +14,7 @@ import org.loader.pojo.per.PerEntity
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.reg.RegEntity
 import org.loader.pojo.sa.SaEntity
+import org.loader.pojo.sp.SpEntity
 import org.loader.writer.{SaSpWriter, SaSpObject, LogWritter}
 import org.springframework.context.support.ClassPathXmlApplicationContext
 object LoaderG extends Logging{
@@ -58,7 +59,7 @@ object LoaderG extends Logging{
     }
   }
 
-  def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
+  def potrToSpObject(potr: Potr, mPremise: Map[String, PremEntity]):SpObject = {
 
     val premise = mPremise(potr.idObj)
 
@@ -78,7 +79,7 @@ object LoaderG extends Logging{
 
 
     val regList = potr.zone.listZonePotr.view.zipWithIndex.map(
-        (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2)
+      (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2)
     ).toList
 
     if (potr.isMultiZone) {
@@ -106,15 +107,27 @@ object LoaderG extends Logging{
 
     SpMtrEvtBuilderG.build(spMtrHist = spMtrHist, mr = mrFirst)
 
+    SpObject(sp = sp, mrFirst = mrFirst, mrLast = mrLast, regList = regList)
+  }
+
+  def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
+
+    val spObj = potrToSpObject(potr = potr, mPremise = mPremise)
+
     //TODO Если NO_RSCH  = true – то по точке не производим расчет (не привязываем к РДО
     val sa = SaBuilderG.buildSaForSp(plat, potr, mPremise(potr.idObj))
 
-    SaSpBuilderG.buildSaSp(sa = sa, sp = sp, mr = mrFirst, isMinus = false)
+    SaSpBuilderG.buildSaSp(sa = sa, sp = spObj.sp, mr = spObj.mrFirst, isMinus = false)
 
     //load finance
     loadFinance(potr,sa)
 
-    ObjectModel(potr, sp,sa, mrLast.getOrElse(mrFirst), regList)
+    ObjectModel(
+      potr = potr,
+      sp = spObj.sp,
+      sa = sa,
+      mr = spObj.mrLast.getOrElse(spObj.mrFirst),
+      regList  = spObj.regList)
   }
 
   def loadFinance(potr:Potr, sa:SaEntity) = {
@@ -141,7 +154,16 @@ object LoaderG extends Logging{
           optKniga = potr.kniga))).
         toMap
 
-    val objects:List[ObjectModel] = plat.potrList.map((potr) => potrToObject(plat,potr,mPremise))
+    val objects:List[ObjectModel] = plat.potrList
+      .filter((potr) => potr.parent.iChS.isEmpty)
+      .map((potr) => potrToObject(plat,potr,mPremise))
+
+    //build sp for physics
+    val spObjects = for {
+      potr <- plat.potrList
+      iChs <- potr.parent.iChS
+      if iChs != "0"
+    } yield potrToSpObject(potr = potr, mPremise = mPremise)
 
     //add service agreement to account
     objects.foreach((o) => acct.addSaEntity(o.sa))
@@ -151,7 +173,7 @@ object LoaderG extends Logging{
     //add mailing address
     AccountBuilderG.addMailingAddress(plat = plat,per = per, acct = acct, acctPer = acctPer)
 
-    SubjectModel(plat = plat, per = per, acct = acct, objects = objects)
+    SubjectModel(plat = plat, per = per, acct = acct, objects = objects, spObjects = spObjects)
   }
 
   def checkZonePort(potr: Potr, mPotrForIdGrup:Map[Int,List[Potr]]):Option[Potr] =
@@ -204,7 +226,8 @@ object LoaderG extends Logging{
 //    val depCtlSt = loadTndr(subjects = subjects)
 
     info("------------ start saveToDb")
-    subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
+//    subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
+    subjects.foreach((sbj) => generalDAO.save(sbj))
 
     info("start save to DB shared objects")
     SaSpWriter.save(saSpObjects)

@@ -8,7 +8,9 @@ import org.loader.pojo.reg.RegEntity
 import org.loader.pojo.sa.SaEntity
 import org.loader.pojo.sp.SpEntity
 
+case class SpObject(sp: SpEntity, mrFirst: MrEntity, mrLast: Option[MrEntity], regList: List[(RegEntity,Potr)])
+
 case class ObjectModel(potr: Potr, sp: SpEntity, sa:SaEntity, mr:MrEntity, regList: List[(RegEntity,Potr)])
 
-case class SubjectModel(plat: Plat, per: PerEntity, acct: AcctEntity, objects: List[ObjectModel])
+case class SubjectModel(plat: Plat, per: PerEntity, acct: AcctEntity, objects: List[ObjectModel], spObjects: List[SpObject])
 

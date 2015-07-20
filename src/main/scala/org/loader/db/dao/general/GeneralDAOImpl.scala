@@ -18,8 +18,9 @@ class GeneralDAOImpl extends GeneralDAO with Logging{
   var entityManager: EntityManager = _
 
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-  override def save(per: PerEntity): Unit = {
-    entityManager.persist(per)
+  override def save(subject: SubjectModel): Unit = {
+    entityManager.persist(subject.per)
+    subject.spObjects.foreach((spObj) => entityManager.persist(spObj.sp))
   }
 
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
