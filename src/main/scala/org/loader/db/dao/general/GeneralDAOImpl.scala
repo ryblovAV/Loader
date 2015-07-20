@@ -26,7 +26,10 @@ class GeneralDAOImpl extends GeneralDAO with Logging{
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
   override def saveList(perList: List[SubjectModel]): Unit = {
     info("--------- start persist")
-    perList.foreach((subj) => entityManager.persist(subj.per))
+    perList.foreach((subj) => {
+      entityManager.persist(subj.per)
+      subj.spObjects.foreach((spObj) => entityManager.persist(spObj.sp))
+    })
     info("--------- end persist")
   }
 

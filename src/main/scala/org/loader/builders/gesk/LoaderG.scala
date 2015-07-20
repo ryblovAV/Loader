@@ -226,8 +226,8 @@ object LoaderG extends Logging{
 //    val depCtlSt = loadTndr(subjects = subjects)
 
     info("------------ start saveToDb")
-//    subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
-    subjects.foreach((sbj) => generalDAO.save(sbj))
+    subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
+//    subjects.foreach(generalDAO.save)
 
     info("start save to DB shared objects")
     SaSpWriter.save(saSpObjects)
