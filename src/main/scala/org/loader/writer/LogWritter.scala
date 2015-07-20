@@ -74,6 +74,17 @@ object LogWritter extends Logging {
 
   def log(subj: SubjectModel) = {
 
+    for (spObj <- subj.spObjects) {
+      jdbc.insert(sql, HashMap(
+        "per_id" -> subj.per.perId,
+        "acct_id" -> subj.acct.acctId,
+        "id_plat" -> subj.plat.idPlat,
+        "id_rec" -> spObj.potr.idRec,
+        "sa_id" -> "",
+        "sp_id" -> spObj.sp.spId,
+        "mr_id" -> spObj.mrFirst.mrId))
+    }
+
     for (obj <- subj.objects) {
       jdbc.insert(sql, HashMap(
         "per_id" -> subj.per.perId,

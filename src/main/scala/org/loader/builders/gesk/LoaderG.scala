@@ -107,7 +107,7 @@ object LoaderG extends Logging{
 
     SpMtrEvtBuilderG.build(spMtrHist = spMtrHist, mr = mrFirst)
 
-    SpObject(sp = sp, mrFirst = mrFirst, mrLast = mrLast, regList = regList)
+    SpObject(potr = potr, sp = sp, mrFirst = mrFirst, mrLast = mrLast, regList = regList)
   }
 
   def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
