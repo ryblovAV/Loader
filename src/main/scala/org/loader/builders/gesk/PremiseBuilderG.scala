@@ -30,7 +30,9 @@ object PremiseBuilderG extends Logging {
     prem.state = "20"
 
     prem.postal = address.ind
-    prem.city = address.reg
+
+    val reg = address.reg.trim.take(90)
+    prem.city = if (reg.length == 0) " " else reg
 
     //книга
     for (kniga <- optKniga)
