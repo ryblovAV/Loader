@@ -14,7 +14,7 @@ object SharedBuilderG {
           saId = parentSubj.sa.saId,
           spId = obj.sp.spId,
           startDttm = DateBuilder.addMinute(parentSubj.sa.startDt,1),
-          startMrId = obj.mr.mrId,
+          startMrId = obj.mrFirst.mrId,
           usageFlg = "-",
           usePct = 100))
       case _ => None

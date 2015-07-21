@@ -38,24 +38,31 @@ object LoaderG extends Logging{
     (RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = true, seq = seq),potr)
   }
 
-  def buildRegRead(potr: Potr, reg: RegEntity, mrFirst: MrEntity, mrLast: Option[MrEntity]):Unit = {
+  def buildRegRead(potr: Potr, reg: RegEntity, mrFirst: MrEntity, mrLast: MrEntity):Unit = {
     if (potr.isHistVol) {
+
       RegReadBuilderG.build(
         mr = mrFirst,
         reg = reg,
+        regReading = 0)
+
+      RegReadBuilderG.build(
+        mr = mrLast,
+        reg = reg,
         regReading = potr.mt.rUz.get)
+
     } else {
+
       RegReadBuilderG.build(
         mr = mrFirst,
         reg = reg,
         regReading = potr.mt.r1)
 
-      for (mr <- mrLast) {
         RegReadBuilderG.build(
-          mr = mr,
+          mr = mrLast,
           reg = reg,
           regReading = potr.mt.r2)
-      }
+
     }
   }
 
@@ -67,16 +74,8 @@ object LoaderG extends Logging{
     val mtr = MtrBuilderG.build(potr)
     val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
-    val mrFirst =
-      if (potr.isHistVol)
-        MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
-      else
-        MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
-
-    val mrLast:Option[MrEntity] =
-      if (potr.isHistVol) None
-      else Some(MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg))
-
+    val mrFirst = MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
+    val mrLast =  MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
 
     val regList = potr.zone.listZonePotr.view.zipWithIndex.map(
       (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2)
@@ -126,7 +125,8 @@ object LoaderG extends Logging{
       potr = potr,
       sp = spObj.sp,
       sa = sa,
-      mr = spObj.mrLast.getOrElse(spObj.mrFirst),
+      mrFirst = spObj.mrFirst,
+      mrLast = spObj.mrLast,
       regList  = spObj.regList)
   }
 
