@@ -158,12 +158,13 @@ object LoaderG extends Logging{
       .filter((potr) => potr.parent.iChS.isEmpty)
       .map((potr) => potrToObject(plat,potr,mPremise))
 
+
     //build sp for physics
-    val spObjects = for {
-      potr <- plat.potrList
-      iChs <- potr.parent.iChS
-      if iChs != "0"
-    } yield potrToSpObject(potr = potr, mPremise = mPremise)
+    val spObjects =
+      for {
+        potr <- plat.potrList
+        if (((potr.parent.iChS.getOrElse("0")) != "0" ) || (potr.parent.chGuk.getOrElse(" ") == "*"))
+      } yield potrToSpObject(potr = potr, mPremise = mPremise)
 
     //add service agreement to account
     objects.foreach((o) => acct.addSaEntity(o.sa))
@@ -238,6 +239,8 @@ object LoaderG extends Logging{
     LogWritter.log(subjects = subjects)
     info("------------ end")
   }
+
+
 
 //  def loadTndr(subjects: List[SubjectModel]) = {
 //

@@ -58,10 +58,15 @@ object SpBuilderG {
     }
 
     //ИД ТУ из БД граждан ГЭСК
-    for (iChS <- potr.parent.iChS) {
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_GE", adhocCharVal = iChS))
+    val idPhysic = (potr.parent.chGuk, potr.parent.iChS) match {
+      case (Some("*"),_) => Some("Не найден идентификатор физ.лица ГЭСК")
+      case (_,Some(iChS)) => Some(iChS)
+      case _ => None
     }
 
+    for (adhocCharVal <- idPhysic) {
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_GE", adhocCharVal = adhocCharVal))
+    }
 
     sp.prem = premise
 

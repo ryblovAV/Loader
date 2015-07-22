@@ -30,7 +30,8 @@ case class Zone(iZn: Option[String],
 case class Parent(idRecI: Option[String],
                   parentIdRec: Option[String],
                   parentIdRec2: Option[String],
-                  iChS: Option[String]) {
+                  iChS: Option[String],
+                  chGuk: Option[String]) {
 
   def getParentIdRec:List[String] = List(idRecI,parentIdRec,parentIdRec2).flatten.distinct
 
