@@ -68,10 +68,11 @@ object GeskReader {
           ko = (rs, "ko"),
           kob = (rs, "kob"),
           kOkwed = (rs, "k_okwed"),
-          bank = Bank(
+          finance = Finance(
             nb = (rs,"bank_nb"),
             naimb = (rs,"bank_naimb"),
-            rs = (rs, "bank_rs")
+            rs = (rs, "bank_rs"),
+            saldo = (rs, "ob_saldo")
           ),
           rs = Rs(
             bank = (rs,"x_bank"),
@@ -148,14 +149,12 @@ object GeskReader {
       parent = Parent(
         idRecI = (rs, "id_rec_i"),
         parentIdRec = (rs,"parent_id_rec"),
-        parentIdRec2 = (rs,"parent_id_rec2"),
         iChS = (rs,"i_ch_s"),
         chGuk = (rs,"ch_guk")
       ),
       k1 = (rs,"k1"),
       t = (rs,"t"),
       grpt46 = (rs,"grptr46"),
-      saldo = (rs,"OB_SALDO"),
       zone = Zone(
         iZn = (rs,"i_zn"),
         idGrup = (rs,"id_grup")),

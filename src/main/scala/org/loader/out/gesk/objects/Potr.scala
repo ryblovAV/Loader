@@ -29,11 +29,10 @@ case class Zone(iZn: Option[String],
 
 case class Parent(idRecI: Option[String],
                   parentIdRec: Option[String],
-                  parentIdRec2: Option[String],
                   iChS: Option[String],
                   chGuk: Option[String]) {
 
-  def getParentIdRec:List[String] = List(idRecI,parentIdRec,parentIdRec2).flatten.distinct
+  def getParentIdRec:Option[String] = if (idRecI.isEmpty) idRecI else parentIdRec
 
 }
 
@@ -55,7 +54,6 @@ case class  Potr(id: Int,
                  k1: Option[String],
                  t: Option[String],
                  grpt46: Option[String],
-                 saldo: Option[Double],
                  zone: Zone,
                  iPch: String) {
 

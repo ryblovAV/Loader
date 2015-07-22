@@ -95,11 +95,11 @@ object AccountBuilderG extends Logging {
     }
 
     //банк
-    for (naimb <- plat.bank.naimb) {
+    for (naimb <- plat.finance.naimb) {
       addAcctChar(account, Characteristic(charTypeCd = "BANK_K_L", adhocCharVal = naimb))
     }
     //БИК
-    for (nb <- plat.bank.nb) {
+    for (nb <- plat.finance.nb) {
       addAcctChar(account, Characteristic(charTypeCd = "BIK_K_L", adhocCharVal = nb))
     }
     //расчетный счет
@@ -107,7 +107,7 @@ object AccountBuilderG extends Logging {
       addAcctChar(account, Characteristic(charTypeCd = "RSCH_K_L", adhocCharVal = rspl))
     }
     //Корр.счет банка клиента
-    for (rs <- plat.bank.rs) {
+    for (rs <- plat.finance.rs) {
       addAcctChar(account, Characteristic(charTypeCd = "KOR_KL_L", adhocCharVal = rs))
     }
 

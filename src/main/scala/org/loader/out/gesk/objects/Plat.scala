@@ -21,9 +21,10 @@ case class Phone(tel1:Option[String],
                  tel2:Option[String],
                  tel3:Option[String])
 
-case class Bank(nb:Option[String],
-                naimb:Option[String],
-                rs:Option[String])
+case class Finance(nb:Option[String],
+                   naimb:Option[String],
+                   rs:Option[String],
+                   saldo:Option[Double])
 
 case class Rs(bank:Option[String],
               rasSch:Option[String],
@@ -52,7 +53,7 @@ case class Plat(idPlat: String,
                 ko: String,
                 kob: Option[String],
                 kOkwed:Option[String],
-                bank:Bank,
+                finance:Finance,
                 rs:Rs,
                 oplataSum:List[Double] = List.empty[Double],
                 oplataDat:List[java.util.Date] = List.empty[java.util.Date],

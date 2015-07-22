@@ -20,10 +20,8 @@ object SharedBuilderG {
       case _ => None
     }
 
-  def buildSaSpObject(obj:ObjectModel,m:Map[String,ObjectModel]):List[SaSpObject] = {
-    obj.potr.parent.getParentIdRec.map(
-      (parentIdRec) => 
-        buildSaSpObject(parentIdRec = parentIdRec, obj = obj, m = m)).flatten
+  def buildSaSpObject(obj:ObjectModel,m:Map[String,ObjectModel]):Option[SaSpObject] = {
+    obj.potr.parent.getParentIdRec.flatMap((parentIdRec) => buildSaSpObject(parentIdRec = parentIdRec, obj = obj, m = m))
   }
   
   def buildListSaSpObject(subjects: List[SubjectModel]):List[SaSpObject] = {
