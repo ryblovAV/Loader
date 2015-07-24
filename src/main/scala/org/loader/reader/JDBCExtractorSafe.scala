@@ -4,6 +4,7 @@ import java.sql.ResultSet
 import java.util.Date
 
 import grizzled.slf4j.Logging
+import scala.language.implicitConversions
 
 object JDBCExtractorSafe extends Logging {
 

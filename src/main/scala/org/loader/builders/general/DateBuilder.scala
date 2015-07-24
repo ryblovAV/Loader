@@ -3,6 +3,9 @@ package org.loader.builders.general
 import java.text.{DateFormat, SimpleDateFormat}
 import java.util.{Calendar, Date, GregorianCalendar}
 
+import scala.language.implicitConversions
+
+
 object DateBuilder {
 
   private var dateFormat: DateFormat = new SimpleDateFormat("dd/MM/yyyy")

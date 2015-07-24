@@ -2,6 +2,7 @@ package org.loader.builders.general
 
 import org.loader.models.Characteristic
 import org.loader.pojo.sa.{SaCharEntity, SaEntity}
+import scala.language.implicitConversions
 
 object SaBuilder {
 

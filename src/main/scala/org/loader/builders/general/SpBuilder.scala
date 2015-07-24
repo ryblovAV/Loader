@@ -2,6 +2,7 @@ package org.loader.builders.general
 
 import org.loader.models.Characteristic
 import org.loader.pojo.sp.{SpCharEntity, SpEntity, SpOpAreaEntity}
+import scala.language.implicitConversions
 
 object SpBuilder {
 

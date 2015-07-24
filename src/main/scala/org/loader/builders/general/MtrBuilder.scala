@@ -2,6 +2,8 @@ package org.loader.builders.general
 
 import org.loader.models.Characteristic
 import org.loader.pojo.mtr.{MtrCharEntity, MtrEntity}
+import scala.language.implicitConversions
+
 
 object MtrBuilder {
   

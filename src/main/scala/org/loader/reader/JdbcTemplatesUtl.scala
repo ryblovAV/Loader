@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 
 import scala.collection.JavaConverters._
+import scala.language.implicitConversions
 
 trait JdbcTemplatesUtl extends Logging {
 

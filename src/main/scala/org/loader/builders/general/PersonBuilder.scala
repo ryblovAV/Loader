@@ -3,6 +3,7 @@ package org.loader.builders.general
 
 import org.loader.models.Characteristic
 import org.loader.pojo.per._
+import scala.language.implicitConversions
 
 
 

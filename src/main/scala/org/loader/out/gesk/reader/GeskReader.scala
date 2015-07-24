@@ -10,6 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
 
 import scala.collection.JavaConversions._
 import scala.collection.immutable.HashMap
+import scala.language.reflectiveCalls
 
 object GeskReader {
 

@@ -2,6 +2,7 @@ package org.loader.builders.general
 
 import org.loader.models.Characteristic
 import org.loader.pojo.prem.{PremCharEntity, PremEntity}
+import scala.language.implicitConversions
 
 object PremiseBuilder {
 
