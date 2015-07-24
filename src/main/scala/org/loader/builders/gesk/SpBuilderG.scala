@@ -21,7 +21,8 @@ object SpBuilderG {
     spChar
   }
 
-  def build(potr:Potr, premise:PremEntity):SpEntity = {
+
+  def build(potr:Potr, premise:PremEntity, isOrphan: Boolean):SpEntity = {
     val sp = new SpEntity(KeysBuilder.getEnvId)
 
     sp.spId = KeysBuilder.getSpId

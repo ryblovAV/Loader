@@ -66,11 +66,11 @@ object LoaderG extends Logging{
     }
   }
 
-  def potrToSpObject(potr: Potr, mPremise: Map[String, PremEntity]):SpObject = {
+  def potrToSpObject(potr: Potr, mPremise: Map[String, PremEntity], isOrphan: Boolean):SpObject = {
 
     val premise = mPremise(potr.idObj)
 
-    val sp = SpBuilderG.build(potr = potr, premise = premise)
+    val sp = SpBuilderG.build(potr = potr, premise = premise, isOrphan = isOrphan)
     val mtr = MtrBuilderG.build(potr)
     val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
@@ -111,7 +111,7 @@ object LoaderG extends Logging{
 
   def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
 
-    val spObj = potrToSpObject(potr = potr, mPremise = mPremise)
+    val spObj = potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = false)
 
     //TODO Если NO_RSCH  = true – то по точке не производим расчет (не привязываем к РДО
     val sa = SaBuilderG.buildSaForSp(plat, potr, mPremise(potr.idObj))
@@ -119,7 +119,7 @@ object LoaderG extends Logging{
     SaSpBuilderG.buildSaSp(sa = sa, sp = spObj.sp, mr = spObj.mrFirst, isMinus = false)
 
     //load finance
-    loadFinance(potr,sa)
+    //loadFinance(potr,sa)
 
     ObjectModel(
       potr = potr,
@@ -130,11 +130,15 @@ object LoaderG extends Logging{
       regList  = spObj.regList)
   }
 
-  def loadFinance(potr:Potr, sa:SaEntity) = {
-    for (saldo <- potr.saldo) {
-      val adj = AdjBuilderG.build(sa = sa, adjAmt = saldo)
-      FtBuilderG.build(adjId = adj.adjId, sa = sa, curAmt = saldo)
-    }
+  def loadFinance(plat:Plat) = {
+
+//    for (saldo <- plat.finance.saldo) {
+//
+//
+//
+//      val adj = AdjBuilderG.build(sa = sa, adjAmt = saldo)
+//      FtBuilderG.build(adjId = adj.adjId, sa = sa, curAmt = saldo)
+//    }
   }
 
   def platToSubject(plat: Plat):SubjectModel = {
@@ -160,11 +164,15 @@ object LoaderG extends Logging{
 
 
     //build sp for physics
+    //shared objects without parent
     val spObjects =
       for {
         potr <- plat.potrList
-        if (((potr.parent.iChS.getOrElse("0")) != "0" ) || (potr.parent.chGuk.getOrElse(" ") == "*"))
-      } yield potrToSpObject(potr = potr, mPremise = mPremise)
+        if (
+          ((potr.parent.iChS.getOrElse("0")) != "0" ) ||
+            (potr.parent.chGuk.getOrElse(" ") == "*") ||
+            (potr.naimp.take(1) == "-") && (!potr.parent.getParentIdRec.isEmpty) && (potr.parent.iNOb.isEmpty))
+      } yield potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = true)
 
     //add service agreement to account
     objects.foreach((o) => acct.addSaEntity(o.sa))
@@ -177,7 +185,7 @@ object LoaderG extends Logging{
     SubjectModel(plat = plat, per = per, acct = acct, objects = objects, spObjects = spObjects)
   }
 
-  def checkZonePort(potr: Potr, mPotrForIdGrup:Map[Int,List[Potr]]):Option[Potr] =
+  def checkZonePort(potr: Potr, mPotrForIdGrup:Map[String,List[Potr]]):Option[Potr] =
     potr.zone.idGrup match {
       case Some(idGrup) => mPotrForIdGrup.get(idGrup) match {
         case Some(l) => l match {
@@ -189,7 +197,7 @@ object LoaderG extends Logging{
       case None => Some(potr)
   }
 
-  def filterZonePotrForPlat(plat: Plat, mPotrForIdGrup:Map[Int,List[Potr]]):List[Potr] = {
+  def filterZonePotrForPlat(plat: Plat, mPotrForIdGrup:Map[String,List[Potr]]):List[Potr] = {
     for {
       potr <- plat.potrList
       potrWithChilds <- checkZonePort(potr, mPotrForIdGrup)
@@ -199,7 +207,7 @@ object LoaderG extends Logging{
   def fillZonePotr(platList: List[Plat]):List[Plat] = {
 
     // list potr for group
-    val mPotrForIdGrup:Map[Int,List[Potr]] = (for {
+    val mPotrForIdGrup:Map[String,List[Potr]] = (for {
       plat <- platList
       potr <- plat.potrList
       idGrup <- potr.zone.idGrup
