@@ -101,6 +101,11 @@ object GeskReader {
 
   }
 
+  def buildIdGroup(idObj: String, optIdGrup: Option[String]) = optIdGrup match {
+    case Some(idGrup) => Some(s"$idObj~$idGrup")
+    case _ => None
+  }
+
   def rsToPotr(rs:ResultSet, rowNum: Int):Potr = {
     Potr(
       address = Address(
@@ -152,14 +157,15 @@ object GeskReader {
         idRecI = (rs, "id_rec_i"),
         parentIdRec = (rs,"parent_id_rec"),
         iChS = (rs,"i_ch_s"),
-        chGuk = (rs,"ch_guk")
+        chGuk = (rs,"ch_guk"),
+        iNOb = (rs,"i_n_ob")
       ),
       k1 = (rs,"k1"),
       t = (rs,"t"),
       grpt46 = (rs,"grptr46"),
       zone = Zone(
         iZn = (rs,"i_zn"),
-        idGrup = (rs,"id_grup")),
+        idGrup = buildIdGroup(idObj =  (rs,"id_ob"), optIdGrup = (rs,"id_grup"))),
       iPch = (rs,"i_pch")
     )
   }

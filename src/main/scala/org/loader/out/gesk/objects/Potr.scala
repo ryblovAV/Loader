@@ -25,13 +25,14 @@ case class Tar(sn: Option[String],
                znJ: Option[String])
 
 case class Zone(iZn: Option[String],
-                idGrup: Option[Int],
+                idGrup: Option[String],
                 listZonePotr: List[Potr] = List.empty[Potr])
 
 case class Parent(idRecI: Option[String],
                   parentIdRec: Option[String],
                   iChS: Option[String],
-                  chGuk: Option[String]) {
+                  chGuk: Option[String],
+                  iNOb: Option[String]) {
 
   def getParentIdRec:Option[String] = if (idRecI.isEmpty) idRecI else parentIdRec
 
