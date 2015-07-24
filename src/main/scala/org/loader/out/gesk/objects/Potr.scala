@@ -16,7 +16,8 @@ case class Mt(volt: Option[String],
               r1: Double,
               r2: Double,
               rUz: Option[Double],
-              dataSh: Option[java.util.Date])
+              dataSh: Option[java.util.Date],
+              mkd: Option[Double])
 
 case class Tar(sn: Option[String],
                gr: Option[String],
@@ -72,5 +73,7 @@ case class  Potr(id: Int,
   def isHistVol = mt.rUz.isEmpty == false
 
   def isInterval = iPch == "true"
+
+  def isMkd = ((mt.r1 == 0) && (mt.r2 != 0))
 
 }

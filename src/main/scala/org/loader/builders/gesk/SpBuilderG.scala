@@ -8,6 +8,8 @@ import org.loader.out.gesk.objects.Potr
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
+import org.loader.builders.general.BuilderUtl
+
 object SpBuilderG {
 
   private def buildSpChar(charTypeCd:String, charVal:String = " ", adhocCharVal:String = " ", effDt:Date = DateBuilder.getDefaultDt) = {
@@ -21,6 +23,12 @@ object SpBuilderG {
     spChar
   }
 
+  def addMkd(potr: Potr):String  = if (potr.isMkd) {
+    potr.mt.mkd match {
+      case Some(mkd) => s",mkd = $mkd"
+      case None      => ""
+    }
+  } else ""
 
   def build(potr:Potr, premise:PremEntity, isOrphan: Boolean):SpEntity = {
     val sp = new SpEntity(KeysBuilder.getEnvId)
@@ -30,10 +38,9 @@ object SpBuilderG {
     sp.installDt = potr.mt.dataSh.getOrElse(DateBuilder.getDefaultDt)
     sp.spSrcStatusFlg = "C"
 
-    sp.mtrLocDetails = potr.parent.iChS match {
-      case Some(_) => s"${potr.naimp} ${potr.address.abv2} ${potr.address.ul} ${potr.address.abv1} ${potr.address.dom}"
-      case None    => potr.naimp
-    }
+    sp.mtrLocDetails =
+      (if (isOrphan) s"${potr.naimp} ${potr.address.abv2} ${potr.address.ul} ${potr.address.abv1} ${potr.address.dom} "
+       else potr.naimp) + addMkd(potr)
 
     //Наименование ТУ
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "NAIM-TP", adhocCharVal = potr.naimp))
