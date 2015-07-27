@@ -34,7 +34,7 @@ case class Parent(idRecI: Option[String],
                   chGuk: Option[String],
                   iNOb: Option[String]) {
 
-  def getParentIdRec:Option[String] = if (idRecI.isEmpty) idRecI else parentIdRec
+  def getParentIdRec:Option[String] = if (!idRecI.isEmpty) idRecI else parentIdRec
 
 }
 
