@@ -22,7 +22,8 @@ case class Mt(volt: Option[String],
 case class Tar(sn: Option[String],
                gr: Option[String],
                prim: Option[String],
-               znJ: Option[String])
+               znJ: Option[String],
+               cK: Option[String])
 
 case class Zone(iZn: Option[String],
                 idGrup: Option[String],

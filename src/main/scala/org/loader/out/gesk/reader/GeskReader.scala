@@ -140,7 +140,8 @@ object GeskReader {
         sn = (rs,"tar_sn"),
         gr = (rs,"tar_gr"),
         prim = (rs,"tar_prim"),
-        znJ = (rs,"tar_zn_j")
+        znJ = (rs,"tar_zn_j"),
+        cK = (rs,"c_k")
       ),
       id = (rs,"id"),
       idPlat = (rs,"id_plat"),

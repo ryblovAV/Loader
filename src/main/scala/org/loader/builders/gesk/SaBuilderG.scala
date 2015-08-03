@@ -53,9 +53,9 @@ object SaBuilderG extends Logging{
     for (ustM <- potr.mt.ustM)
       SaBuilder.addChar(sa,Characteristic(charTypeCd = "M-POWER",adhocCharVal = ustM.toString))
 
-    //TODO ценовая категория
-//    for (prim <- potr.tar.prim)
-//      SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = translateCategory(prim = prim)))
+    //Ценовая категория
+    for (cK <- potr.tar.cK if (cK.take(1) != "-"))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = cK))
 
     //Группа населения
     for (grpt46 <- potr.grpt46)
