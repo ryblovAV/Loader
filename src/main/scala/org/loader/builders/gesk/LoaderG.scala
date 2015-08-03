@@ -56,12 +56,12 @@ object LoaderG extends Logging{
       RegReadBuilderG.build(
         mr = mrFirst,
         reg = reg,
-        regReading = potr.mt.r1)
+        regReading = potr.mt.r1.getOrElse(0))
 
-        RegReadBuilderG.build(
-          mr = mrLast,
-          reg = reg,
-          regReading = potr.mt.r2)
+      RegReadBuilderG.build(
+        mr = mrLast,
+        reg = reg,
+        regReading = potr.mt.r2.getOrElse(0))
 
     }
   }
@@ -140,6 +140,8 @@ object LoaderG extends Logging{
 //      FtBuilderG.build(adjId = adj.adjId, sa = sa, curAmt = saldo)
 //    }
   }
+
+
 
   def platToSubject(plat: Plat):SubjectModel = {
 

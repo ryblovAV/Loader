@@ -13,8 +13,8 @@ case class Mt(volt: Option[String],
               pLi: Option[String],
               pTr: Option[String],
               rks: Double,
-              r1: Double,
-              r2: Double,
+              r1: Option[Double],
+              r2: Option[Double],
               rUz: Option[Double],
               dataSh: Option[java.util.Date],
               mkd: Option[Double])
@@ -76,6 +76,6 @@ case class  Potr(id: Int,
 
   def isInterval = iPch == "true"
 
-  def isMkd = ((mt.r1 == 0) && (mt.r2 != 0))
+  def isMkd = ((mt.r1.getOrElse(0) == 0) && (mt.r2.getOrElse(0) != 0))
 
 }
