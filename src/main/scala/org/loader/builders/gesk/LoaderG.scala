@@ -161,20 +161,13 @@ object LoaderG extends Logging{
         toMap
 
     val objects:List[ObjectModel] = plat.potrList
-      .filter((potr) => potr.parent.iChS.isEmpty)
+      .filter((potr) => !potr.isOrphan)
       .map((potr) => potrToObject(plat,potr,mPremise))
 
 
     //build sp for physics
     //shared objects without parent
-    val spObjects =
-      for {
-        potr <- plat.potrList
-        if (
-          ((potr.parent.iChS.getOrElse("0")) != "0" ) ||
-            (potr.parent.chGuk.getOrElse(" ") == "*") ||
-            (potr.naimp.take(1) == "-") && (!potr.parent.getParentIdRec.isEmpty) && (potr.parent.iNOb.isEmpty))
-      } yield potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = true)
+    val spObjects = plat.potrList.filter(_.isOrphan).map((potr) => potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = true))
 
     //add service agreement to account
     objects.foreach((o) => acct.addSaEntity(o.sa))

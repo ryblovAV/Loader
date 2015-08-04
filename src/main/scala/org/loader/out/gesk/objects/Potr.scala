@@ -78,4 +78,10 @@ case class  Potr(id: Int,
 
   def isMkd = ((mt.r1.getOrElse(0) == 0) && (mt.r2.getOrElse(0) != 0))
 
+  def isOrphan = ((parent.iChS.getOrElse("0") != "0" ) || (!parent.chGuk.isEmpty)) &&
+    //Ранее использовалось условие
+    //(potr.parent.chGuk.getOrElse(" ")  == "*") &&
+    (naimp.take(1) == "-") &&
+    (parent.getParentIdRec.isEmpty)
+
 }
