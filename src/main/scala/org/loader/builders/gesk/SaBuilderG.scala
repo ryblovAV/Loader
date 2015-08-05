@@ -27,6 +27,13 @@ object SaBuilderG extends Logging{
     }
   }
 
+  def translatePriceCategory(cK:String) = cK match {
+    case "без УПП и СбН=для сетевых" => Some("8")
+    case s if s.take(1) == "-" => None
+    case s => Some(s)
+    case - => None
+  }
+
   def buildSaForSp(plat: Plat, potr: Potr, charPrem: PremEntity) = {
 
     val sa = new SaEntity(KeysBuilder.getEnvId)
@@ -54,8 +61,9 @@ object SaBuilderG extends Logging{
       SaBuilder.addChar(sa,Characteristic(charTypeCd = "M-POWER",adhocCharVal = ustM.toString))
 
     //Ценовая категория
-    for (cK <- potr.tar.cK if (cK.take(1) != "-"))
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = cK))
+    for (cK <- potr.tar.cK)
+      for (charVal <- translatePriceCategory(cK))
+        SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = charVal))
 
     //Группа населения
     for (grpt46 <- potr.grpt46)
