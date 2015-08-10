@@ -90,7 +90,12 @@ object GeskReader {
         )
     }
 
-    val potrList = readAllPotr.groupBy((p) => p.idPlat)
+    def filterPotr(p:Potr) = p.tar.cK match {
+      case Some(ck) if ck == "-без УПП и СбН=n3" => false
+      case _ => true
+    }
+
+    val potrList = readAllPotr.filter((p) => filterPotr(p)).groupBy((p) => p.idPlat)
 
     //load potr for plat
 //    platList.map((plat) => plat.copy(potrList = readPotrForPlat(plat.idPlat)))
