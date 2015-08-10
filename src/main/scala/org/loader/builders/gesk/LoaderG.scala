@@ -258,6 +258,12 @@ object LoaderG extends Logging{
 //    info("------------ start load tndr")
 //    val depCtlSt = loadTndr(subjects = subjects)
 
+    info("------------ start logging")
+    LogWritter.log(subjects = subjects)
+    LogWritter.logKeys(KeysBuilder.createdKeys)
+
+    info("------------ end")
+
     info("------------ start saveToDb")
     subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
 //    subjects.foreach(generalDAO.save)
@@ -267,9 +273,6 @@ object LoaderG extends Logging{
 
 //    generalDAO.saveDepCtlSt(depCtlSt = depCtlSt)
 
-    info("------------ start logging")
-    LogWritter.log(subjects = subjects)
-    info("------------ end")
   }
 
 
