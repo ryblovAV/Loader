@@ -6,6 +6,7 @@ import grizzled.slf4j.Logging
 import org.loader.models.SubjectModel
 import org.loader.pojo.mtrcfg.MtrConfigEntity
 import org.loader.pojo.per.PerEntity
+import org.loader.pojo.sp.SpEntity
 import org.loader.pojo.tndr.DepCtlStEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -43,6 +44,12 @@ class GeneralDAOImpl extends GeneralDAO with Logging{
     entityManager.find(classOf[PerEntity],perId)
   }
 
+  @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+  def findSp(spId:String):SpEntity = {
+    entityManager.find(classOf[SpEntity],spId)
+  }
+
+
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
   def removePer(perId:String) = {
     val per = findPer(perId)
@@ -50,6 +57,29 @@ class GeneralDAOImpl extends GeneralDAO with Logging{
       entityManager.remove(per)
     }
   }
+
+  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  def removePerList(perList:List[String]) = {
+    info(s"remove $perList")
+    perList.foreach((perId) => {
+      val per = findPer(perId)
+      if (per != null) {
+        entityManager.remove(per)
+      }
+      info(per.perId)
+    })
+  }
+
+  @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+  def removeSpList(spList:List[String]) = {
+    spList.foreach((spId) => {
+      val sp = findSp(spId)
+      if (sp != null) {
+        entityManager.remove(sp)
+      }
+    })
+  }
+
 
   @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
   def saveDepCtlSt(depCtlSt: DepCtlStEntity) = {

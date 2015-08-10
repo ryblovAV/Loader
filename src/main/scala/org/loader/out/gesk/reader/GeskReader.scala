@@ -22,6 +22,21 @@ object GeskReader {
   final val sqlPlatAll = "select * from v_gesk_plat"
   final val sqlPotrAll = "select * from v_gesk_potr"
 
+  final val sqlListLoadedPer = "select distinct t.per_id as per_id from cm_log_per_gesk_juridical t"
+  final val sqlListLoadedSp = "select distinct t.sp_id as sp_id from cm_log_per_gesk_juridical t where t.sa_id is null"
+
+  def readLoadedPerson: List[String] = {
+    jdbcReader.query(sqlListLoadedPer) {
+      (rs, rowNum) => (rs,"per_id")
+    }
+  }
+
+  def readLoadedSp: List[String] = {
+    jdbcReader.query(sqlListLoadedSp) {
+      (rs, rowNum) => (rs,"sp_id")
+    }
+  }
+
   def readPlat: List[Plat] = {
 
     //jdbcReader.queryWithParameters(sqlPlat, HashMap("id_plat" -> idPlat)) {

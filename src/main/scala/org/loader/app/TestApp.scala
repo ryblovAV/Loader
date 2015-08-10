@@ -9,4 +9,5 @@ import org.loader.builders.gesk.LoaderG
 object TestApp extends App{
   //LoaderG.removePer(KeysBuilder.getPerId)
   LoaderG.loadPlat
+  //LoaderG.removeAll
 }
