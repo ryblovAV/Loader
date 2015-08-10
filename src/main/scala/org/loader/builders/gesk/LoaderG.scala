@@ -235,6 +235,14 @@ object LoaderG extends Logging{
       (plat) => plat.copy(potrList = filterZonePotrForPlat(plat = plat, mPotrForIdGrup = mPotrForIdGrup)))
   }
 
+  def removeAll = {
+    val perIdList = GeskReader.readLoadedPerson
+    info(s"perId = $perIdList")
+    generalDAO.removePerList(perIdList.take(1))
+//    generalDAO.removeSpList(GeskReader.readLoadedSp)
+  }
+
+
   def loadPlat = {
     info("------------ start read from db")
     val platList = fillZonePotr(GeskReader.readPlat)
