@@ -36,7 +36,7 @@ object PremiseBuilderG extends Logging {
 
     //книга
     for (kniga <- optKniga)
-      PremiseBuilder.addChar(prem,Characteristic(charTypeCd = "BOOK",adhocCharVal = kniga))
+      PremiseBuilder.addChar(prem,Characteristic(charTypeCd = "BOOK",adhocCharVal = kniga, effDt = LoaderG.activeMonth))
 
     prem
   }

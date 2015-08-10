@@ -66,12 +66,12 @@ object AccountBuilderG extends Logging {
     plat.kontr match {
       case Some(kontr) => {
 //        addAcctChar(account, Characteristic(charTypeCd = "NOM_DOG", adhocCharVal = kontr))
-        addAcctChar(account, Characteristic(charTypeCd = "VID_DOG", charVal = "7"))
+        addAcctChar(account, Characteristic(charTypeCd = "VID_DOG", charVal = "7", effDt = account.setupDt))
       }
       case None => plat.ndGesk match {
         case Some(ndGesk) => {
 //          addAcctChar(account, Characteristic(charTypeCd = "NOM_DOG", adhocCharVal = ndGesk))
-          addAcctChar(account, Characteristic(charTypeCd = "VID_DOG", charVal = "6"))
+          addAcctChar(account, Characteristic(charTypeCd = "VID_DOG", charVal = "6", effDt = account.setupDt))
         }
         case None =>
       }
@@ -80,36 +80,36 @@ object AccountBuilderG extends Logging {
     //TODO Расчетный счет (ГЭСК) (4 характеристики)
     //банк
     for (bank <- plat.rs.bank) {
-      addAcctChar(account, Characteristic(charTypeCd = "BANK_G", adhocCharVal = bank))
+      addAcctChar(account, Characteristic(charTypeCd = "BANK_G", adhocCharVal = bank, effDt = account.setupDt))
     }
     //расчетный счет
     for (rasSch <- plat.rs.rasSch) {
-      addAcctChar(account, Characteristic(charTypeCd = "R/CH_G", adhocCharVal = rasSch))
+      addAcctChar(account, Characteristic(charTypeCd = "R/CH_G", adhocCharVal = rasSch, effDt = account.setupDt))
     }
     //бик
     for (bik <- plat.rs.bik) {
-      addAcctChar(account, Characteristic(charTypeCd = "BIK_G", adhocCharVal = bik))
+      addAcctChar(account, Characteristic(charTypeCd = "BIK_G", adhocCharVal = bik, effDt = account.setupDt))
     }
     //корреспондентский счет банка
     for (korSch <- plat.rs.korSch) {
-      addAcctChar(account, Characteristic(charTypeCd = "KORSCH_G", adhocCharVal = korSch))
+      addAcctChar(account, Characteristic(charTypeCd = "KORSCH_G", adhocCharVal = korSch, effDt = account.setupDt))
     }
 
     //банк
     for (naimb <- plat.finance.naimb) {
-      addAcctChar(account, Characteristic(charTypeCd = "BANK_K_L", adhocCharVal = naimb))
+      addAcctChar(account, Characteristic(charTypeCd = "BANK_K_L", adhocCharVal = naimb, effDt = account.setupDt))
     }
     //БИК
     for (nb <- plat.finance.nb) {
-      addAcctChar(account, Characteristic(charTypeCd = "BIK_K_L", adhocCharVal = nb))
+      addAcctChar(account, Characteristic(charTypeCd = "BIK_K_L", adhocCharVal = nb, effDt = account.setupDt))
     }
     //расчетный счет
     for (rspl <- plat.id.rspl) {
-      addAcctChar(account, Characteristic(charTypeCd = "RSCH_K_L", adhocCharVal = rspl))
+      addAcctChar(account, Characteristic(charTypeCd = "RSCH_K_L", adhocCharVal = rspl, effDt = account.setupDt))
     }
     //Корр.счет банка клиента
     for (rs <- plat.finance.rs) {
-      addAcctChar(account, Characteristic(charTypeCd = "KOR_KL_L", adhocCharVal = rs))
+      addAcctChar(account, Characteristic(charTypeCd = "KOR_KL_L", adhocCharVal = rs, effDt = account.setupDt))
     }
 
     account

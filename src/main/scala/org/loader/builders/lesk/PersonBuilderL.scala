@@ -2,6 +2,7 @@ package org.loader.builders.lesk
 
 import org.loader.builders.general.PersonBuilder.buildPerChar
 import org.loader.builders.general.{DateBuilder, KeysBuilder}
+import org.loader.builders.gesk.LoaderG
 import org.loader.models.Characteristic
 import org.loader.out.lesk.objects.Client
 import org.loader.pojo.per._
@@ -55,20 +56,20 @@ object PersonBuilderL {
 
     //Характеристики
     //Бюджет
-    if (client.budget != null)
-      person.perCharEntitySet.add(Characteristic(charTypeCd = "BUDZHET", charVal = translateBudget(client.budget)))
-    //Исполнитель коммунальных услуг (ИКУ)
-    if (client.iku == "Да")
-      person.perCharEntitySet.add(Characteristic(charTypeCd = "IKY", adhocCharVal = "Требуется добавить подтверждающий документ"))
-    //Дата расторжения
-    if (client.dateCancelling != null)
-      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATARAST", adhocCharVal = DateBuilder.dateToStr(client.dateCancelling)))
-    //Дата заключения
-    if (client.dateConclusion != null)
-      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATAZAKL", adhocCharVal = DateBuilder.dateToStr(client.dateConclusion)))
-    //Код отрасли
-    if (client.codeDepartment != null)
-      person.perCharEntitySet.add(Characteristic(charTypeCd = "OKONH", charVal = translateCodeDepartment(client.codeDepartment, client.department)))
+//    if (client.budget != null)
+//      person.perCharEntitySet.add(Characteristic(charTypeCd = "BUDZHET", charVal = translateBudget(client.budget), effDt = LoaderG.ac))
+//    //Исполнитель коммунальных услуг (ИКУ)
+//    if (client.iku == "Да")
+//      person.perCharEntitySet.add(Characteristic(charTypeCd = "IKY", adhocCharVal = "Требуется добавить подтверждающий документ"))
+//    //Дата расторжения
+//    if (client.dateCancelling != null)
+//      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATARAST", adhocCharVal = DateBuilder.dateToStr(client.dateCancelling)))
+//    //Дата заключенияtive
+//    if (client.dateConclusion != null)
+//      person.perCharEntitySet.add(Characteristic(charTypeCd = "DATAZAKL", adhocCharVal = DateBuilder.dateToStr(client.dateConclusion)))
+//    //Код отрасли
+//    if (client.codeDepartment != null)
+//      person.perCharEntitySet.add(Characteristic(charTypeCd = "OKONH", charVal = translateCodeDepartment(client.codeDepartment, client.department)))
 
     //TODO добавить загрузку телефонов (пакет pkg_cm_load_phone_juridical)
     //TODO добавить загрузку руководителей (пакет pkg_cm_load_person_juridical.load_chief)

@@ -83,7 +83,7 @@ object PersonBuilderG extends Logging{
     //Характеристики
     //бюджет
     getBudzhet(plat.ko) match {
-      case Some(charVal) => addPersonChar(person = person, Characteristic(charTypeCd = "BUDZHET", charVal = charVal))
+      case Some(charVal) => addPersonChar(person = person, Characteristic(charTypeCd = "BUDZHET", charVal = charVal, effDt = LoaderG.activeMonth))
       case None =>
     }
 
@@ -93,21 +93,22 @@ object PersonBuilderG extends Logging{
         addPersonChar(
             person = person,
             Characteristic(charTypeCd = "IKY",
-            adhocCharVal = "Требуется добавить подтверждающий документ")
+            adhocCharVal = "Требуется добавить подтверждающий документ",
+            effDt = LoaderG.activeMonth)
         )
       case _ =>
     }
 
     //Дата заключения
     plat.data match {
-      case Some(data) => addPersonChar(person = person, Characteristic(charTypeCd = "DATAZAKL", adhocCharVal = data))
+      case Some(data) => addPersonChar(person = person, Characteristic(charTypeCd = "DATAZAKL", adhocCharVal = data, effDt = LoaderG.activeMonth))
       case None =>
     }
 
 
     //OKONH
     OkonhDictionary.getOkonh(plat.kob) match {
-      case Some(charVal) => addPersonChar(person = person, Characteristic(charTypeCd = "OKONH", charVal = charVal))
+      case Some(charVal) => addPersonChar(person = person, Characteristic(charTypeCd = "OKONH", charVal = charVal, effDt = LoaderG.activeMonth))
       case None =>
     }
 
@@ -129,7 +130,7 @@ object PersonBuilderG extends Logging{
       )
 
     if (!phoneStr.isEmpty) {
-      addPersonChar(person = person, Characteristic(charTypeCd = "KOMMENT", adhocCharVal = phoneStr))
+      addPersonChar(person = person, Characteristic(charTypeCd = "KOMMENT", adhocCharVal = phoneStr, effDt = LoaderG.activeMonth))
     }
 
     //add Person phone

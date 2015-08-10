@@ -35,7 +35,7 @@ object SpBuilderG {
 
     sp.spId = KeysBuilder.getSpId
     sp.spTypeCd = "E-URTU"
-    sp.installDt = potr.mt.dataSh.getOrElse(DateBuilder.getDefaultDt)
+    sp.installDt = potr.mt.dataSh.getOrElse(LoaderG.activeMonth)
     sp.spSrcStatusFlg = "C"
 
     sp.mtrLocDetails =
@@ -43,22 +43,22 @@ object SpBuilderG {
        else potr.naimp) + addMkd(potr)
 
     //Наименование ТУ
-    SpBuilder.addChar(sp,Characteristic(charTypeCd = "NAIM-TP", adhocCharVal = potr.naimp))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "NAIM-TP", adhocCharVal = potr.naimp, effDt = sp.installDt))
 
     //Номер позиции ТУ из прежней системы
     for (kp <- potr.kp)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "TY_NOM_C", adhocCharVal = kp))
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "TY_NOM_C", adhocCharVal = kp, effDt = sp.installDt))
 
     //ID ТУ из прежней системы (юр.лица)
-    SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_1C", adhocCharVal = potr.idRec))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_1C", adhocCharVal = potr.idRec, effDt = sp.installDt))
 
     //потери
     for (pLi <- potr.mt.pLi)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_LIN",adhocCharVal = pLi))
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_LIN",charVal = pLi, effDt = sp.installDt))
     for (pTr <- potr.mt.pTr)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TR",adhocCharVal = pTr))
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TR",charVal = pTr, effDt = sp.installDt))
     for (k1 <- potr.k1)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",adhocCharVal = k1))
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = k1.toString, effDt = sp.installDt))
 
     //участки обслуживания
     for (fsClCd <- Array("KON_P","MONTA","OGRAN","OPLOM","POKAZ","PRIBO", "KONTR")) {
@@ -73,7 +73,7 @@ object SpBuilderG {
     }
 
     for (adhocCharVal <- idPhysic) {
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_GE", adhocCharVal = adhocCharVal))
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_GE", adhocCharVal = adhocCharVal, effDt = sp.installDt))
     }
 
     sp.prem = premise
