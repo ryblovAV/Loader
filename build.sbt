@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-simple" % "1.7.5",
   "log4j" % "log4j" % "1.2.17",
   "junit" % "junit" % "4.11",
+  "com.typesafe.play" %% "play-json" % "2.3.4",
   "org.hibernate" % "hibernate-core" % "4.3.8.Final",
   "org.hibernate" % "hibernate-entitymanager" % "4.3.8.Final",
   "org.springframework" % "spring-core" % "4.1.1.RELEASE",
