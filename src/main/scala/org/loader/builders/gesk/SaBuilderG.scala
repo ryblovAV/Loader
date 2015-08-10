@@ -9,11 +9,7 @@ import org.loader.pojo.sa.SaEntity
 
 object SaBuilderG extends Logging {
 
-  def translateCategory(prim:String):String = mTranslateKategory.get(prim) match {
-    //TODO добавить остальные значения
-    case Some(v) => v
-    case _ => throw new Exception(s"Couldn't decode KATEGORY -> $prim")
-  }
+  val mTranslateKategory = Map("1 цен.кат." -> "1")
 
   def checkGr(gr:String):Boolean = (gr == "210") || (gr == "2010")
 
@@ -29,10 +25,12 @@ object SaBuilderG extends Logging {
   def checkCkNet(cK:String) = cK == "-без УПП и СбН=для сетевых"
 
   def translatePriceCategory(cK:String) = cK match {
-    case "без УПП и СбН=для сетевых" => Some("8")
+    case s:String if checkCkNet(s) => Some("8")
     case s if s.take(1) == "-" => None
-    case s => Some(s)
-    case - => None
+    case s:String => Some(s)
+    case _ => None
+  }
+
   def checkTarSw1(tar:Tar) =
       (!tar.cSw1.isEmpty) &&
       (!tar.cSw1Sr.isEmpty) &&
