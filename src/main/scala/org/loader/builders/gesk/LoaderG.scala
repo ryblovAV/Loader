@@ -153,6 +153,12 @@ object LoaderG extends Logging{
     }
   }
 
+  def loadSaldo(plat: Plat, objects:Seq[ObjectModel]) = {
+    for (saldo <- plat.finance.saldo) {
+      for (obj <- objects.sortBy((o) => o.sa.saId).headOption)
+        AdjBuilderG.build(sa = obj.sa, adjAmt = saldo)
+    }
+  }
 
   def platToSubject(plat: Plat):SubjectModel = {
 
@@ -177,6 +183,8 @@ object LoaderG extends Logging{
       .filter((potr) => !potr.isOrphan)
       .map((potr) => potrToObject(plat,potr,mPremise,saUnion))
 
+    //saldo
+    loadSaldo(plat = plat,objects = objects)
 
     //build sp for physics
     //shared objects without parent
