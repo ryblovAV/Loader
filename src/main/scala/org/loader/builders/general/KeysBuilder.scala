@@ -13,6 +13,8 @@ object KeysBuilder extends Logging {
 
   var mKeys = Map.empty[String,List[String]].withDefaultValue(List.empty[String])
 
+  var createdKeys = List.empty[(String,String)]
+
   def getEnvId = 201302
 
   def sqlForKey(columnName:String)
@@ -20,83 +22,67 @@ object KeysBuilder extends Logging {
         |   from dual
         |connect by level < 1000""".stripMargin
 
-  def fillMap(sql:String) = {
-    val keys = jdbcReader.query(sql)((rs, rowNum) => rs.getString("id"))
-    mKeys = mKeys + (sql -> keys)
+  def fillMap(keyColumn:String) = {
+    val keys = jdbcReader.query(sqlForKey(columnName = keyColumn))((rs, rowNum) => rs.getString("id"))
+    mKeys = mKeys + (keyColumn -> keys)
   }
 
-  def getNextKey(sql:String):String = mKeys(sql) match {
+  def getNextKey(keyColumn:String):String = mKeys(keyColumn) match {
     case h::t => {
-      mKeys = mKeys + (sql -> t);
+      mKeys = mKeys + (keyColumn -> t)
       h
     }
     case Nil  => {
-      fillMap(sql)
-      getNextKey(sql)
+      fillMap(keyColumn)
+      getNextKey(keyColumn)
     }
   }
 
-  def getId(sql:String) = getNextKey(sql)
+  def getId(keyColumn:String) = {
+    val key = getNextKey(keyColumn)
+    createdKeys = (keyColumn,key)::createdKeys
+    key
+  }
 
   def getIdOld(sql:String) = jdbcReader.query(sql)((rs, rowNum) => rs.getString("id")).head
 
+  def getPerId:String = getId("per_id")
 
-  val personSql = sqlForKey(columnName = "per_id")
-  def getPerId:String = getId(personSql)
+  def getAcctId = getId("acct_id")
 
-  val acctSql = sqlForKey(columnName = "acct_id")
-  def getAcctId = getId(acctSql)
+  def getPremiseId = getId("prem_id")
 
-  val premiseSql = sqlForKey(columnName = "prem_id")
-  def getPremiseId = getId(spSql)
+  def getSpId = getId("sp_id")
 
-  val spSql = sqlForKey(columnName = "sp_id")
-  def getSpId = getId(spSql)
+  def getMtrId = getId("mtr_id")
 
-  val mtrSql = sqlForKey(columnName = "mtr_id")
-  def getMtrId = getId(mtrSql)
+  def getRegId = getId("reg_id")
 
-  val regSql = sqlForKey(columnName = "reg_id")
-  def getRegId = getId(regSql)
+  def getMtrConfigId = getId("mtr_config_id")
 
-  val mtrConfigSql = sqlForKey(columnName = "mtr_config_id")
-  def getMtrConfigId = getId(mtrConfigSql)
+  def getMrId = getId("mr_id")
 
-  val mrSql = sqlForKey(columnName = "mr_id")
-  def getMrId = getId(mrSql)
+  def getRegReadId = getId("reg_read_id")
 
-  val regReadSql = sqlForKey(columnName = "reg_read_id")
-  def getRegReadId = getId(regReadSql)
+  def getSpMtrHistId = getId("sp_mtr_hist_id")
 
-  val spMtrHistSql = sqlForKey(columnName = "sp_mtr_hist_id")
-  def getSpMtrHistId = getId(spMtrHistSql)
+  def getSaId = getId("sa_id")
 
-  val saSql = sqlForKey(columnName = "sa_id")
-  def getSaId = getId(saSql)
+  def getSaSpId = getId("sa_sp_id")
 
-  val saSpSql = sqlForKey(columnName = "sa_sp_id")
-  def getSaSpId = getId(saSpSql)
+  def getAcctApayId = getId("acct_apay_id")
 
-  val acctApaySql = sqlForKey(columnName = "acct_apay_id")
-  def getAcctApayId = getId(acctApaySql)
+  def getMtrLocHistId = getId("mtr_loc_hist_id")
 
-  val mtrLocHistSql = sqlForKey(columnName = "mtr_loc_hist_id")
-  def getMtrLocHistId = getId(mtrLocHistSql)
+  def getAdjId = getId("adj_id")
 
-  val adjSql = sqlForKey(columnName = "adj_id")
-  def getAdjId = getId(adjSql)
+  def getFtId = getId("ft_id")
 
-  val ftSql = sqlForKey(columnName = "ft_id")
-  def getFtId = getId(ftSql)
+  def getExtTransmitId = getId("dep_ctl_st_id")
 
-  val depCtlStSql = sqlForKey(columnName = "dep_ctl_st_id")
-  def getExtTransmitId = getId(depCtlStSql)
+  def getExtBatchId = getId("tndr_ctl_st_id")
 
-  val tndrCtlStId = sqlForKey(columnName = "tndr_ctl_st_id")
-  def getExtBatchId = getId(tndrCtlStId)
-
-  val payTndrStId = sqlForKey(columnName = "pay_tndr_st_id")
-  def getExtReferenceId = getId(payTndrStId)
+  def getExtReferenceId = getId("pay_tndr_st_id")
 
   
 

@@ -33,8 +33,14 @@ object LogWritter extends Logging {
      |values
      |(:parent_id, :child_id, :reg_id, :sp_id)""".stripMargin
 
+  val sqlKeys =
+    s"""
+       |insert into cm_log_keys_gesk
+       |(column_name, key)
+       |values
+       |(:column_name, :key)""".stripMargin
 
-  def objToMap(subj: SubjectModel, obj: ObjectModel):JMap[String,_] = {
+  def objToMap(subj: SubjectModel, obj: ObjectModel):JMap[String,String] = {
     HashMap(
       "per_id" -> subj.per.perId,
       "acct_id" -> subj.acct.acctId,
@@ -47,7 +53,7 @@ object LogWritter extends Logging {
       "type" -> "OBJECT")
   }
 
-  def spObjToMap(subj: SubjectModel, spObj: SpObject):JMap[String,_] = {
+  def spObjToMap(subj: SubjectModel, spObj: SpObject):JMap[String,String] = {
     HashMap(
       "per_id" -> subj.per.perId,
       "acct_id" -> subj.acct.acctId,
@@ -65,7 +71,7 @@ object LogWritter extends Logging {
       subj.spObjects.map((spObj) => spObjToMap(subj = subj, spObj = spObj))
   }
 
-  def regToMap(obj: ObjectModel, reg: (RegEntity, Potr)):JMap[String,_] = {
+  def regToMap(obj: ObjectModel, reg: (RegEntity, Potr)):JMap[String,String] = {
     HashMap(
       "parent_id" -> obj.potr.idRec,
       "child_id" -> reg._2.idRec,
@@ -73,12 +79,16 @@ object LogWritter extends Logging {
       "sp_id" -> obj.sp.spId)
   }
 
-  def objToRegListMap(obj:ObjectModel):List[JMap[String,_]] = {
+  def objToRegListMap(obj:ObjectModel):List[JMap[String,String]] = {
     obj.regList.map((reg) => regToMap(obj = obj, reg = reg))
   }
 
-  def subjToRegListMap(subj:SubjectModel):List[JMap[String,_]] = {
+  def subjToRegListMap(subj:SubjectModel):List[JMap[String,String]] = {
     subj.objects.flatMap((obj) => objToRegListMap(obj = obj))
+  }
+
+  def keyToMap(key:(String,String)):JMap[String,String] = {
+    HashMap("column_name" -> key._1,"key" -> key._2)
   }
 
   def log(subjects: List[SubjectModel]) = {
@@ -86,6 +96,11 @@ object LogWritter extends Logging {
     info(s"end write log")
     jdbc.insertBatch(sqlRegMultiZone,subjects.flatMap(subjToRegListMap(_)))
     info(s"end write log zone")
+  }
+
+  def logKeys(keys:List[(String,String)]) = {
+    jdbc.insertBatch(sqlKeys,keys.map(keyToMap(_)))
+    info(s"end write keys")
   }
 
 }
