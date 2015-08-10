@@ -53,6 +53,7 @@ object AccountBuilderG extends Logging {
     account.billCycCd = "M-D1"
     account.custClCd = "COMM"
     account.accessGrpCd = "GESK_COMM"
+    account.collClCd = "N/A"
 
     account.setupDt = plat.data match {
       case Some(data) => data
