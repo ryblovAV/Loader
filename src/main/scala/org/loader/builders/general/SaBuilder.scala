@@ -1,7 +1,7 @@
 package org.loader.builders.general
 
 import org.loader.models.Characteristic
-import org.loader.pojo.sa.{SaCharEntity, SaEntity}
+import org.loader.pojo.sa.{SaRsHistEntity, SaCharEntity, SaEntity}
 import scala.language.implicitConversions
 
 object SaBuilder {
@@ -20,6 +20,14 @@ object SaBuilder {
   def addChar(sa: SaEntity,char: Characteristic) = {
     if (!char.isEmpty)
       sa.saCharEntitySet.add(char)
+  }
+
+  def addRsHist(sa: SaEntity, rsCd: String) = {
+    val saRsHist = new SaRsHistEntity()
+    saRsHist.effdt = sa.startDt
+    saRsHist.rsCd = rsCd
+
+    sa.saRsHistEntitySet.add(saRsHist)
   }
 
 }

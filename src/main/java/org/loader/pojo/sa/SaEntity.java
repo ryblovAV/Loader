@@ -32,6 +32,10 @@ public class SaEntity {
     @CollectionTable(name = "CI_SA_CHAR", schema = "RUSADM", joinColumns = @JoinColumn(name = "SA_ID"))
     public Set<SaCharEntity> saCharEntitySet = new HashSet<>();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "CI_SA_RS_HIST", schema = "RUSADM", joinColumns = @JoinColumn(name = "SA_ID"))
+    public Set<SaRsHistEntity> saRsHistEntitySet = new HashSet<>();
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CHAR_PREM_ID", nullable = false, updatable = false)
     public PremEntity charPrem;

@@ -3,12 +3,11 @@ package org.loader.builders.gesk
 import grizzled.slf4j.Logging
 import org.loader.builders.general.{DateBuilder, Constants, KeysBuilder, SaBuilder}
 import org.loader.models.Characteristic
-import org.loader.out.gesk.objects.{Plat, Potr}
+import org.loader.out.gesk.objects.{Tar, Plat, Potr}
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sa.SaEntity
-object SaBuilderG extends Logging{
 
-  val mTranslateKategory = Map("1 цен.кат." -> "1")
+object SaBuilderG extends Logging {
 
   def translateCategory(prim:String):String = mTranslateKategory.get(prim) match {
     //TODO добавить остальные значения
@@ -27,11 +26,38 @@ object SaBuilderG extends Logging{
     }
   }
 
+  def checkCkNet(cK:String) = cK == "-без УПП и СбН=для сетевых"
+
   def translatePriceCategory(cK:String) = cK match {
     case "без УПП и СбН=для сетевых" => Some("8")
     case s if s.take(1) == "-" => None
     case s => Some(s)
     case - => None
+  def checkTarSw1(tar:Tar) =
+      (!tar.cSw1.isEmpty) &&
+      (!tar.cSw1Sr.isEmpty) &&
+      (!tar.cSw1Us.isEmpty) &&
+      (!tar.cSw1N.isEmpty) &&
+      (!tar.cSw1In.isEmpty)
+
+  def translateRS(potr:Potr) = {
+    if (checkCkNet(potr.tar.cK.getOrElse("")))
+      Some("G_TSOLOS")
+    else if ((potr.tar.prim.getOrElse("").take(1) == "1") && checkTarSw1(potr.tar))
+      Some("G_ORG_1K")
+    else if (potr.k1.getOrElse(0) != 0)
+      Some("G_VOLMAX")
+    else if ((potr.tar.prim.getOrElse("").take(1) == "1") && checkTarSw1(potr.tar) && (potr.tar.cSw1Us.get == 0))
+      Some("G_UR_1KP")
+    else if ((potr.tar.prim.getOrElse("").take(2) == "2") && checkTarSw1(potr.tar))
+      Some("G_OR_ZON")
+    else if (potr.isInterval)
+      Some("L_KOR_S")
+    else if (!potr.tar.c.isEmpty)
+      Some("G_NASPUN")
+    else None
+
+
   }
 
   def buildSaForSp(plat: Plat, potr: Potr, charPrem: PremEntity) = {
@@ -58,31 +84,35 @@ object SaBuilderG extends Logging{
 
     //максимальная мощность
     for (ustM <- potr.mt.ustM)
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "M-POWER",adhocCharVal = ustM.toString))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "M-POWER",adhocCharVal = ustM.toString, effDt = sa.startDt))
 
     //Ценовая категория
     for (cK <- potr.tar.cK)
       for (charVal <- translatePriceCategory(cK))
-        SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = charVal))
+        SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = charVal, effDt = sa.startDt))
 
     //Группа населения
     for (grpt46 <- potr.grpt46)
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "GRPTR-46",charVal = grpt46))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "GRPTR-46",charVal = grpt46, effDt = sa.startDt))
 
     //диапазон напряжения
     for (naprayg <- translateNaprayg(optSn = potr.tar.sn,optGr = potr.tar.gr))
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "NAPRAYG2",charVal = naprayg))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "NAPRAYG2",charVal = naprayg, effDt = sa.startDt))
 
     //NEPREMEN
     for (t <- potr.t if (t.take(1) == "8") || (t.take(1) == "9"))
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "NEPREMEN",charVal = "NEPREMEN"))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "NEPREMEN",charVal = "NEPREMEN", effDt = sa.startDt))
 
     //PRIMEN
-    SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRIMEN",charVal = "PRIMEN"))
+    SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRIMEN",charVal = "PRIMEN", effDt = sa.startDt))
 
     //PRICE-1
     for (znj <- potr.tar.znJ)
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRICE-1",charVal = znj))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRICE-1",charVal = znj, effDt = sa.startDt))
+
+    //RS
+    for (rsCd <- translateRS(potr))
+      SaBuilder.addRsHist(sa = sa,rsCd = rsCd)
 
     sa
   }
