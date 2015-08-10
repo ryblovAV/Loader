@@ -23,7 +23,13 @@ case class Tar(sn: Option[String],
                gr: Option[String],
                prim: Option[String],
                znJ: Option[String],
-               cK: Option[String])
+               cK: Option[String],
+               cSw1: Option[Double],
+               cSw1Sr: Option[Double],
+               cSw1Us: Option[Double],
+               cSw1N: Option[Double],
+               cSw1In: Option[Double],
+               c: Option[Double])
 
 case class Zone(iZn: Option[String],
                 idGrup: Option[String],
