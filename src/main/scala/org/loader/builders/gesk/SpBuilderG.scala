@@ -60,6 +60,13 @@ object SpBuilderG {
     for (k1 <- potr.k1)
       SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = k1.toString, effDt = sp.installDt))
 
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "ISKL_M",adhocCharVal = "0", effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "CI_GENCP",charVal = "Y", effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_A",charVal = "0", effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_B",charVal = "0", effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_EXT",charVal = "0", effDt = sp.installDt))
+
+
     //участки обслуживания
     for (fsClCd <- Array("KON_P","MONTA","OGRAN","OPLOM","POKAZ","PRIBO", "KONTR")) {
       SpBuilder.addSpOpArea(sp,fsClCd,"GESK_YO")
