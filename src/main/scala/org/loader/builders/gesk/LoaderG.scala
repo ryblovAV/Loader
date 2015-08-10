@@ -109,14 +109,19 @@ object LoaderG extends Logging{
     SpObject(potr = potr, sp = sp, mrFirst = mrFirst, mrLast = mrLast, regList = regList)
   }
 
-  def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity]): ObjectModel = {
+  def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity], saUnion:Option[SaEntity]): ObjectModel = {
 
     val spObj = potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = false)
 
     //TODO Если NO_RSCH  = true – то по точке не производим расчет (не привязываем к РДО
-    val sa = SaBuilderG.buildSaForSp(plat, potr, mPremise(potr.idObj))
 
-    SaSpBuilderG.buildSaSp(sa = sa, sp = spObj.sp, mr = spObj.mrFirst, isMinus = false)
+
+    val (sa,isMinus) = saUnion match {
+      case Some(sa) => (sa,potr.naimp.take(1) == "-")
+      case None => (SaBuilderG.buildSaForSp(plat, potr, mPremise(potr.idObj)),false)
+    }
+
+    SaSpBuilderG.buildSaSp(sa = sa, sp = spObj.sp, mr = spObj.mrFirst, isMinus = isMinus)
 
     //load finance
     //loadFinance(potr,sa)
@@ -141,6 +146,12 @@ object LoaderG extends Logging{
 //    }
   }
 
+  def createSaUnion(plat:Plat, mPremise: Map[String, PremEntity]):Option[SaEntity] = {
+    plat.potrList.filter((potr) => SaBuilderG.checkCkNet(potr.tar.cK.getOrElse(""))) match {
+      case potr::_ => Some(SaBuilderG.buildSaForSp(plat, potr, mPremise(potr.idObj)))
+      case _ => None
+    }
+  }
 
 
   def platToSubject(plat: Plat):SubjectModel = {
@@ -160,9 +171,11 @@ object LoaderG extends Logging{
           optKniga = potr.kniga))).
         toMap
 
+    val saUnion = createSaUnion(plat,mPremise)
+
     val objects:List[ObjectModel] = plat.potrList
       .filter((potr) => !potr.isOrphan)
-      .map((potr) => potrToObject(plat,potr,mPremise))
+      .map((potr) => potrToObject(plat,potr,mPremise,saUnion))
 
 
     //build sp for physics
