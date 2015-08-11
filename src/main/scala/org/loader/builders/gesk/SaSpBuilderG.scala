@@ -25,6 +25,10 @@ object SaSpBuilderG {
     sasp.usageFlg = if (isMinus) "-" else "+"
     sasp.usePct = 100
 
+    //correct sa.start_dt
+    if (sa.startDt.before(sp.installDt))
+      sa.startDt = sp.installDt
+
     sasp
   }
 
