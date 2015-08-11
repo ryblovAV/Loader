@@ -19,8 +19,8 @@ object MtrConfigBuilderG {
     mtrConfig.mtrConfigTyCd =
       if (potr.isInterval) "PO_POTREBLEN"
       else {
-        if (potr.isMultiZone) "EE-1"
-        else "EE-ZS"
+        if (potr.isMultiZone) "EE-ZS"
+        else "EE-1"
       }
 
     mtrConfig
