@@ -155,8 +155,10 @@ object LoaderG extends Logging{
 
   def loadSaldo(plat: Plat, objects:Seq[ObjectModel]) = {
     for (saldo <- plat.finance.saldo) {
-      for (obj <- objects.sortBy((o) => o.sa.saId).headOption)
-        AdjBuilderG.build(sa = obj.sa, adjAmt = saldo)
+      for (obj <- objects.sortBy((o) => o.sa.saId).headOption) {
+        val adj = AdjBuilderG.build(sa = obj.sa, adjAmt = saldo)
+        FtBuilderG.build(adjId = adj.adjId, sa = obj.sa, curAmt = saldo)
+      }
     }
   }
 

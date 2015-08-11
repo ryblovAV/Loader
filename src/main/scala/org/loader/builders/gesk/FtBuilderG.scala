@@ -1,10 +1,7 @@
 package org.loader.builders.gesk
 
-import java.util.Calendar
-
-import org.loader.builders.general.{DateBuilder, KeysBuilder}
-import org.loader.db.utl.DBUtl
-import org.loader.pojo.ft.{FtGlEntity, FtEntity}
+import org.loader.builders.general.KeysBuilder
+import org.loader.pojo.ft.{FtEntity, FtGlEntity}
 import org.loader.pojo.sa.SaEntity
 
 object FtBuilderG {
@@ -26,21 +23,33 @@ object FtBuilderG {
     ft.ftId = KeysBuilder.getFtId
 
     ft.siblingId = adjId
-    ft.parentId = "OLDBAL"
+    ft.parentId = "SALDO"
+    ft.glDivision = "G-OSN"
+    ft.cisDivision = "GESK"
+    ft.currencyCd = "RUR"
     ft.ftTypeFlg = "AD"
     ft.curAmt = curAmt
     ft.totAmt = curAmt
-    ft.creDttm = Calendar.getInstance().getTime
-    ft.arsDt = DateBuilder.lastDay(DateBuilder.addMonth(LoaderG.activeMonth,-1))
+    ft.creDttm = LoaderG.activeMonth
+    ft.freezeSw = "Y"
+    ft.freezeDttm = LoaderG.activeMonth
+    ft.arsDt = LoaderG.activeMonth
+    ft.correctionSw = "N"
+    ft.redundantSw = "N"
+    ft.newDebitSw = "N"
+    ft.showOnBillSw = "N"
+    ft.notInArsSw = "N"
     ft.accountingDt = LoaderG.activeMonth
-
-    ft.schedDistribDt = DateBuilder.trunc(Calendar.getInstance()).getTime
+    ft.xferredOutSw = "N"
+    ft.glDistribStatus = "G"
+    ft.schedDistribDt = LoaderG.activeMonth
+    ft.freezeUserId = "SYSUSER"
 
     ft.sa = sa
     sa.ftEntitySet.add(ft)
 
-    buildFtGl(glSeqNbr = 1,dstId = "REE 62.1", amount = curAmt,totAmtSw = "Y")
-    buildFtGl(glSeqNbr = 2,dstId = "TRNSF-KORR", amount = - curAmt,totAmtSw = "N")
+    buildFtGl(glSeqNbr = 10,dstId = "REE 62.1", amount = curAmt,totAmtSw = "N")
+    buildFtGl(glSeqNbr = 20,dstId = "SALDO", amount = - curAmt,totAmtSw = "N")
 
     ft
   }

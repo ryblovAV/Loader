@@ -16,6 +16,8 @@ object AdjBuilderG {
     adj.adjAmt = adjAmt
     adj.currencyCd = "RUR"
     adj.comments = "Задолженность Юридические лица"
+    adj.genRefDt = LoaderG.activeMonth
+    adj.creDt = LoaderG.activeMonth
 
     sa.adjEntitySet.add(adj)
 
