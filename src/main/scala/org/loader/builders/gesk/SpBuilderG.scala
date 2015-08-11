@@ -8,7 +8,7 @@ import org.loader.out.gesk.objects.Potr
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
-import org.loader.builders.general.BuilderUtl
+import org.loader.builders.general.BuilderUtl._
 
 object SpBuilderG {
 
@@ -58,7 +58,7 @@ object SpBuilderG {
     for (pTr <- potr.mt.pTr)
       SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TR",charVal = pTr, effDt = sp.installDt))
     for (k1 <- potr.k1)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = k1.toString, effDt = sp.installDt))
+      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = k1, effDt = sp.installDt))
 
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "ISKL_M",adhocCharVal = "0", effDt = sp.installDt))
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "CI_GENCP",charVal = "Y", effDt = sp.installDt))
