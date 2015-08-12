@@ -85,9 +85,13 @@ object SaBuilderG extends Logging {
       SaBuilder.addChar(sa,Characteristic(charTypeCd = "M-POWER",adhocCharVal = ustM.toString, effDt = sa.startDt))
 
     //Ценовая категория
-    for (cK <- potr.tar.cK)
-      for (charVal <- translatePriceCategory(cK))
-        SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = charVal, effDt = sa.startDt))
+    val priceCategory = for {
+      cK <- potr.tar.cK
+      charVal <- translatePriceCategory(cK)
+    } yield charVal
+
+    for (charVal <- priceCategory)
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "KATEGORI",charVal = charVal, effDt = sa.startDt))
 
     //Группа населения
     for (grpt46 <- potr.grpt46)
@@ -102,7 +106,12 @@ object SaBuilderG extends Logging {
       SaBuilder.addChar(sa,Characteristic(charTypeCd = "NEPREMEN",charVal = "NEPREMEN", effDt = sa.startDt))
 
     //PRIMEN
-    SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRIMEN",charVal = "PRIMEN", effDt = sa.startDt))
+    //если ценовая категория = 8
+    val primenVal = priceCategory match {
+      case Some("8") => "1"
+      case _      => "0"
+    }
+    SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRIMEN",charVal = primenVal, effDt = sa.startDt))
 
     //PRICE-1
     for (znj <- potr.tar.znJ)
