@@ -10,6 +10,10 @@ object SaSpBuilderG {
 
   def buildSaSp(sa: SaEntity, sp: SpEntity, mr: MrEntity, isMinus: Boolean) = {
 
+    //correct sa.start_dt
+    if (sa.startDt.before(sp.installDt))
+      sa.startDt = sp.installDt
+
     val sasp = new SaSpEntity(
       KeysBuilder.getEnvId,
       KeysBuilder.getSaSpId,
@@ -25,9 +29,6 @@ object SaSpBuilderG {
     sasp.usageFlg = if (isMinus) "-" else "+"
     sasp.usePct = 100
 
-    //correct sa.start_dt
-    if (sa.startDt.before(sp.installDt))
-      sa.startDt = sp.installDt
 
     sasp
   }
