@@ -10,6 +10,7 @@ import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
 import org.loader.builders.general.BuilderUtl._
 
+
 object SpBuilderG {
 
   private def buildSpChar(charTypeCd:String, charVal:String = " ", adhocCharVal:String = " ", effDt:Date = DateBuilder.getDefaultDt) = {
@@ -29,6 +30,8 @@ object SpBuilderG {
       case None      => ""
     }
   } else ""
+
+  implicit def defaultForTr(p:Option[Double]):String = translateToString(p.getOrElse(0))
 
   def build(potr:Potr, premise:PremEntity, isOrphan: Boolean):SpEntity = {
     val sp = new SpEntity(KeysBuilder.getEnvId)
@@ -53,12 +56,9 @@ object SpBuilderG {
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "ID_TY_1C", adhocCharVal = potr.idRec, effDt = sp.installDt))
 
     //потери
-    for (pLi <- potr.mt.pLi)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_LIN",charVal = pLi, effDt = sp.installDt))
-    for (pTr <- potr.mt.pTr)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TR",charVal = pTr, effDt = sp.installDt))
-    for (k1 <- potr.k1)
-      SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = k1, effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_LIN",charVal = potr.mt.pLi, effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TR",charVal = potr.mt.pTr, effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = potr.k1, effDt = sp.installDt))
 
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "ISKL_M",adhocCharVal = "0", effDt = sp.installDt))
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "CI_GENCP",charVal = "Y", effDt = sp.installDt))
