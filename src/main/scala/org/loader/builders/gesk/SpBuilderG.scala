@@ -9,6 +9,7 @@ import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.sp.{SpCharEntity, SpEntity}
 
 import org.loader.builders.general.BuilderUtl._
+import scala.language.implicitConversions
 
 
 object SpBuilderG {
