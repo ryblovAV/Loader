@@ -55,7 +55,17 @@ object SaBuilderG extends Logging {
       Some("G_NASPUN")
     else None
 
+  def translatePrice1(charVal: String) = charVal match {
+    case "ГОР_ДН_ЭП" => "ГОРОД_ЭЛ_ПЛ"
+    case "ГОР_НЧ_ЭП" => "ГОРОД_ЭЛ_ПЛ"
+    case "ГОР_ДН" => "ГОРОД"
+    case "ГОР_НЧ" => "ГОРОД"
+    case _ => charVal
+  }
 
+  def translateGrpt46(priceCategory: Option[String], grpt46: String) = priceCategory match {
+    case Some("8") => "KOM-EESO"
+    case _ => grpt46
   }
 
   def buildSaForSp(plat: Plat, potr: Potr, charPrem: PremEntity) = {
@@ -95,7 +105,10 @@ object SaBuilderG extends Logging {
 
     //Группа населения
     for (grpt46 <- potr.grpt46)
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "GRPTR-46",charVal = grpt46, effDt = sa.startDt))
+      SaBuilder.addChar(sa = sa,
+        char = Characteristic(charTypeCd = "GRPTR-46",
+                              charVal = translateGrpt46(priceCategory = priceCategory, grpt46 = grpt46),
+                              effDt = sa.startDt))
 
     //диапазон напряжения
     for (naprayg <- translateNaprayg(optSn = potr.tar.sn,optGr = potr.tar.gr))
@@ -115,7 +128,7 @@ object SaBuilderG extends Logging {
 
     //PRICE-1
     for (znj <- potr.tar.znJ)
-      SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRICE-1",charVal = znj, effDt = sa.startDt))
+      SaBuilder.addChar(sa,Characteristic(charTypeCd = "PRICE-1",charVal = translatePrice1(znj), effDt = sa.startDt))
 
     //RS
     for (rsCd <- translateRS(potr))
