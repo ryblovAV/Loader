@@ -53,7 +53,9 @@ object SaBuilderG extends Logging {
       Some("L_KOR_S")
     else if (!potr.tar.c.isEmpty)
       Some("G_NASPUN")
-    else None
+    else
+      Some("NO_CALCU")
+  }
 
   def translatePrice1(charVal: String) = charVal match {
     case "ГОР_ДН_ЭП" => "ГОРОД_ЭЛ_ПЛ"
