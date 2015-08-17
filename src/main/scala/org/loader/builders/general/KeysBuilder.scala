@@ -84,6 +84,7 @@ object KeysBuilder extends Logging {
 
   def getExtReferenceId = getId("pay_tndr_st_id")
 
+  def getBillableChgId = getId("bill_chg_id")
   
 
 }

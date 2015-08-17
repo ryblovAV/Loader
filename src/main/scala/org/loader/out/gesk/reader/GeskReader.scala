@@ -19,8 +19,10 @@ object GeskReader {
 
   final val city = "Липецк"
 
-  final val sqlPlatAll = "select * from v_gesk_plat"
+  final val sqlPlatAll = "select * from v_gesk_plat"// = '11388'"
   final val sqlPotrAll = "select * from v_gesk_potr"
+  final val sqlPerAll = "select * from v_gesk_per"
+
 
   final val sqlListLoadedPer = "select distinct t.per_id as per_id from cm_log_per_gesk_juridical t"
   final val sqlListLoadedSp = "select distinct t.sp_id as sp_id from cm_log_per_gesk_juridical t where t.sa_id is null"
@@ -101,7 +103,8 @@ object GeskReader {
             tel2 = (rs,"tel2"),
             tel3 = (rs,"tel3")
           ),
-          potrList = Nil
+          potrList = List.empty[Potr],
+          perList = List.empty[Per]
         )
     }
 
@@ -110,16 +113,18 @@ object GeskReader {
       case _ => true
     }
 
-    val potrList = readAllPotr.filter((p) => filterPotr(p)).groupBy((p) => p.idPlat)
+    val potrMap = readAllPotr.filter((p) => filterPotr(p)).groupBy((p) => p.idPlat)
+
+    val perMap = readAllPer.groupBy(_.idPlat)
 
     //load potr for plat
-//    platList.map((plat) => plat.copy(potrList = readPotrForPlat(plat.idPlat)))
-    platList.map((plat) => plat.copy(potrList = potrList.getOrElse(plat.idPlat,List.empty[Potr])))
-
-
-
+    platList.map((plat) => plat.copy(
+      potrList = potrMap.getOrElse(plat.idPlat,List.empty[Potr]),
+      perList = perMap.getOrElse(plat.idPlat,List.empty[Per])
+    ))
 
   }
+
 
   def buildIdGroup(idObj: String, optIdGrup: Option[String]) = optIdGrup match {
     case Some(idGrup) => Some(s"$idObj~$idGrup")
@@ -197,8 +202,27 @@ object GeskReader {
     )
   }
 
+  def rsToPer(rs:ResultSet, rowNum: Int):Per = {
+    Per(
+      idPlat = (rs,"id_plat"),
+      idObj = (rs,"id_ob"),
+      r = (rs,"r"),
+      s = (rs,"s"),
+      nds = (rs,"nds"),
+      mes = (rs,"mes"),
+      god = (rs,"god"),
+      kp = (rs,"kp"),
+      effdt = (rs,"effdt")
+    )
+  }
+
   def readAllPotr: List[Potr] = {
     jdbcReader.query(sqlPotrAll)(rsToPotr)
   }
+
+  def readAllPer:List[Per] = {
+    jdbcReader.query(sqlPerAll)(rsToPer)
+  }
+
 
 }

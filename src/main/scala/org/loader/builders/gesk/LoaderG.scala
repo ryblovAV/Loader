@@ -5,7 +5,7 @@ import grizzled.slf4j.Logging
 import org.loader.builders.general.{KeysBuilder, DateBuilder}
 import org.loader.db.dao.general.GeneralDAO
 import org.loader.models.{SpObject, SubjectModel, ObjectModel}
-import org.loader.out.gesk.objects.{Potr, Plat}
+import org.loader.out.gesk.objects.{Per, Potr, Plat}
 import org.loader.out.gesk.reader.GeskReader
 import org.loader.pojo.acct.AcctEntity
 import org.loader.pojo.mr.MrEntity
@@ -162,6 +162,52 @@ object LoaderG extends Logging{
     }
   }
 
+  def checkRecalculationPremiseUnion(plat:Plat) = {
+    plat.perList.headOption match {
+      case Some(per) if per.kp == 0 => true
+      case _ => false
+    }
+  }
+
+  def buildSaReCalc(plat:Plat,
+                    potr:Potr,
+                    perList:List[Per],
+                    charPrem:PremEntity) = {
+
+    val sa = SaBuilderG.buildSaForSp(
+      plat = plat,
+      potr = potr,
+      charPrem = charPrem)
+
+    sa.saTypeCd = "L_RECCUL"
+
+    for (per <- perList) {
+      sa.billChgEntitySet.add(BillChangeBuilderG.build(per,sa))
+    }
+
+    sa
+  }
+
+  def loadRecalculation(plat: Plat, mPremise: Map[String, PremEntity]) = {
+
+    if (checkRecalculationPremiseUnion(plat)) {
+
+      val potr = plat.potrList.sortBy(_.id).head
+
+      List(buildSaReCalc(plat, potr, plat.perList, mPremise(potr.idObj)))
+
+    } else {
+
+      for {
+        (idObj, perList) <- plat.perList.groupBy(_.idObj)
+        charPrem <- mPremise.get(idObj)
+        potr <- plat.potrList.filter(_.idObj == idObj).sortBy(_.id).headOption
+      } yield buildSaReCalc(plat, potr, perList, charPrem)
+
+    }
+
+  }
+
   def platToSubject(plat: Plat):SubjectModel = {
 
     val per = PersonBuilderG.buildPerson(plat)
@@ -187,6 +233,9 @@ object LoaderG extends Logging{
 
     //saldo
     loadSaldo(plat = plat,objects = objects)
+
+    //load recalculation
+    loadRecalculation(plat,mPremise).foreach((sa) => acct.addSaEntity(sa))
 
     //build sp for physics
     //shared objects without parent
@@ -244,7 +293,6 @@ object LoaderG extends Logging{
 //    generalDAO.removeSpList(GeskReader.readLoadedSp)
   }
 
-
   def loadPlat = {
     info("------------ start read from db")
     val platList = fillZonePotr(GeskReader.readPlat)
@@ -260,20 +308,25 @@ object LoaderG extends Logging{
 //    info("------------ start load tndr")
 //    val depCtlSt = loadTndr(subjects = subjects)
 
-    info("------------ start logging")
-    LogWritter.log(subjects = subjects)
-    LogWritter.logKeys(KeysBuilder.createdKeys)
 
-    info("------------ end")
+    if (true) {
 
-    info("------------ start saveToDb")
-    subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
-//    subjects.foreach(generalDAO.save)
+      info("------------ start logging")
+      LogWritter.log(subjects = subjects)
+      LogWritter.logKeys(KeysBuilder.createdKeys)
 
-    info("start save to DB shared objects")
-    SaSpWriter.save(saSpObjects)
+      info("------------ end")
 
-//    generalDAO.saveDepCtlSt(depCtlSt = depCtlSt)
+      info("------------ start saveToDb")
+      subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
+  //    subjects.foreach(generalDAO.save)
+
+      info("start save to DB shared objects")
+      SaSpWriter.save(saSpObjects)
+
+  //    generalDAO.saveDepCtlSt(depCtlSt = depCtlSt)
+
+    }
 
   }
 

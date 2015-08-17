@@ -24,7 +24,9 @@ case class Phone(tel1:Option[String],
 case class Finance(nb:Option[String],
                    naimb:Option[String],
                    rs:Option[String],
-                   saldo:Option[Double])
+                   saldo:Option[Double],
+                   oplataSum:List[Double] = List.empty[Double],
+                   oplataDat:List[java.util.Date] = List.empty[java.util.Date])
 
 case class Rs(bank:Option[String],
               rasSch:Option[String],
@@ -55,10 +57,9 @@ case class Plat(idPlat: String,
                 kOkwed:Option[String],
                 finance:Finance,
                 rs:Rs,
-                oplataSum:List[Double] = List.empty[Double],
-                oplataDat:List[java.util.Date] = List.empty[java.util.Date],
                 phone: Phone,
-                potrList:List[Potr]) {
+                potrList:List[Potr],
+                perList:List[Per]) {
 
   def addMailingAddrtoAcct = addressU == addressF
 

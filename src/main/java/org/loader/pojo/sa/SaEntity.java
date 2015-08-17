@@ -4,6 +4,7 @@ package org.loader.pojo.sa;
 import org.loader.pojo.acct.AcctEntity;
 import org.loader.pojo.acctper.AcctPerEntity;
 import org.loader.pojo.adj.AdjEntity;
+import org.loader.pojo.billChg.BillChgEntity;
 import org.loader.pojo.ft.FtEntity;
 import org.loader.pojo.prem.PremEntity;
 import org.loader.pojo.sasp.SaSpEntity;
@@ -48,6 +49,9 @@ public class SaEntity {
 
     @OneToMany(mappedBy="sa",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     public Set<FtEntity> ftEntitySet = new HashSet<>();
+
+    @OneToMany(mappedBy="sa",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    public Set<BillChgEntity> billChgEntitySet = new HashSet<>();
 
     @Override
     public boolean equals(Object object) {
