@@ -179,7 +179,7 @@ object LoaderG extends Logging{
       potr = potr,
       charPrem = charPrem)
 
-    sa.saTypeCd = "L_RECCUL"
+    sa.saTypeCd = "G_RECCUL"
 
     for (per <- perList) {
       sa.billChgEntitySet.add(BillChangeBuilderG.build(per,sa))
