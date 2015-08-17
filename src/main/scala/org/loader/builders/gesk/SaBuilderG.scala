@@ -70,7 +70,9 @@ object SaBuilderG extends Logging {
     case _ => grpt46
   }
 
-  def buildSaForSp(plat: Plat, potr: Potr, charPrem: PremEntity) = {
+  def buildSaForSp(plat: Plat,
+                   potr: Potr,
+                   charPrem: PremEntity) = {
 
     val sa = new SaEntity(KeysBuilder.getEnvId)
 
