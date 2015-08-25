@@ -2,20 +2,17 @@ package org.loader.builders.gesk
 
 
 import grizzled.slf4j.Logging
-import org.loader.builders.general.{KeysBuilder, DateBuilder}
+import org.loader.builders.general.{DateBuilder, KeysBuilder}
 import org.loader.db.dao.general.GeneralDAO
-import org.loader.models.{SpObject, SubjectModel, ObjectModel}
-import org.loader.out.gesk.objects.{Per, Potr, Plat}
+import org.loader.models.{ObjectModel, SpObject, SubjectModel}
+import org.loader.out.gesk.objects.{Per, Plat, Potr}
 import org.loader.out.gesk.reader.GeskReader
-import org.loader.pojo.acct.AcctEntity
 import org.loader.pojo.mr.MrEntity
 import org.loader.pojo.mtr.MtrEntity
-import org.loader.pojo.per.PerEntity
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.reg.RegEntity
 import org.loader.pojo.sa.SaEntity
-import org.loader.pojo.sp.SpEntity
-import org.loader.writer.{SaSpWriter, SaSpObject, LogWritter}
+import org.loader.writer.{LogWritter, SaSpWriter}
 import org.springframework.context.support.ClassPathXmlApplicationContext
 object LoaderG extends Logging{
 
