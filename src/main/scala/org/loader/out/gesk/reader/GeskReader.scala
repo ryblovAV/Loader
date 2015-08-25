@@ -2,24 +2,23 @@ package org.loader.out.gesk.reader
 
 import java.sql.ResultSet
 
+import grizzled.slf4j.{Logging, Logger}
 import org.loader.out.gesk.objects._
 import org.loader.reader.JDBCExtractorSafe._
 import org.loader.reader.JdbcTemplatesUtl._
 import org.loader.reader.OutReader
 import org.springframework.context.support.ClassPathXmlApplicationContext
 
-import scala.collection.JavaConversions._
-import scala.collection.immutable.HashMap
 import scala.language.reflectiveCalls
 
-object GeskReader {
+object GeskReader extends Logging{
 
   val ctx = new ClassPathXmlApplicationContext("application-context.xml")
   val jdbcReader: OutReader = ctx.getBean(classOf[OutReader])
 
   final val city = "Липецк"
 
-  final val sqlPlatAll = "select * from v_gesk_plat"// = '11388'"
+  final val sqlPlatAll = "select * from v_gesk_plat"// where id_plat = '3053'"
   final val sqlPotrAll = "select * from v_gesk_potr"
   final val sqlPerAll = "select * from v_gesk_per"
 
@@ -119,9 +118,42 @@ object GeskReader {
 
     //load potr for plat
     platList.map((plat) => plat.copy(
-      potrList = potrMap.getOrElse(plat.idPlat,List.empty[Potr]),
+      potrList = fillListParentIdRec(potrMap.getOrElse(plat.idPlat, List.empty[Potr])).
+        //filter shared point (parent_id_rec)
+        filter((p) => p.parent.parentIdRec.isEmpty),
       perList = perMap.getOrElse(plat.idPlat,List.empty[Per])
     ))
+
+  }
+
+  def getNearestPotr(potr:Potr,potrList:List[Potr]):Option[Potr] = {
+
+    potrList.
+      filter(_.idObj == potr.idObj).
+      filter(_.id > potr.id).
+      filter(_.naimp.take(1) != "-").
+      sortBy (_.id).headOption match {
+      case Some(a) => Some(a)
+      case None => {
+        info("****** NOT_FOUND " + potr.idRec + "~" + potr.idPlat + "~" + potr.idObj + "~" + potr.id)
+        None
+      }
+    }
+  }
+
+  def createTuple(potrOpt:Option[Potr],idRecOpt:Option[String]):Option[(String,String)] = {
+    for {
+      potr <- potrOpt
+      idRec <- idRecOpt
+    } yield (potr.idRec,idRec)
+  }
+  
+  def fillListParentIdRec(potrList: List[Potr]) = {
+    val m:Map[String,List[String]] = potrList.filter((p) => !p.parent.parentIdRec.isEmpty).
+      flatMap((p) => createTuple(getNearestPotr(p,potrList),p.parent.parentIdRec)).
+      groupBy(_._1).map { case (k,v) => (k,v.map(_._2))}
+
+    potrList.map((p) => p.copy(parent = p.parent.copy(parentIdRecList = m.getOrElse(p.idRec,List.empty[String]))))
 
   }
 

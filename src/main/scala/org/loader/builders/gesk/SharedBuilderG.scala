@@ -20,15 +20,22 @@ object SharedBuilderG {
       case _ => None
     }
 
-  def buildSaSpObject(obj:ObjectModel,m:Map[String,ObjectModel]):Option[SaSpObject] = {
-    obj.potr.parent.getParentIdRec.flatMap((parentIdRec) => buildSaSpObject(parentIdRec = parentIdRec, obj = obj, m = m))
+  def buildSaSpObject(obj:ObjectModel,m:Map[String,ObjectModel]):List[SaSpObject] = {
+    obj.potr.parent.idRecI.
+      flatMap((parentIdRec) => buildSaSpObject(parentIdRec = parentIdRec, obj = obj, m = m)).toList
   }
-  
+
+  def buildSaSpObjectList(obj:ObjectModel,m:Map[String,ObjectModel]):List[SaSpObject] = {
+    obj.potr.parent.parentIdRecList.flatMap((parentIdRec) => buildSaSpObject(parentIdRec = parentIdRec, obj = obj, m = m))
+  }
+
   def buildListSaSpObject(subjects: List[SubjectModel]):List[SaSpObject] = {
+
+    //create Map idRec -> Objects
     val m = Map.empty[String,ObjectModel] ++
       (subjects.flatMap((s)=>s.objects).map((o) => (o.potr.idRec,o)))
     m.values.flatMap(
-      (obj) => buildSaSpObject(obj = obj, m = m)).toList
+      (obj) => buildSaSpObject(obj,m):::buildSaSpObjectList(obj,m)).toList
   }
 
 

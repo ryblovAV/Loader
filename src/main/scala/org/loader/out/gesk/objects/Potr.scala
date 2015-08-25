@@ -39,9 +39,12 @@ case class Parent(idRecI: Option[String],
                   parentIdRec: Option[String],
                   iChS: Option[String],
                   chGuk: Option[String],
-                  iNOb: Option[String]) {
+                  iNOb: Option[String],
+                  parentIdRecList: List[String] = List.empty[String]) {
 
-  def getParentIdRec:Option[String] = if (!idRecI.isEmpty) idRecI else parentIdRec
+
+
+  def existsParent:Boolean = (!idRecI.isEmpty) || (!parentIdRecList.isEmpty)
 
 }
 
@@ -88,6 +91,6 @@ case class  Potr(id: Int,
     //Ранее использовалось условие
     //(potr.parent.chGuk.getOrElse(" ")  == "*") &&
     (naimp.take(1) == "-") &&
-    (parent.getParentIdRec.isEmpty)
+    (parent.existsParent == false)
 
 }
