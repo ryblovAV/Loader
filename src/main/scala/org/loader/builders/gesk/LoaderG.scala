@@ -192,9 +192,9 @@ object LoaderG extends Logging{
 
     if (checkRecalculationPremiseUnion(plat)) {
 
-      val potr = plat.potrList.sortBy(_.id).head
-
-      List(buildSaReCalc(plat, potr, plat.perList, mPremise(potr.idObj)))
+      for {
+        potr <- plat.potrList.sortBy(_.id).headOption.toList
+      } yield buildSaReCalc(plat, potr, plat.perList, mPremise(potr.idObj))
 
     } else {
 
