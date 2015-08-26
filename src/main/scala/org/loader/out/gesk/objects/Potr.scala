@@ -82,8 +82,6 @@ case class  Potr(id: Int,
 
   def isMultiZone = zone.listZonePotr.isEmpty == false
 
-  def isHistVol = mt.rUz.isEmpty == false
-
   def isInterval = iPch == "true"
 
   def isMkd = ((mt.r1.getOrElse(0) == 0) && (mt.r2.getOrElse(0) != 0))

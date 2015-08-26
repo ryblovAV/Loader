@@ -32,14 +32,14 @@ object MtrBuilderG {
     case None => potr.getDateFromGw.map(dateToStr(_))
   }
 
-  def build(potr: Potr) = {
+  def build(potr: Potr, isHistVol: Boolean) = {
 
     val mtr = new MtrEntity(KeysBuilder.getEnvId)
 
     mtr.mtrId = KeysBuilder.getMtrId
 
     mtr.mtrTypeCd =
-      if ((potr.isHistVol) || (potr.isInterval)) "HIST_VOL"
+      if ((isHistVol) || (potr.isInterval)) "HIST_VOL"
       else
         if (potr.isMultiZone) "E-3F" else "E-1F"
 

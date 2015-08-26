@@ -31,12 +31,12 @@ object LoaderG extends Logging{
     generalDAO.removePer(perId)
   }
 
-  def buildReg(potr:Potr, mtr:MtrEntity, seq:Int):(RegEntity,Potr) = {
-    (RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = true, seq = seq),potr)
+  def buildReg(potr:Potr, mtr:MtrEntity, isHistVol: Boolean, seq:Int):(RegEntity,Potr) = {
+    (RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = true, isHistVol = isHistVol, seq = seq),potr)
   }
 
-  def buildRegRead(potr: Potr, reg: RegEntity, mrFirst: MrEntity, mrLast: MrEntity):Unit = {
-    if (potr.isHistVol) {
+  def buildRegRead(potr: Potr, reg: RegEntity, mrFirst: MrEntity, mrLast: MrEntity, isHistVol: Boolean):Unit = {
+    if (isHistVol) {
 
       RegReadBuilderG.build(
         mr = mrFirst,
@@ -63,37 +63,41 @@ object LoaderG extends Logging{
     }
   }
 
-  def potrToSpObject(potr: Potr, mPremise: Map[String, PremEntity], isOrphan: Boolean):SpObject = {
+  def potrToSpObject(potr: Potr, mPremise: Map[String, PremEntity], isOrphan: Boolean, isHistVol: Boolean):SpObject = {
 
     val premise = mPremise(potr.idObj)
 
     val sp = SpBuilderG.build(potr = potr, premise = premise, isOrphan = isOrphan)
-    val mtr = MtrBuilderG.build(potr)
+    val mtr = MtrBuilderG.build(potr,isHistVol)
     val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
     val mrFirst = MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
     val mrLast =  MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
 
     val regList = potr.zone.listZonePotr.view.zipWithIndex.map(
-      (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2)
+      (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2,isHistVol = isHistVol)
     ).toList
 
     if (potr.isMultiZone) {
 
       for ((reg,potr) <- regList) {
 
-        buildRegRead(potr = potr,
+        buildRegRead(
+          potr = potr,
           reg = reg,
           mrFirst = mrFirst,
-          mrLast = mrLast)
+          mrLast = mrLast,
+          isHistVol = isHistVol)
 
       }
     } else {
 
       buildRegRead(potr = potr,
-        reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, seq = 1),
+        reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, isHistVol = isHistVol, seq = 1),
         mrFirst = mrFirst,
-        mrLast = mrLast)
+        mrLast = mrLast,
+        isHistVol = isHistVol
+      )
 
     }
 
@@ -108,7 +112,7 @@ object LoaderG extends Logging{
 
   def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity], saUnion:Option[SaEntity]): ObjectModel = {
 
-    val spObj = potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = false)
+    val spObj = potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = false, isHistVol = false)
 
     //TODO Если NO_RSCH  = true – то по точке не производим расчет (не привязываем к РДО
 
@@ -236,7 +240,7 @@ object LoaderG extends Logging{
 
     //build sp for physics
     //shared objects without parent
-    val spObjects = plat.potrList.filter(_.isOrphan).map((potr) => potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = true))
+    val spObjects = plat.potrList.filter(_.isOrphan).map((potr) => potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = true, isHistVol = false))
 
     //add service agreement to account
     objects.foreach((o) => acct.addSaEntity(o.sa))

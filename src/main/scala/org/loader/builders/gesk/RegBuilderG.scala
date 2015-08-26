@@ -7,7 +7,7 @@ import org.loader.pojo.reg.RegEntity
 
 object RegBuilderG {
 
-  def build(mtr: MtrEntity, potr: Potr, isMultiZone: Boolean, seq: Int):RegEntity = {
+  def build(mtr: MtrEntity, potr: Potr, isMultiZone: Boolean, isHistVol: Boolean, seq: Int):RegEntity = {
     val reg = new RegEntity(KeysBuilder.getEnvId)
 
     reg.regId = KeysBuilder.getRegId
@@ -20,7 +20,7 @@ object RegBuilderG {
     }
     reg.readSeq = seq
 
-    reg.consumSubFlg = if ((potr.isHistVol) || (potr.isInterval)) "C" else "S"
+    reg.consumSubFlg = if ((isHistVol) || (potr.isInterval)) "C" else "S"
     reg.regConst = if (potr.isInterval) 1 else potr.mt.rks
     reg.readOutTypeCd = "ELT"
 
