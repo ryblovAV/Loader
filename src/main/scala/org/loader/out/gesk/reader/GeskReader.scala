@@ -38,6 +38,28 @@ object GeskReader extends Logging{
     }
   }
 
+  def fillParentList(platList:List[Plat]) = {
+
+    // build Map child => parent
+    val mParents: Map[String, List[String]] = platList.
+      flatMap((plat) => plat.potrList.
+      flatMap((potr) => potr.parent.childIdRecList.
+      map((childIdRec) => (childIdRec, potr.idRec)))).
+      groupBy(_._1).map { case (k, v) => (k, v.map(_._2)) }
+
+    //add parent
+    platList.map((plat) => plat.copy(
+      potrList = plat.potrList.map(
+        (potr) => potr.copy(
+          parent = potr.parent.copy(
+            parentIdRecList = mParents.getOrElse(potr.idRec, List.empty[String])
+          )
+        )
+      )
+    ))
+
+  }
+
   def readPlat: List[Plat] = {
 
     //jdbcReader.queryWithParameters(sqlPlat, HashMap("id_plat" -> idPlat)) {
@@ -112,17 +134,20 @@ object GeskReader extends Logging{
       case _ => true
     }
 
+
     val potrMap = readAllPotr.filter((p) => filterPotr(p)).groupBy((p) => p.idPlat)
 
     val perMap = readAllPer.groupBy(_.idPlat)
 
-    //load potr for plat
-    platList.map((plat) => plat.copy(
-      potrList = fillListParentIdRec(potrMap.getOrElse(plat.idPlat, List.empty[Potr])).
-        //filter shared point (parent_id_rec)
-        filter((p) => p.parent.parentIdRec.isEmpty),
-      perList = perMap.getOrElse(plat.idPlat,List.empty[Per])
-    ))
+    //load potr for plat (+ parent list)
+    fillParentList(
+      platList.map((plat) => plat.copy(
+        potrList = fillListChildIdRec(potrMap.getOrElse(plat.idPlat, List.empty[Potr])).
+          //filter shared point (parent_id_rec)
+          filter((p) => p.parent.parentIdRec.isEmpty),
+        perList = perMap.getOrElse(plat.idPlat,List.empty[Per])
+      ))
+    )
 
   }
 
@@ -148,12 +173,12 @@ object GeskReader extends Logging{
     } yield (potr.idRec,idRec)
   }
   
-  def fillListParentIdRec(potrList: List[Potr]) = {
+  def fillListChildIdRec(potrList: List[Potr]) = {
     val m:Map[String,List[String]] = potrList.filter((p) => !p.parent.parentIdRec.isEmpty).
       flatMap((p) => createTuple(getNearestPotr(p,potrList),p.parent.parentIdRec)).
       groupBy(_._1).map { case (k,v) => (k,v.map(_._2))}
 
-    potrList.map((p) => p.copy(parent = p.parent.copy(parentIdRecList = m.getOrElse(p.idRec,List.empty[String]))))
+    potrList.map((p) => p.copy(parent = p.parent.copy(childIdRecList = m.getOrElse(p.idRec,List.empty[String]))))
 
   }
 

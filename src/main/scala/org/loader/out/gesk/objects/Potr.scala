@@ -40,7 +40,8 @@ case class Parent(idRecI: Option[String],
                   iChS: Option[String],
                   chGuk: Option[String],
                   iNOb: Option[String],
-                  parentIdRecList: List[String] = List.empty[String]) {
+                  parentIdRecList: List[String] = List.empty[String],
+                  childIdRecList: List[String] = List.empty[String]) {
 
 
 
