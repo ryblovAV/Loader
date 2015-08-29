@@ -38,7 +38,7 @@ object SpBuilderG {
     val sp = new SpEntity(KeysBuilder.getEnvId)
 
     sp.spId = KeysBuilder.getSpId
-    sp.spTypeCd = "E-URTU"
+    sp.spTypeCd = if (potr.k.isFill) "EGSHIL_O" else  "E-URTU"
     sp.installDt = potr.mt.dataSh.getOrElse(LoaderG.activeMonth)
     sp.spSrcStatusFlg = "C"
 
@@ -59,7 +59,7 @@ object SpBuilderG {
     //потери
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_LIN",charVal = potr.mt.pLi, effDt = sp.installDt))
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TR",charVal = potr.mt.pTr, effDt = sp.installDt))
-    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = potr.k1, effDt = sp.installDt))
+    SpBuilder.addChar(sp,Characteristic(charTypeCd = "LOSS_TSO",charVal = potr.k.k1, effDt = sp.installDt))
 
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "ISKL_M",adhocCharVal = "0", effDt = sp.installDt))
     SpBuilder.addChar(sp,Characteristic(charTypeCd = "CI_GENCP",charVal = "Y", effDt = sp.installDt))
