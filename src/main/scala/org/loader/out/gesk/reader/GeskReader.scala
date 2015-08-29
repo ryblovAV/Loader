@@ -2,7 +2,7 @@ package org.loader.out.gesk.reader
 
 import java.sql.ResultSet
 
-import grizzled.slf4j.{Logging, Logger}
+import grizzled.slf4j.Logging
 import org.loader.out.gesk.objects._
 import org.loader.reader.JDBCExtractorSafe._
 import org.loader.reader.JdbcTemplatesUtl._
@@ -18,7 +18,7 @@ object GeskReader extends Logging{
 
   final val city = "Липецк"
 
-  final val sqlPlatAll = "select * from v_gesk_plat"// where id_plat = '3053'"
+  final val sqlPlatAll = "select * from v_gesk_plat"// where id_plat = '1020'"
   final val sqlPotrAll = "select * from v_gesk_potr"
   final val sqlPerAll = "select * from v_gesk_per"
 
@@ -188,6 +188,8 @@ object GeskReader extends Logging{
     case _ => None
   }
 
+
+
   def rsToPotr(rs:ResultSet, rowNum: Int):Potr = {
     Potr(
       address = Address(
@@ -251,7 +253,12 @@ object GeskReader extends Logging{
         chGuk = (rs,"ch_guk"),
         iNOb = (rs,"i_n_ob")
       ),
-      k1 = (rs,"k1"),
+      k = K(
+        k1 = (rs,"k1"),
+        k2 = (rs,"k2"),
+        k3 = (rs,"k3"),
+        k4 = (rs,"k4"),
+        kZ = (rs,"kz")),
       t = (rs,"t"),
       grpt46 = (rs,"grptr46"),
       zone = Zone(
