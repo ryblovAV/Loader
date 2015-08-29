@@ -39,12 +39,12 @@ object SaBuilderG extends Logging {
       (!tar.cSw1In.isEmpty)
 
   def translateRS(potr:Potr) = {
-    if (checkCkNet(potr.tar.cK.getOrElse("")))
+    if (potr.k.isFill)
+      Some("G_VOLMAX")
+    else if (checkCkNet(potr.tar.cK.getOrElse("")))
       Some("G_TSOLOS")
     else if ((potr.tar.prim.getOrElse("").take(1) == "1") && checkTarSw1(potr.tar))
       Some("G_ORG_1K")
-    else if (potr.k1.getOrElse(0) != 0)
-      Some("G_VOLMAX")
     else if ((potr.tar.prim.getOrElse("").take(1) == "1") && checkTarSw1(potr.tar) && (potr.tar.cSw1Us.get == 0))
       Some("G_UR_1KP")
     else if ((potr.tar.prim.getOrElse("").take(2) == "2") && checkTarSw1(potr.tar))
