@@ -24,9 +24,9 @@ object RegBuilderG {
     reg.regConst = if (potr.isInterval) 1 else potr.mt.rks
     reg.readOutTypeCd = "ELT"
 
-    reg.nbrOfDgtsLft = 7
+    reg.nbrOfDgtsLft = 8
     reg.nbrOfDgtsRgt = 3
-    reg.fullScale = 9999999.999
+    reg.fullScale = 99999999.999
 
     reg.howToUseFlg = "+"
     reg.uomCd = "KWH"
