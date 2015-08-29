@@ -8,7 +8,7 @@ import org.loader.pojo.sp.SpEntity
 
 object SaSpBuilderG {
 
-  def buildSaSp(sa: SaEntity, sp: SpEntity, mr: MrEntity, isMinus: Boolean) = {
+  def buildSaSp(sa: SaEntity, sp: SpEntity, mr: Option[MrEntity], isMinus: Boolean) = {
 
     //correct sa.start_dt
     if (sa.startDt.before(sp.installDt))
@@ -24,10 +24,13 @@ object SaSpBuilderG {
     sasp.startDttm = DateBuilder.addMinute(sa.startDt,1)
     sasp.stopDttm  = if (sa.endDt != null) DateBuilder.addMinute(sa.endDt,-1) else sa.endDt
 
-    sasp.startMr = mr
+    for (startMr <- mr)
+      sasp.startMr = startMr
 
     sasp.usageFlg = if (isMinus) "-" else "+"
-    sasp.usePct = 100
+
+    //TODO load opla
+    sasp.usePct = 100 //opla
 
 
     sasp
