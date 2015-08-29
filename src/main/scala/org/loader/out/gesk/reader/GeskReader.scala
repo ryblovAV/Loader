@@ -215,7 +215,9 @@ object GeskReader extends Logging{
         rks = (rs, "rks"),
         r1 = (rs, "r1"),
         r2 = (rs, "r2"),
-        rUz = (rs,"r_uz"),
+        d1 = (rs,"d1"),
+        d3 = (rs,"d3"),
+        d5 = (rs,"d5"),
         mkd = (rs,"mkd")
       ),
       tar = Tar(

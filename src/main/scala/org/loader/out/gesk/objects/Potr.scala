@@ -15,7 +15,9 @@ case class Mt(volt: Option[String],
               rks: Double,
               r1: Option[Double],
               r2: Option[Double],
-              rUz: Option[Double],
+              d1: Option[Double],
+              d3: Option[Double],
+              d5: Option[Double],
               dataSh: Option[java.util.Date],
               mkd: Option[Double])
 
