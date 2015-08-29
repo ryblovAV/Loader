@@ -14,7 +14,7 @@ object MrBuilderG {
     mr.readDttm = readDttm
     mr.useOnBillSw = "Y"
     mr.mtrConfig = mtrConfig
-    mr.mrSourceCd = "SO_MRSK_S"
+    mr.mrSourceCd = "SO_LGEK"
 
     mr.mtrConfig.mrMtrConfigEntitySet.add(mr)
 
