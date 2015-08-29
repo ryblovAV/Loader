@@ -22,9 +22,10 @@ object LogWritter extends Logging {
   val sql =
     s"""
        |insert into cm_log_per_gesk_juridical
-       |(per_id, acct_id, id_plat, id_rec, sa_id, sp_id, mr_first_id, mr_last_id, type)
+       |(per_id, acct_id, id_plat, id_rec, sa_id, sp_id, mr_first_id, mr_last_id, type, sp_type_cd)
        |values
-       |(:per_id, :acct_id, :id_plat, :id_rec, :sa_id, :sp_id, :mr_first_id, :mr_last_id, :type)""".stripMargin
+       |(:per_id, :acct_id, :id_plat, :id_rec, :sa_id, :sp_id, :mr_first_id, :mr_last_id, :type, :sp_type_cd)""".
+      stripMargin
 
   val sqlRegMultiZone =
   s"""
@@ -40,17 +41,18 @@ object LogWritter extends Logging {
        |values
        |(:column_name, :key)""".stripMargin
 
-  def objToMap(subj: SubjectModel, obj: ObjectModel):JMap[String,String] = {
+  def spObjToMap(subj: SubjectModel, obj: ObjectModel, spObj: SpObject):JMap[String,String] = {
     HashMap(
       "per_id" -> subj.per.perId,
       "acct_id" -> subj.acct.acctId,
       "id_plat" -> subj.plat.idPlat,
       "id_rec" -> obj.potr.idRec,
       "sa_id" -> obj.sa.saId,
-      "sp_id" -> obj.sp.spId,
-      "mr_first_id" -> obj.mrFirst.mrId,
-      "mr_last_id" -> obj.mrLast.mrId,
-      "type" -> "OBJECT")
+      "sp_id" -> spObj.sp.spId,
+      "mr_first_id" -> spObj.mrFirst.map(_.mrId).getOrElse(" "),
+      "mr_last_id" -> spObj.mrLast.map(_.mrId).getOrElse(" "),
+      "type" -> "OBJECT",
+      "sp_type_cd" -> spObj.spTypeCd)
   }
 
   def spObjToMap(subj: SubjectModel, spObj: SpObject):JMap[String,String] = {
@@ -61,26 +63,37 @@ object LogWritter extends Logging {
       "id_rec" -> spObj.potr.idRec,
       "sa_id" -> "",
       "sp_id" -> spObj.sp.spId,
-      "mr_first_id" -> spObj.mrFirst.mrId,
-      "mr_last_id" -> spObj.mrLast.mrId,
-      "type" -> "SP_OBJECT")
+      "mr_first_id" -> spObj.mrFirst.map(_.mrId).getOrElse(" "),
+      "mr_last_id" -> spObj.mrLast.map(_.mrId).getOrElse(" "),
+      "type" -> "SP_OBJECT",
+      "sp_type_cd" -> spObj.spTypeCd)
+  }
+
+  def objToListMap(subj: SubjectModel, obj: ObjectModel):List[JMap[String,_]] = {
+    obj.spObjects.map((spObj) => spObjToMap(subj = subj, obj = obj, spObj = spObj))
   }
 
   def subjToListMap(subj: SubjectModel):List[JMap[String,_]] = {
-    subj.objects.map((obj) => objToMap(subj = subj, obj = obj)) :::
-      subj.spObjects.map((spObj) => spObjToMap(subj = subj, spObj = spObj))
+    subj.objects.flatMap(
+      (obj) => objToListMap(subj = subj, obj = obj)) :::
+    subj.spObjects.map(
+      (spObj) => spObjToMap(subj = subj, spObj = spObj))
   }
 
-  def regToMap(obj: ObjectModel, reg: (RegEntity, Potr)):JMap[String,String] = {
-    HashMap(
+  def regToMap(obj: ObjectModel, spObj: SpObject, reg: (RegEntity, Potr)):JMap[String,String] = reg match {
+    case (reg,potr) => HashMap(
       "parent_id" -> obj.potr.idRec,
-      "child_id" -> reg._2.idRec,
-      "reg_id" -> reg._1.regId,
-      "sp_id" -> obj.sp.spId)
+      "child_id" -> potr.idRec,
+      "reg_id" -> reg.regId,
+      "sp_id" -> spObj.sp.spId)
+  }
+
+  def spObjToRegList(obj: ObjectModel, spObj: SpObject):List[JMap[String,String]] = {
+    spObj.regList.map((reg) => regToMap(obj = obj, spObj = spObj, reg = reg))
   }
 
   def objToRegListMap(obj:ObjectModel):List[JMap[String,String]] = {
-    obj.regList.map((reg) => regToMap(obj = obj, reg = reg))
+    obj.spObjects.flatMap((spObj) => spObjToRegList(obj = obj,spObj = spObj))
   }
 
   def subjToRegListMap(subj:SubjectModel):List[JMap[String,String]] = {

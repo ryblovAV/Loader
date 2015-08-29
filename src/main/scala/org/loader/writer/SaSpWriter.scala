@@ -18,7 +18,7 @@ case class SaSpObject(
     saId: String, 
     spId: String, 
     startDttm: Date,
-    startMrId: String, 
+    startMrId: Option[String],
     usageFlg: String,
     usePct: Int)
 
@@ -49,7 +49,7 @@ object SaSpWriter {
     m.put("sp_id",saObject.spId)
     m.put("sa_id",saObject.saId)
     m.put("start_dttm",saObject.startDttm)
-    m.put("start_mr_id",saObject.startMrId)
+    m.put("start_mr_id",saObject.startMrId.getOrElse(" "))
     m.put("usage_flg",saObject.usageFlg)
     m.put("use_pct",saObject.usePct)
 

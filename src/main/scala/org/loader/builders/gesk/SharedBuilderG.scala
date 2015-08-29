@@ -6,23 +6,24 @@ import org.loader.writer.SaSpObject
 
 object SharedBuilderG {
 
-  def buildSaSpObject(parentIdRec: String, obj: ObjectModel, m:Map[String,ObjectModel]):Option[SaSpObject] =
+  def buildSaSpObject(parentIdRec: String, obj: ObjectModel, m:Map[String,ObjectModel]):List[SaSpObject] =
     m.get(parentIdRec) match {
-      case Some(parentSubj) => Some(
+      case Some(parentSubj) => obj.spObjects.map((spObj) =>
         SaSpObject(
           saSpId = KeysBuilder.getSaSpId,
           saId = parentSubj.sa.saId,
-          spId = obj.sp.spId,
+          spId = spObj.sp.spId,
           startDttm = DateBuilder.addMinute(parentSubj.sa.startDt,1),
-          startMrId = obj.mrFirst.mrId,
+          startMrId = spObj.mrFirst.map(_.mrId),
           usageFlg = "-",
           usePct = 100))
-      case _ => None
+      case _ => List.empty[SaSpObject]
     }
 
   def buildSaSpObject(obj:ObjectModel,m:Map[String,ObjectModel]):List[SaSpObject] = {
-    obj.potr.parent.idRecI.
-      flatMap((parentIdRec) => buildSaSpObject(parentIdRec = parentIdRec, obj = obj, m = m)).toList
+    //TODO fix convertion option to list
+    obj.potr.parent.idRecI.map(
+      (parentIdRec) => buildSaSpObject(parentIdRec = parentIdRec, obj = obj, m = m)).getOrElse(List.empty)
   }
 
   def buildSaSpObjectList(obj:ObjectModel,m:Map[String,ObjectModel]):List[SaSpObject] = {

@@ -12,7 +12,8 @@ import org.loader.pojo.mtr.MtrEntity
 import org.loader.pojo.prem.PremEntity
 import org.loader.pojo.reg.RegEntity
 import org.loader.pojo.sa.SaEntity
-import org.loader.writer.{LogWritter, SaSpWriter}
+import org.loader.pojo.sp.SpEntity
+import org.loader.writer.{SaSpObject, LogWritter, SaSpWriter}
 import org.springframework.context.support.ClassPathXmlApplicationContext
 object LoaderG extends Logging{
 
@@ -46,7 +47,7 @@ object LoaderG extends Logging{
       RegReadBuilderG.build(
         mr = mrLast,
         reg = reg,
-        regReading = potr.mt.rUz.get)
+        regReading = potr.mt.d1.get * potr.mt.d3.get * potr.mt.d5.get)
 
     } else {
 
@@ -68,51 +69,84 @@ object LoaderG extends Logging{
     val premise = mPremise(potr.idObj)
 
     val sp = SpBuilderG.build(potr = potr, premise = premise, isOrphan = isOrphan)
-    val mtr = MtrBuilderG.build(potr,isHistVol)
-    val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
-    val mrFirst = MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
-    val mrLast =  MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
+    if (!potr.k.isFill) {
 
-    val regList = potr.zone.listZonePotr.view.zipWithIndex.map(
-      (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2,isHistVol = isHistVol)
-    ).toList
+      val mtr = MtrBuilderG.build(potr,isHistVol)
+      val mtrCfg = MtrConfigBuilderG.build(mtr = mtr, potr = potr)
 
-    if (potr.isMultiZone) {
+      val mrFirst = MrBuilderG.build(readDttm = activeMonth, mtrConfig = mtrCfg)
+      val mrLast =  MrBuilderG.build(readDttm = readDttm, mtrConfig = mtrCfg)
 
-      for ((reg,potr) <- regList) {
+      val regList = potr.zone.listZonePotr.view.zipWithIndex.map(
+        (p:(Potr,Int)) => buildReg(potr = p._1,mtr = mtr, seq = p._2,isHistVol = isHistVol)
+      ).toList
 
-        buildRegRead(
-          potr = potr,
-          reg = reg,
+      if (potr.isMultiZone) {
+
+        for ((reg,potr) <- regList) {
+
+          buildRegRead(
+            potr = potr,
+            reg = reg,
+            mrFirst = mrFirst,
+            mrLast = mrLast,
+            isHistVol = isHistVol)
+
+        }
+      } else {
+
+        buildRegRead(potr = potr,
+          reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, isHistVol = isHistVol, seq = 1),
           mrFirst = mrFirst,
           mrLast = mrLast,
-          isHistVol = isHistVol)
+          isHistVol = isHistVol
+        )
 
       }
+
+      val spMtrHist = SpMtrHistBuilderG.build(sp = sp, mtrCfg = mtrCfg)
+
+      MtrLocHisBuilderG.build(mtr = mtr, spMtrHist = spMtrHist, readDttm = readDttm)
+
+      SpMtrEvtBuilderG.build(spMtrHist = spMtrHist, mr = mrFirst)
+
+      SpObject(
+        potr = potr,
+        sp = sp,
+        mrFirst = Some(mrFirst),
+        mrLast = Some(mrLast),
+        regList = regList,
+        spTypeCd = sp.spTypeCd + (if (isHistVol) "~H" else "")
+      )
+
     } else {
 
-      buildRegRead(potr = potr,
-        reg = RegBuilderG.build(mtr = mtr, potr = potr, isMultiZone = false, isHistVol = isHistVol, seq = 1),
-        mrFirst = mrFirst,
-        mrLast = mrLast,
-        isHistVol = isHistVol
-      )
+      SpObject(
+        potr = potr,
+        sp = sp,
+        mrFirst = None,
+        mrLast = None,
+        regList = List.empty,
+        spTypeCd = sp.spTypeCd + (if (isHistVol) "~H" else ""))
 
     }
 
-    val spMtrHist = SpMtrHistBuilderG.build(sp = sp, mtrCfg = mtrCfg)
 
-    MtrLocHisBuilderG.build(mtr = mtr, spMtrHist = spMtrHist, readDttm = readDttm)
 
-    SpMtrEvtBuilderG.build(spMtrHist = spMtrHist, mr = mrFirst)
-
-    SpObject(potr = potr, sp = sp, mrFirst = mrFirst, mrLast = mrLast, regList = regList)
   }
 
   def potrToObject(plat: Plat, potr: Potr, mPremise: Map[String, PremEntity], saUnion:Option[SaEntity]): ObjectModel = {
 
+
+
     val spObj = potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = false, isHistVol = false)
+
+    val spObjects = if ((potr.mt.isHistVol) && (!potr.k.isFill)) {
+      List(spObj,
+           potrToSpObject(potr,mPremise, isOrphan = false, isHistVol = potr.mt.isHistVol))
+    } else List(spObj)
+
 
     //TODO Если NO_RSCH  = true – то по точке не производим расчет (не привязываем к РДО
 
@@ -122,18 +156,18 @@ object LoaderG extends Logging{
       case None => (SaBuilderG.buildSaForSp(plat, potr, mPremise(potr.idObj)),false)
     }
 
-    SaSpBuilderG.buildSaSp(sa = sa, sp = spObj.sp, mr = spObj.mrFirst, isMinus = isMinus)
+    for (spObj <- spObjects)
+      SaSpBuilderG.buildSaSp(sa = sa, sp = spObj.sp, mr = spObj.mrFirst, isMinus = isMinus)
+
 
     //load finance
     //loadFinance(potr,sa)
 
     ObjectModel(
       potr = potr,
-      sp = spObj.sp,
-      sa = sa,
-      mrFirst = spObj.mrFirst,
-      mrLast = spObj.mrLast,
-      regList  = spObj.regList)
+      spObjects = spObjects,
+      sa = sa)
+
   }
 
   def loadFinance(plat:Plat) = {
@@ -240,7 +274,7 @@ object LoaderG extends Logging{
 
     //build sp for physics
     //shared objects without parent
-    val spObjects = plat.potrList.filter(_.isOrphan).map((potr) => potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = true, isHistVol = false))
+    val spObjects = plat.potrList.filter(_.isOrphan).map((potr) => potrToSpObject(potr = potr, mPremise = mPremise, isOrphan = true, isHistVol = potr.mt.isHistVol))
 
     //add service agreement to account
     objects.foreach((o) => acct.addSaEntity(o.sa))
@@ -306,8 +340,8 @@ object LoaderG extends Logging{
     info("------------ start set ref sa sp")
     val saSpObjects = SharedBuilderG.buildListSaSpObject(subjects)
 
-//    info("------------ start load tndr")
-//    val depCtlSt = loadTndr(subjects = subjects)
+    //    info("------------ start load tndr")
+    //    val depCtlSt = loadTndr(subjects = subjects)
 
 
     if (true) {
@@ -320,12 +354,12 @@ object LoaderG extends Logging{
 
       info("------------ start saveToDb")
       subjects.grouped(1000).toList.par.foreach(generalDAO.saveList)
-  //    subjects.foreach(generalDAO.save)
+//      subjects.foreach((s) => generalDAO.save(s))
 
       info("start save to DB shared objects")
       SaSpWriter.save(saSpObjects)
 
-  //    generalDAO.saveDepCtlSt(depCtlSt = depCtlSt)
+      //    generalDAO.saveDepCtlSt(depCtlSt = depCtlSt)
 
     }
 

@@ -19,7 +19,12 @@ case class Mt(volt: Option[String],
               d3: Option[Double],
               d5: Option[Double],
               dataSh: Option[java.util.Date],
-              mkd: Option[Double])
+              mkd: Option[Double]) {
+
+  def isHistVol = d1.getOrElse(0) != 0 && d3.getOrElse(0) != 0 && d5.getOrElse(0) != 0
+}
+
+
 
 case class Tar(sn: Option[String],
                gr: Option[String],
@@ -51,6 +56,14 @@ case class Parent(idRecI: Option[String],
 
 }
 
+case class K(k1: Double,
+             k2: Double,
+             k3: Double,
+             k4: Double,
+             kZ: Double) {
+  def isFill = !((k1 == 0) || (k2 == 0) || (k3 == 0) || (k4 == 0) || (kZ == 0))
+}
+
 case class  Potr(id: Int,
                  idPlat: String,
                  naimp: String,
@@ -66,7 +79,7 @@ case class  Potr(id: Int,
                  kp: Option[String],
                  idRec: String,
                  parent: Parent,
-                 k1: Option[Double],
+                 k: K,
                  t: Option[String],
                  grpt46: Option[String],
                  zone: Zone,
